@@ -1,7 +1,10 @@
 name: Release
 
 # Publishes the packages to npm when a version tag is pushed, for example:  git tag v0.1.0 && git push origin v0.1.0
-# One-time setup: create the "@bddr" organisation on npmjs.com and add an automation token as the repository secret NPM_TOKEN.
+# Uses npm Trusted Publishing (OpenID Connect), so there is no npm token or secret.
+# One-time setup, for each of the 8 packages on npmjs.com (Settings > Trusted Publisher > GitHub Actions):
+#   organization or user: afsarali273   repository: bddr   workflow filename: release.yml   environment: (empty)
+# A package must exist on npm before a trusted publisher can be added, so publish version 0.1.0 of each once by hand first.
 
 on:
   push:
@@ -9,7 +12,7 @@ on:
 
 permissions:
   contents: read
-  id-token: write # npm provenance
+  id-token: write # lets npm verify this workflow run; provenance is attached automatically
 
 jobs:
   publish:
@@ -21,6 +24,8 @@ jobs:
           node-version: 22
           cache: npm
           registry-url: https://registry.npmjs.org
+      - name: Use an npm version that supports trusted publishing (11.5.1 or newer)
+        run: npm install -g npm@latest && npm --version
       - run: npm ci
       - run: npm run build
       - run: npm run verify
@@ -29,12 +34,10 @@ jobs:
           v=$(node -p "require('./packages/core/package.json').version")
           test "v$v" = "$GITHUB_REF_NAME" || { echo "tag $GITHUB_REF_NAME does not match version $v"; exit 1; }
       - name: Publish (dependencies first)
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           for d in packages/core packages/runtime packages/reporters packages/cli packages/bddr; do
-            (cd $d && npm publish --provenance --access public)
+            (cd $d && npm publish --access public)
           done
           for d in plugins/playwright plugins/selenium plugins/axios; do
-            (cd $d && npm ci && npm run build && npm publish --provenance --access public)
+            (cd $d && npm ci && npm run build && npm publish --access public)
           done

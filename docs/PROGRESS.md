@@ -402,8 +402,8 @@ Worked directly in the user's folder via device shell.
 ### 2026-11-23: release preparation for v0.1
 - MIT `LICENSE`; npm metadata (license, repository, homepage, keywords, publishConfig) on all seven packages; short READMEs for core, runtime, reporters and cli.
 - New bare package `packages/bddr` (`npm i -D bddr`): installs the `bddr` command with core, runtime and reporters and re-exports `@bddr/cli` (so `defineConfig` works from `bddr`). `@bddr/cli` gained a `./bin` export for it. Checked by installing the packed tarballs in a clean project and running a scenario.
-- `.github/workflows/ci.yml` (verify on Node 20 and 22) and `release.yml` (publish on a `v*` tag, dependency order, provenance; needs the `@bddr` npm org and the `NPM_TOKEN` secret).
+- `.github/workflows/ci.yml` (verify on Node 20 and 22) and `release.yml` (publish on a `v*` tag, dependency order, provenance; uses npm Trusted Publishing, so no token: create the `@bddr` npm org, publish 0.1.0 of each package by hand once, then add the trusted publisher (repo `afsarali273/bddr`, workflow `release.yml`) on each package).
 - `bddr migrate [dir] [--write]`: rewrites `@bddx/*`, `BDDX_*`, `bddx.config`, `.bddx` and renames the config file and history folder (`cli/src/migrate.ts`, 2 tests).
 - Fixes: `AfterWorker` no longer runs after a failed `BeforeWorker` or `BeforeAll` (inline and process pools, tests added); `--shard` warns that `@exclusive` only holds inside one shard; `bddr docs` falls back to `reports/events.ndjson` when there is no `--results` and no history.
 - Verified: typecheck clean, 240 of 240 tests, offline examples pass.
-- Still to do for the release: create the `@bddr` npm org and `NPM_TOKEN`, retake the screenshots that show bddx, run the live showcases, then tag `v0.1.0` and remove the "Not on npm yet" notes.
+- Still to do for the release: create the `@bddr` npm org, retake the screenshots that show bddx, run the live showcases, then tag `v0.1.0` and remove the "Not on npm yet" notes.
