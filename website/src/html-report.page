@@ -7,14 +7,7 @@ lede: One file, no server, works offline. Send it by email or attach it to a CI 
 <cb lang="bash">$ npx bddr -f html:reports/report.html
 $ open reports/report.html           # macOS
 $ start reports\report.html          # Windows</cb>
-<figure class="placeholder" data-kind="screenshot" style="--ratio: 16 / 9">
-  <div class="placeholder-frame"><p class="placeholder-what">The Overview tab: KPI cards, status donut, duration histogram and failures by cause.</p></div>
-  <figcaption>
-    <p class="placeholder-how">Capture this yourself:</p>
-    <p>Run <code>npx bddr</code> in <code>examples/orchestration</code> or <code>examples/resilience</code> with <code>history: true</code> a few times, open <code>reports/report.html</code> and capture the Overview tab, light theme, about 1400 px wide.</p>
-    <p class="placeholder-file">Save as <code>assets/img/report-overview.png</code>.</p>
-  </figcaption>
-</figure>
+<figure class="shot"><img src="../assets/img/report-overview.png" alt="The Overview tab of the HTML report: KPI cards, failures grouped by cause, scenario results donut, step bar, duration histogram and slowest scenarios." width="1462" height="936" loading="lazy"></figure>
 
 <h2>What is in it</h2>
 <h3>Overview</h3>

@@ -24,14 +24,7 @@ $ npx bddr docs features --results reports/events.ndjson --title "Shop behaviour
   <li>With results, scenarios are coloured and each folder shows a roll-up.</li>
 </ul>
 <aside class="callout note"><p class="callout-title">Markdown</p><p>README files use a small, safe subset of Markdown. Links are limited to http, https, mailto and relative paths.</p></aside>
-<figure class="placeholder" data-kind="screenshot" style="--ratio: 16 / 9">
-  <div class="placeholder-frame"><p class="placeholder-what">The living documentation page with the folder tree, a feature and coloured scenarios.</p></div>
-  <figcaption>
-    <p class="placeholder-how">Capture this yourself:</p>
-    <p>In <code>examples/basic</code> run <code>npx bddr -f ndjson:reports/events.ndjson</code> then <code>npx bddr docs --results reports/events.ndjson</code>, open the page, select the Shopping basket feature and capture it. Light theme, about 1400 px wide.</p>
-    <p class="placeholder-file">Save as <code>assets/img/living-docs.png</code>.</p>
-  </figcaption>
-</figure>
+<figure class="shot"><img src="../assets/img/living-docs.png" alt="The living documentation page for the Playwright showcase: a folder tree with scenario counts on the left, and on the right the project title, a pass bar and the list of feature folders." width="1140" height="439" loading="lazy"></figure>
 
 <h2>Publish it</h2>
 <p>The page is one file. Publish it as a CI artifact, or copy it to any static host after each run on your main branch, so the documentation always matches the tests.</p>
