@@ -1,5 +1,5 @@
 import { strict as assert } from 'node:assert';
-import { AfterStep, Given, Then } from '@bddx/runtime';
+import { AfterStep, Given, Then } from '@bddr/runtime';
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 

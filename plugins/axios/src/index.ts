@@ -1,8 +1,8 @@
 /**
- * @bddx/axios: API testing for bddx with axios, as a plugin. bddx does not depend on axios; your project does.
+ * @bddr/axios: API testing for bddr with axios, as a plugin. bddr does not depend on axios; your project does.
  *
- *   // bddx.config.ts
- *   import { axios } from '@bddx/axios';
+ *   // bddr.config.ts
+ *   import { axios } from '@bddr/axios';
  *   export default defineConfig({ plugins: [axios({ baseURL: 'https://api.example.com', auth: { bearer: 'token' } })] });
  *
  *   // steps
@@ -23,11 +23,11 @@
 import { createRequire } from 'node:module';
 import { join } from 'node:path';
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { defineFixture, definePlugin, type BddxPlugin, type RunContext } from '@bddx/runtime';
+import { defineFixture, definePlugin, type BddrPlugin, type RunContext } from '@bddr/runtime';
 
 type AxiosModule = typeof import('axios').default;
 
-declare module '@bddx/runtime' {
+declare module '@bddr/runtime' {
   interface Fixtures {
     axios: AxiosModule;
     api: AxiosInstance;
@@ -85,7 +85,7 @@ async function loadProjectAxios(): Promise<AxiosModule> {
 }
 
 /** Build the plugin. `load` is how axios is imported (tests pass a fake). */
-export function createAxiosPlugin(load: () => Promise<AxiosModule> = loadProjectAxios): BddxPlugin<AxiosPluginOptions> {
+export function createAxiosPlugin(load: () => Promise<AxiosModule> = loadProjectAxios): BddrPlugin<AxiosPluginOptions> {
   return definePlugin<AxiosPluginOptions>({
     name: 'axios',
     setup(o = {}) {
@@ -186,11 +186,11 @@ const parseIfJson = (data: unknown): unknown => {
   }
 };
 
-/** The plugin with axios from your project. Use as `plugins: ['@bddx/axios']` or `plugins: [axios({ ... })]`. */
+/** The plugin with axios from your project. Use as `plugins: ['@bddr/axios']` or `plugins: [axios({ ... })]`. */
 const plugin = createAxiosPlugin();
 export default plugin;
 
-/** Typed form for bddx.config.ts: `plugins: [axios({ baseURL: 'https://api.example.com' })]`. */
+/** Typed form for bddr.config.ts: `plugins: [axios({ baseURL: 'https://api.example.com' })]`. */
 export function axios(options: AxiosPluginOptions = {}): { name: string; setup(): void | Promise<void> } {
   return { name: plugin.name, setup: () => plugin.setup(options) };
 }

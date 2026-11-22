@@ -1,4 +1,4 @@
-import { defineConfig } from '@bddx/cli';
+import { defineConfig } from '@bddr/cli';
 
 /**
  * Resilience demo (Phase 4): scenario retry, group retry, flaky detection, quarantine,

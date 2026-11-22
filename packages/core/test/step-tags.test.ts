@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { extractStepTags, parseDuration, parseSpec } from '@bddx/core';
+import { extractStepTags, parseDuration, parseSpec } from '@bddr/core';
 
 describe('step-level tags', () => {
   it('strips recognised trailing tags and parses options', () => {

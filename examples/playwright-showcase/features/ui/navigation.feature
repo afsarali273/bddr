@@ -1,6 +1,6 @@
 @ui @the-internet @owner:web
 Feature: UI navigation and status pages
-  Playwright drives public pages while bddx owns discovery, orchestration, hooks and reporting.
+  Playwright drives public pages while bddr owns discovery, orchestration, hooks and reporting.
 
   Background:
     Given the UI base URL is configured

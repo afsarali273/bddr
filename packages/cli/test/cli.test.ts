@@ -20,22 +20,22 @@ const rerunProject = fileURLToPath(new URL('./fixtures/rerun-project/', import.m
 const poolProject = fileURLToPath(new URL('./fixtures/pool-project/', import.meta.url));
 const validateProject = fileURLToPath(new URL('./fixtures/validate-project/', import.meta.url));
 
-function bddx(...args: string[]) {
-  return bddxIn(project, ...args);
+function bddr(...args: string[]) {
+  return bddrIn(project, ...args);
 }
 
-function bddxIn(cwd: string, ...args: string[]) {
-  return bddxEnv(cwd, {}, ...args);
+function bddrIn(cwd: string, ...args: string[]) {
+  return bddrEnv(cwd, {}, ...args);
 }
 
-function bddxEnv(cwd: string, env: Record<string, string>, ...args: string[]) {
+function bddrEnv(cwd: string, env: Record<string, string>, ...args: string[]) {
   const r = spawnSync(process.execPath, [bin, ...args], { cwd, encoding: 'utf8', env: { ...process.env, NO_COLOR: '1', ...env } });
   return { code: r.status, out: r.stdout, err: r.stderr };
 }
 
-describe.skipIf(!built)('bddx CLI (built)', () => {
+describe.skipIf(!built)('bddr CLI (built)', () => {
   it('runs the project: exit 1 with failures, @wip excluded by config', () => {
-    const r = bddx('run');
+    const r = bddr('run');
     expect(r.code).toBe(1);
     expect(r.out).toContain('✔ passes');
     expect(r.out).toContain('✘ fails');
@@ -45,25 +45,25 @@ describe.skipIf(!built)('bddx CLI (built)', () => {
   });
 
   it('profile + -D params can make it green', () => {
-    expect(bddx('--profile', 'green').code).toBe(0);
-    const r = bddx('-t', 'not @green', '-D', 'env=prod', '--name', '^fails$');
+    expect(bddr('--profile', 'green').code).toBe(0);
+    const r = bddr('-t', 'not @green', '-D', 'env=prod', '--name', '^fails$');
     expect(r.code).toBe(0);
     expect(r.out).toContain('1 scenario (1 passed)');
   });
 
   it('selects by file:line', () => {
-    const r = bddx('features/mixed.feature:7');
+    const r = bddr('features/mixed.feature:7');
     expect(r.out).toContain('1 scenario (1 failed)');
   });
 
   it('--dry-run reports undefined steps without executing', () => {
-    const r = bddx('--dry-run', '--no-strict');
+    const r = bddr('--dry-run', '--no-strict');
     expect(r.code).toBe(0);
     expect(r.out).toContain(`Given('something nobody wrote', async (ctx) => {`);
   });
 
   it('snippets prints code for undefined steps with their locations', () => {
-    const r = bddx('snippets');
+    const r = bddr('snippets');
     expect(r.code).toBe(0);
     expect(r.out).toContain('// 1 undefined step pattern(s)');
     expect(r.out).toContain('// used at: features/mixed.feature:11');
@@ -71,17 +71,17 @@ describe.skipIf(!built)('bddx CLI (built)', () => {
   });
 
   it('validate checks step coverage without executing scenarios', () => {
-    const bad = bddx('validate');
+    const bad = bddr('validate');
     expect(bad.code).toBe(1);
     expect(bad.out).toContain('ERROR [undefined-step] features/mixed.feature:11 Undefined step: Given something nobody wrote');
     expect(bad.out).toMatch(/Validated 4 scenario\(s\), 4 step\(s\), \d+ definition\(s\): 2 error\(s\)/);
 
-    const clean = bddxIn(orchestration, 'validate', '--fail-on-warnings');
+    const clean = bddrIn(orchestration, 'validate', '--fail-on-warnings');
     expect(clean.code, clean.out + clean.err).toBe(0);
     expect(clean.out).toContain('Validated 9 scenario(s), 17 step(s)');
     expect(clean.out).toContain('0 error(s), 0 warning(s)');
 
-    const detailed = bddxIn(validateProject, 'validate', '--fail-on-warnings');
+    const detailed = bddrIn(validateProject, 'validate', '--fail-on-warnings');
     expect(detailed.code).toBe(1);
     expect(detailed.out).toContain('ERROR [ambiguous-step]');
     expect(detailed.out).toContain('ERROR [undefined-step]');
@@ -91,7 +91,7 @@ describe.skipIf(!built)('bddx CLI (built)', () => {
   });
 
   it('list prints ids and tags', () => {
-    const r = bddx('list');
+    const r = bddr('list');
     expect(r.code).toBe(0);
     expect(r.out.trim().split('\n')).toEqual([
       'features/mixed.feature::passes\tfeatures/mixed.feature:4\t@green',
@@ -101,8 +101,8 @@ describe.skipIf(!built)('bddx CLI (built)', () => {
   });
 
   it('writes NDJSON and JUnit via --format', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'bddx-cli-'));
-    bddx('-f', `ndjson:${join(dir, 'e.ndjson')}`, '-f', `junit:${join(dir, 'j.xml')}`);
+    const dir = mkdtempSync(join(tmpdir(), 'bddr-cli-'));
+    bddr('-f', `ndjson:${join(dir, 'e.ndjson')}`, '-f', `junit:${join(dir, 'j.xml')}`);
     const lines = readFileSync(join(dir, 'e.ndjson'), 'utf8').trim().split('\n').map((l) => JSON.parse(l) as { type: string });
     expect(lines[0]!.type).toBe('runStarted');
     expect(lines.at(-1)!.type).toBe('runFinished');
@@ -110,72 +110,72 @@ describe.skipIf(!built)('bddx CLI (built)', () => {
   });
 
   it('expands @data rows, switches data by profile, and exits 2 on data errors', () => {
-    const r = bddxIn(dataProject);
+    const r = bddrIn(dataProject);
     expect(r.code).toBe(2);
     expect(r.out).toContain('✔ ann has a balance (accounts.csv row 1)');
     expect(r.out).toContain('✔ bob has a balance (accounts.csv row 2)');
     expect(r.out).toContain('Parse errors:');
     expect(r.out).toContain('features/accounts.feature:6 Data file "nope.csv" not found');
-    const ci = bddxIn(dataProject, '-p', 'ci', '--name', 'balance');
+    const ci = bddrIn(dataProject, '-p', 'ci', '--name', 'balance');
     expect(ci.out).toContain('✔ ci-bot has a balance (accounts.csv row 1)');
-    const list = bddxIn(dataProject, 'list', '--name', 'balance');
+    const list = bddrIn(dataProject, 'list', '--name', 'balance');
     expect(list.out).toContain('features/accounts.feature::user-has-a-balance[accounts.csv#2]');
   });
 
   it('plan prints groups and dependencies; --explain and mermaid/json formats work', () => {
-    const text = bddxIn(orchestration, 'plan');
+    const text = bddrIn(orchestration, 'plan');
     expect(text.code).toBe(0);
     expect(text.out).toContain('group checkout: parallel x3, 4 member(s), after setup');
-    expect(bddxIn(orchestration, 'plan', '--explain', 'login').out).toContain('needed by:');
-    expect(bddxIn(orchestration, 'plan', '--plan-format', 'mermaid').out).toMatch(/^flowchart LR/);
-    const json = JSON.parse(bddxIn(orchestration, 'plan', '--plan-format', 'json').out) as { nodes: unknown[]; workers: number };
+    expect(bddrIn(orchestration, 'plan', '--explain', 'login').out).toContain('needed by:');
+    expect(bddrIn(orchestration, 'plan', '--plan-format', 'mermaid').out).toMatch(/^flowchart LR/);
+    const json = JSON.parse(bddrIn(orchestration, 'plan', '--plan-format', 'json').out) as { nodes: unknown[]; workers: number };
     expect(json.workers).toBe(4);
     expect(json.nodes).toHaveLength(9);
   });
 
   it('selecting one scenario pulls in its dependencies unless --no-deps', () => {
-    const r = bddxIn(orchestration, 'run', '--name', 'Buy fig', '-w', '2');
+    const r = bddrIn(orchestration, 'run', '--name', 'Buy fig', '-w', '2');
     expect(r.code).toBe(0);
     expect(r.out).toContain('✔ Create a test user');
     expect(r.out).toContain('✔ Log in');
     expect(r.out).toContain('3 scenarios (3 passed)');
-    const alone = bddxIn(orchestration, 'run', '--name', 'Buy fig', '--no-deps');
+    const alone = bddrIn(orchestration, 'run', '--name', 'Buy fig', '--no-deps');
     expect(alone.code).toBe(1); // ctx.from('login') fails: login is not in the plan
     expect(alone.out).toContain('no scenario with this id in the plan');
   });
 
   it('--set overrides any config value (typed), rejects unknown keys', () => {
-    const r = bddxIn(orchestration, 'plan', '-s', 'groups.checkout.mode=serial', '--set', 'workers=7', '-s', 'defaultMode="serial"');
+    const r = bddrIn(orchestration, 'plan', '-s', 'groups.checkout.mode=serial', '--set', 'workers=7', '-s', 'defaultMode="serial"');
     expect(r.code).toBe(0);
     expect(r.out).toContain('Plan: 9 scenario(s), 4 group(s), workers=7');
     expect(r.out).toContain('group checkout: serial x3');
-    const bad = bddxIn(orchestration, 'plan', '--set', 'wokers=2');
+    const bad = bddrIn(orchestration, 'plan', '--set', 'wokers=2');
     expect(bad.code).toBe(2);
     expect(bad.err).toContain('--set: unknown option "wokers"');
   });
 
   it('--log-level controls console logs; debug adds CLI and scheduler diagnostics', () => {
-    const normal = bddxIn(orchestration, 'run', '--name', 'Wallet');
+    const normal = bddrIn(orchestration, 'run', '--name', 'Wallet');
     expect(normal.out).toContain('[info] paying 5 by wallet'); // default console level: info
     expect(normal.out).not.toContain('[debug]');
-    const quiet = bddxIn(orchestration, 'run', '--name', 'Wallet', '--log-level', 'warn');
+    const quiet = bddrIn(orchestration, 'run', '--name', 'Wallet', '--log-level', 'warn');
     expect(quiet.out).toContain('[warn] wallet payments are slow');
     expect(quiet.out).not.toContain('[info] paying');
-    const loud = bddxIn(orchestration, 'run', '--name', 'Wallet', '--log-level', 'debug');
+    const loud = bddrIn(orchestration, 'run', '--name', 'Wallet', '--log-level', 'debug');
     expect(loud.out).toContain('[info] paying 5 by wallet');
-    expect(loud.out).toContain('[bddx:debug] start features/payments.feature::wallet-payment on w1');
-    expect(loud.err).toContain('[bddx:debug] config:');
-    expect(bddxIn(orchestration, 'run', '--log-level', 'chatty').code).toBe(2);
+    expect(loud.out).toContain('[bddr:debug] start features/payments.feature::wallet-payment on w1');
+    expect(loud.err).toContain('[bddr:debug] config:');
+    expect(bddrIn(orchestration, 'run', '--log-level', 'chatty').code).toBe(2);
   });
 
   it('runs the orchestration example green with 4 workers', () => {
-    const r = bddxIn(orchestration);
+    const r = bddrIn(orchestration);
     expect(r.code).toBe(0);
     expect(r.out).toContain('9 scenarios (9 passed)');
   });
 
   it('resilience example: retries, group retry, quarantine, soft asserts all green; flaky reported', () => {
-    const r = bddxIn(resilience);
+    const r = bddrIn(resilience);
     expect(r.code).toBe(0);
     expect(r.out).toContain('↻ Pay through a flaky API attempt 1 failed: payment API returned 503 — retrying');
     expect(r.out).toContain('flaky (passed on attempt 2)');
@@ -183,36 +183,36 @@ describe.skipIf(!built)('bddx CLI (built)', () => {
     expect(r.out).toContain('[quarantined]');
     expect(r.out).toContain('Quarantined failures (do not fail the run):');
     expect(r.out).toMatch(/6 scenarios \(5 passed, 1 failed\) · 2 flaky, 2 retried, 1 quarantined/);
-    expect(bddxIn(resilience, '--fail-on-flaky').code).toBe(1);
+    expect(bddrIn(resilience, '--fail-on-flaky').code).toBe(1);
     const junit = readFileSync(join(resilience, 'reports/junit.xml'), 'utf8');
     expect(junit).toContain('<flakyFailure type="failed" message="payment API returned 503">');
     expect(junit).toContain('<skipped message="quarantined: BUG-123: float rounding in totals"/>');
   });
 
-  it('--retry, --rerun-failed and bddx report merge runs', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'bddx-rerun-'));
-    const first = bddxIn(rerunProject, '-f', `ndjson:${join(dir, 'run1.ndjson')}`);
+  it('--retry, --rerun-failed and bddr report merge runs', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'bddr-rerun-'));
+    const first = bddrIn(rerunProject, '-f', `ndjson:${join(dir, 'run1.ndjson')}`);
     expect(first.code).toBe(1);
     expect(first.out).toContain('3 scenarios (1 passed, 1 failed, 1 skipped)');
-    expect(bddxIn(rerunProject, '--retry', '2').out).toContain('↻ depends on the environment attempt 2 failed');
-    const second = bddxIn(rerunProject, '--rerun-failed', join(dir, 'run1.ndjson'), '-D', 'backend=up', '-f', `ndjson:${join(dir, 'run2.ndjson')}`);
+    expect(bddrIn(rerunProject, '--retry', '2').out).toContain('↻ depends on the environment attempt 2 failed');
+    const second = bddrIn(rerunProject, '--rerun-failed', join(dir, 'run1.ndjson'), '-D', 'backend=up', '-f', `ndjson:${join(dir, 'run2.ndjson')}`);
     expect(second.code).toBe(0);
     expect(second.out).toContain('2 scenarios (2 passed)'); // only what did not pass
-    const nothing = bddxIn(rerunProject, '--rerun-failed', join(dir, 'run2.ndjson'));
+    const nothing = bddrIn(rerunProject, '--rerun-failed', join(dir, 'run2.ndjson'));
     expect(nothing.out).toContain('Nothing to rerun');
-    const merged = bddxIn(rerunProject, 'report', join(dir, 'run1.ndjson'), join(dir, 'run2.ndjson'), '-f', `html:${join(dir, 'merged.html')}`, '-f', 'console');
+    const merged = bddrIn(rerunProject, 'report', join(dir, 'run1.ndjson'), join(dir, 'run2.ndjson'), '-f', `html:${join(dir, 'merged.html')}`, '-f', 'console');
     expect(merged.code).toBe(0);
     expect(merged.out).toContain('3 scenarios (3 passed) · 2 flaky');
     expect(readFileSync(join(dir, 'merged.html'), 'utf8')).toContain('PASSED');
   });
 
   it('usage errors exit 2', () => {
-    expect(bddx('--profile', 'nope').code).toBe(2);
-    expect(bddx('--bogus').code).toBe(2);
-    expect(bddx('-t', '@a and').code).toBe(2);
-    expect(bddx('-w', '0').code).toBe(2);
-    expect(bddx('--retry', 'x').code).toBe(2);
-    expect(bddx('report').code).toBe(2);
+    expect(bddr('--profile', 'nope').code).toBe(2);
+    expect(bddr('--bogus').code).toBe(2);
+    expect(bddr('-t', '@a and').code).toBe(2);
+    expect(bddr('-w', '0').code).toBe(2);
+    expect(bddr('--retry', 'x').code).toBe(2);
+    expect(bddr('report').code).toBe(2);
   });
 });
 
@@ -241,12 +241,12 @@ describe.skipIf(!built)('applySetOverrides', () => {
   });
 
   describe('worker processes (--pool process)', () => {
-    const traceFile = () => join(mkdtempSync(join(tmpdir(), 'bddx-pool-')), 'trace.txt');
+    const traceFile = () => join(mkdtempSync(join(tmpdir(), 'bddr-pool-')), 'trace.txt');
     const count = (text: string, line: string) => text.split('\n').filter((l) => l.startsWith(line)).length;
 
     it('runs on separate processes: run hooks once in the parent, worker/feature hooks per process, exports + seed cross over', () => {
       const t = traceFile();
-      const r = bddxIn(poolProject, 'run', '-D', `trace=${t}`);
+      const r = bddrIn(poolProject, 'run', '-D', `trace=${t}`);
       expect(r.code, r.out + r.err).toBe(0);
       expect(r.out).toContain('8 scenarios (8 passed)');
       expect(r.out).toContain('run store key(s) [notCloneable]');
@@ -261,26 +261,26 @@ describe.skipIf(!built)('applySetOverrides', () => {
     });
 
     it('same results as the inline pool', () => {
-      const inline = bddxIn(poolProject, 'run', '--pool', 'inline');
+      const inline = bddrIn(poolProject, 'run', '--pool', 'inline');
       expect(inline.code).toBe(0);
       expect(inline.out).toContain('8 scenarios (8 passed)');
       const t = traceFile();
-      bddxIn(poolProject, 'run', '--pool', 'inline', '-D', `trace=${t}`);
+      bddrIn(poolProject, 'run', '--pool', 'inline', '-D', `trace=${t}`);
       expect(count(readFileSync(t, 'utf8'), 'beforeWorker inline')).toBe(1);
-      const res = bddxIn(resilience, 'run', '--pool', 'process');
+      const res = bddrIn(resilience, 'run', '--pool', 'process');
       expect(res.out).toMatch(/6 scenarios \(5 passed, 1 failed\) · 2 flaky, 2 retried, 1 quarantined/);
       expect(res.code).toBe(0);
     });
 
     it('a crashing worker fails only its scenario; the run continues', () => {
-      const r = bddxIn(poolProject, 'run', '-D', 'crash=yes');
+      const r = bddrIn(poolProject, 'run', '-D', 'crash=yes');
       expect(r.code).toBe(1);
       expect(r.out).toMatch(/worker w\d \(pid \d+\) exited unexpectedly \(code 3\)/);
       expect(r.out).toContain('8 scenarios (7 passed, 1 failed)');
     });
 
     it('enforces a group budget in the process pool by cancelling the lane', () => {
-      const r = bddxIn(
+      const r = bddrIn(
         poolProject,
         'run',
         '--name',
@@ -297,7 +297,7 @@ describe.skipIf(!built)('applySetOverrides', () => {
     });
 
     it('enforces a run-wide timeout across process workers', () => {
-      const r = bddxIn(poolProject, 'run', '--name', 'Busy', '--run-timeout', '15ms');
+      const r = bddrIn(poolProject, 'run', '--name', 'Busy', '--run-timeout', '15ms');
       expect(r.code).toBe(1);
       expect(r.out).toContain('Run timed out after 15 ms');
     });
@@ -319,43 +319,43 @@ describe.skipIf(!built)('applySetOverrides', () => {
     });
 
     it('a worker that cannot start stops the run with the cause', () => {
-      const r = bddxEnv(poolProject, { BDDX_TEST_BREAK_WORKER: '1' }, 'run');
+      const r = bddrEnv(poolProject, { BDDR_TEST_BREAK_WORKER: '1' }, 'run');
       expect(r.code).toBe(1);
       expect(r.out + r.err).toContain('failed to start: support code broken in workers');
     });
 
     it('rejects a bad --pool value', () => {
-      const r = bddxIn(poolProject, 'run', '--pool', 'threads');
+      const r = bddrIn(poolProject, 'run', '--pool', 'threads');
       expect(r.code).toBe(2);
       expect(r.err).toContain('--pool must be inline or process');
     });
   });
 
-  it('history: records runs, feeds the HTML report and bddx history ranks flaky scenarios', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'bddx-hist-e2e-'));
+  it('history: records runs, feeds the HTML report and bddr history ranks flaky scenarios', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'bddr-hist-e2e-'));
     const html = join(dir, 'r.html');
     const set = ['--set', `history={"dir":"${dir.split('\\').join('/')}/h","keep":5}`];
-    for (let i = 0; i < 3; i++) expect(bddxIn(resilience, 'run', ...set, '-f', `html:${html}`).code).toBe(0);
+    for (let i = 0; i < 3; i++) expect(bddrIn(resilience, 'run', ...set, '-f', `html:${html}`).code).toBe(0);
     expect(readdirSync(join(dir, 'h'))).toHaveLength(3);
     const page = readFileSync(html, 'utf8');
     expect(page).toContain('<summary>History</summary>');
     expect(page).toContain('flaky score 1.00');
-    const h = bddxIn(resilience, 'history', ...set, '--top', '2');
+    const h = bddrIn(resilience, 'history', ...set, '--top', '2');
     expect(h.code).toBe(0);
     expect(h.out).toContain('Run history: 3 run(s)');
     expect(h.out).toMatch(/1\.00  ◐◐◐ +3\/3 passed +(Pay through a flaky API|Warm the cache)/);
-    const none = bddxIn(resilience, 'history', '--set', `history={"dir":"${dir.split('\\').join('/')}/none"}`);
+    const none = bddrIn(resilience, 'history', '--set', `history={"dir":"${dir.split('\\').join('/')}/none"}`);
     expect(none.out).toContain('No run history');
-    const dry = bddxIn(resilience, 'run', '--dry-run', ...set);
+    const dry = bddrIn(resilience, 'run', '--dry-run', ...set);
     expect(dry.code).toBe(0);
     expect(readdirSync(join(dir, 'h'))).toHaveLength(3); // dry runs are not recorded
   });
 
   it('process pool emits workerStarted and the HTML timeline shows start-up', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'bddx-ws-'));
+    const dir = mkdtempSync(join(tmpdir(), 'bddr-ws-'));
     const events = join(dir, 'e.ndjson');
     const html = join(dir, 'r.html');
-    const r = bddxIn(poolProject, 'run', '-f', `ndjson:${events}`, '-f', `html:${html}`);
+    const r = bddrIn(poolProject, 'run', '-f', `ndjson:${events}`, '-f', `html:${html}`);
     expect(r.code).toBe(0);
     const started = readFileSync(events, 'utf8').split('\n').filter((l) => l.includes('"workerStarted"')).map((l) => JSON.parse(l));
     expect(started.map((e) => e.workerId).sort()).toEqual(['w1', 'w2']);
@@ -391,7 +391,7 @@ describe.skipIf(!built)('applySetOverrides', () => {
   });
 
   it('-f messages writes a valid Cucumber Messages stream (basic example: pickles, test cases, results)', async () => {
-    const dir = mkdtempSync(join(tmpdir(), 'bddx-msg-'));
+    const dir = mkdtempSync(join(tmpdir(), 'bddr-msg-'));
     const file = join(dir, 'm.ndjson');
     const r = spawnSync(process.execPath, [bin, '-f', `messages:${file}`, '-f', 'progress'], { cwd: join(orchestration, '..', 'basic'), encoding: 'utf8' });
     expect(r.status).toBe(0);
@@ -419,7 +419,7 @@ describe.skipIf(!built)('applySetOverrides', () => {
   });
 
   it('-f messages reports retries as attempts with willBeRetried', async () => {
-    const dir = mkdtempSync(join(tmpdir(), 'bddx-msg-'));
+    const dir = mkdtempSync(join(tmpdir(), 'bddr-msg-'));
     const file = join(dir, 'm.ndjson');
     spawnSync(process.execPath, [bin, '-f', `messages:${file}`, '-f', 'progress'], { cwd: resilience, encoding: 'utf8' });
     const { parseEnvelope } = await import('@cucumber/messages');
@@ -432,8 +432,8 @@ describe.skipIf(!built)('applySetOverrides', () => {
     rmSync(dir, { recursive: true, force: true });
   });
 
-  it('bddx docs renders the spec folders with results and the folder README', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'bddx-docs-'));
+  it('bddr docs renders the spec folders with results and the folder README', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'bddr-docs-'));
     const basic = join(orchestration, '..', 'basic');
     const events = join(dir, 'e.ndjson');
     expect(spawnSync(process.execPath, [bin, '-f', `ndjson:${events}`, '-f', 'progress'], { cwd: basic, encoding: 'utf8' }).status).toBe(0);

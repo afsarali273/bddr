@@ -1,5 +1,5 @@
-import { defineConfig } from '@bddx/cli';
-import { selenium } from '../src/index.js'; // in your project: import { selenium } from '@bddx/selenium';
+import { defineConfig } from '@bddr/cli';
+import { selenium } from '../src/index.js'; // in your project: import { selenium } from '@bddr/selenium';
 
 export default defineConfig({
   features: 'features/**/*.feature',

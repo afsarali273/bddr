@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { EventBus, buildPlan, parseSpec, type Log } from '@bddx/core';
-import { Executor, SupportRegistry, log, type StepContext } from '@bddx/runtime';
+import { EventBus, buildPlan, parseSpec, type Log } from '@bddr/core';
+import { Executor, SupportRegistry, log, type StepContext } from '@bddr/runtime';
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -51,13 +51,13 @@ describe('levelled logging', () => {
     expect(user.indexOf(by('after b'))).toBeLessThan(user.indexOf(by('after a')));
   });
 
-  it('emits framework diagnostics as debug logs with source bddx', async () => {
+  it('emits framework diagnostics as debug logs with source bddr', async () => {
     const r = new SupportRegistry();
     r.defineStep('ok', () => {});
     const bus = new EventBus({ keepHistory: true });
     const s = parseSpec('Feature: D\n  @id:a\n  Scenario: a\n    Given ok\n  @dependsOn:a\n  Scenario: b\n    Given ok\n', 'd.feature').scenarios;
     await new Executor({ registry: r, bus }).execute(s);
-    const diag = bus.history!.filter((e): e is Log => e.type === 'log' && e.source === 'bddx').map((l) => l.message);
+    const diag = bus.history!.filter((e): e is Log => e.type === 'log' && e.source === 'bddr').map((l) => l.message);
     expect(diag[0]).toMatch(/^plan: 2 scenario\(s\), workers=1/);
     expect(diag).toContain('start d.feature::b on w1 after a');
   });
@@ -65,7 +65,7 @@ describe('levelled logging', () => {
 
 describe('logging images', () => {
   it('ctx.log.image and bytes-as-data attach an image to the log line; media type sniffed', async () => {
-    const { sniffMediaType } = await import('@bddx/runtime');
+    const { sniffMediaType } = await import('@bddr/runtime');
     const png = Buffer.from('89504e470d0a1a0a', 'hex');
     const jpg = Buffer.from('ffd8ffe0', 'hex');
     expect(sniffMediaType(png)).toBe('image/png');

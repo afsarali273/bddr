@@ -13,7 +13,7 @@ import type { ScenarioInstance } from '../model.js';
  *   @priority:<n>                 lower runs first among ready scenarios (default: group priority, else 0)
  *   @exclusive                    runs alone: nothing else in flight
  *
- * Config (bddx.config.ts `groups`):
+ * Config (bddr.config.ts `groups`):
  *   groups: { checkout: { mode: 'parallel', workers: 4, dependsOn: ['setup'], match: '@checkout' } }
  */
 export type GroupMode = 'parallel' | 'serial' | 'exclusive';

@@ -1,7 +1,7 @@
 {
-  "name": "@bddx/playwright",
+  "name": "@bddr/playwright",
   "version": "0.1.0",
-  "description": "Playwright plugin for bddx: browser per worker, context and page per scenario, API request context, screenshots, traces and videos",
+  "description": "Playwright plugin for bddr: browser per worker, context and page per scenario, API request context, screenshots, traces and videos",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -22,13 +22,13 @@
     "verify": "npm run typecheck && npm run build && npm test"
   },
   "peerDependencies": {
-    "@bddx/runtime": ">=0.1.0",
+    "@bddr/runtime": ">=0.1.0",
     "playwright": ">=1.40.0",
     "@playwright/test": ">=1.40.0"
   },
   "devDependencies": {
-    "@bddx/core": "file:../../packages/core",
-    "@bddx/runtime": "file:../../packages/runtime",
+    "@bddr/core": "file:../../packages/core",
+    "@bddr/runtime": "file:../../packages/runtime",
     "@playwright/test": "^1.65.1",
     "@types/node": "^22.20.5",
     "playwright": "^1.65.1",

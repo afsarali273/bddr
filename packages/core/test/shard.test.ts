@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildPlan, parseShard, parseSpec, shardPlan } from '@bddx/core';
+import { buildPlan, parseShard, parseSpec, shardPlan } from '@bddr/core';
 
 const SRC = `Feature: Shards
   @id:a

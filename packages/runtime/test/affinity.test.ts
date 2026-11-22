@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { buildPlan, parseSpec } from '@bddx/core';
-import { schedule } from '@bddx/runtime';
+import { buildPlan, parseSpec } from '@bddr/core';
+import { schedule } from '@bddr/runtime';
 
 const src = (name: string, serial: boolean, n: number) =>
   `${serial ? '@serial\n' : ''}Feature: ${name}\n${Array.from({ length: n }, (_, i) => `  Scenario: ${name}${i}\n    Given x\n`).join('')}`;

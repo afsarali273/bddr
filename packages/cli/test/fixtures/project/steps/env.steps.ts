@@ -1,4 +1,4 @@
-import { Given } from '@bddx/runtime';
+import { Given } from '@bddr/runtime';
 
 Given('the env is {string}', (ctx, expected: string) => {
   const actual = ctx.params['env'];

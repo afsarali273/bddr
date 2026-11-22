@@ -1,6 +1,6 @@
-import { defineConfig } from '@bddx/cli';
-import { axios } from '@bddx/axios';
-import { playwright } from '@bddx/playwright';
+import { defineConfig } from '@bddr/cli';
+import { axios } from '@bddr/axios';
+import { playwright } from '@bddr/playwright';
 
 const uiBaseUrl = 'https://the-internet.herokuapp.com';
 const apiBaseUrl = 'https://jsonplaceholder.typicode.com';
@@ -23,7 +23,7 @@ export default defineConfig({
       context: { baseURL: uiBaseUrl, ignoreHTTPSErrors: true, viewport: { width: 1440, height: 900 } },
       request: {
         baseURL: apiBaseUrl,
-        extraHTTPHeaders: { Accept: 'application/json', 'User-Agent': 'bddx-playwright-showcase' },
+        extraHTTPHeaders: { Accept: 'application/json', 'User-Agent': 'bddr-playwright-showcase' },
         timeout: 15_000,
       },
     }),
@@ -74,8 +74,8 @@ export default defineConfig({
   },
   reporters: [
     'console',
-    ['html', { outputFile: 'reports/report.html', title: 'bddx + Playwright showcase' }],
-    ['junit', { outputFile: 'reports/junit.xml', suiteName: 'bddx-playwright-showcase' }],
+    ['html', { outputFile: 'reports/report.html', title: 'bddr + Playwright showcase' }],
+    ['junit', { outputFile: 'reports/junit.xml', suiteName: 'bddr-playwright-showcase' }],
     ['ndjson', { outputFile: 'reports/events.ndjson' }],
   ],
   profiles: {

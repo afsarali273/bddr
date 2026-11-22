@@ -1,5 +1,5 @@
 import { attemptsNote } from './logs.js';
-import { logLevelEnabled, type BddxEvent, type Log, type LogLevel, type PlannedScenario, type Status, type StepFinished } from '@bddx/core';
+import { logLevelEnabled, type BddrEvent, type Log, type LogLevel, type PlannedScenario, type Status, type StepFinished } from '@bddr/core';
 import type { Reporter, ReporterOptions } from './types.js';
 
 const ICON: Record<Status, string> = {
@@ -38,7 +38,7 @@ export function consoleReporter(raw: ReporterOptions = {}): Reporter {
   const scenarioLogs = new Map<string, Log[]>();
   const fmtLog = (l: Log, indent: string) => {
     const level = l.level ?? 'info';
-    const tag = `[${l.source === 'bddx' ? `bddx:${level}` : level}]`;
+    const tag = `[${l.source === 'bddr' ? `bddr:${level}` : level}]`;
     const head = useColor ? `\x1b[${LEVEL_COLOR[level]}m${tag}\x1b[0m` : tag;
     let data = '';
     if (l.data !== undefined) {
@@ -61,7 +61,7 @@ export function consoleReporter(raw: ReporterOptions = {}): Reporter {
 
   return {
     name: 'console',
-    onEvent(e: BddxEvent) {
+    onEvent(e: BddrEvent) {
       switch (e.type) {
         case 'specParsed':
           for (const err of e.errors) parseErrors.push(`${err.uri}${err.line ? `:${err.line}` : ''} ${err.message}`);

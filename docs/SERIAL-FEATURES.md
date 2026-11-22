@@ -31,7 +31,7 @@ Rules and guarantees:
 - `--shard` keeps a serial feature on one shard.
 - Errors (exit 2): `@serial` on a single scenario, `@serial` and `@parallel` together, and a scenario that
   `@dependsOn` a later scenario in the same serial feature (a cycle).
-- `bddx plan` shows the chain as `<- previous (feature runs in file order)`.
+- `bddr plan` shows the chain as `<- previous (feature runs in file order)`.
 
 To share one browser session (context, page, login) across a serial feature, use feature-scoped fixtures
 (docs/FIXTURES.md); with Playwright: `@serial @reuseContext` on the Feature, or the plugin option

@@ -1,4 +1,4 @@
-import { inject } from '@bddx/runtime';
+import { inject } from '@bddr/runtime';
 
 /** Page object: takes its page and the shop from fixtures; no constructor wiring. */
 export class LoginPage {

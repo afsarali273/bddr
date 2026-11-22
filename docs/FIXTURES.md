@@ -11,7 +11,7 @@ Source: `packages/runtime/src/fixtures.ts` (engine), `api.ts` (`defineFixture`, 
 ## Define
 
 ```ts
-import { defineFixture } from '@bddx/runtime';
+import { defineFixture } from '@bddr/runtime';
 
 defineFixture('browser', () => chromium.launch(), { scope: 'worker', teardown: (b) => b.close() });
 defineFixture('page', async ({ browser }) => browser.newPage(), {
@@ -22,7 +22,7 @@ defineFixture('page', async ({ browser }) => browser.newPage(), {
 });
 defineFixture('login', ({ page }) => new LoginPage(page)); // page objects can be fixtures too
 
-declare module '@bddx/runtime' {              // types for ctx.page, ({ page }) and inject('page')
+declare module '@bddr/runtime' {              // types for ctx.page, ({ page }) and inject('page')
   interface Fixtures { browser: Browser; page: Page; login: LoginPage }
 }
 ```
@@ -61,8 +61,8 @@ class LoginSteps {
 class LoginPage { private page = inject('page'); /* ... */ }
 ```
 
-How it works: bddx reads the first parameter of steps, hooks and fixture setups (like Playwright Test) and creates the
-destructured fixtures before calling them. `inject('x')` on an async fixture that is not ready yet stops construction; bddx
+How it works: bddr reads the first parameter of steps, hooks and fixture setups (like Playwright Test) and creates the
+destructured fixtures before calling them. `inject('x')` on an async fixture that is not ready yet stops construction; bddr
 creates the fixture and constructs again (constructors must not have side effects beyond field set-up, which is normal).
 Reading `ctx.page` without requesting it works for synchronous or already-created fixtures; otherwise the error says how
 to request it. `static inject = [...]` and `resolve()` still work.
@@ -71,12 +71,12 @@ Names are identifiers and must not clash with context properties (`state`, `para
 
 ## Plugins
 
-A plugin bundles fixtures, hooks, steps and parameter types. bddx depends on no browser or HTTP library; the plugin
+A plugin bundles fixtures, hooks, steps and parameter types. bddr depends on no browser or HTTP library; the plugin
 is a dependency of the project that uses it.
 
 ```ts
-// @bddx/playwright (or ./support/db.plugin.ts)
-import { definePlugin, defineFixture } from '@bddx/runtime';
+// @bddr/playwright (or ./support/db.plugin.ts)
+import { definePlugin, defineFixture } from '@bddr/runtime';
 export default definePlugin<{ browser?: 'chromium' | 'firefox' }>({
   name: 'playwright',
   setup(options) { defineFixture('browser', /* ... */); defineFixture('page', /* ... */); },
@@ -84,8 +84,8 @@ export default definePlugin<{ browser?: 'chromium' | 'firefox' }>({
 ```
 
 ```ts
-// bddx.config.ts
-export default defineConfig({ plugins: ['@bddx/playwright', ['./support/db.plugin.ts', { url: 'postgres://...' }]] });
+// bddr.config.ts
+export default defineConfig({ plugins: ['@bddr/playwright', ['./support/db.plugin.ts', { url: 'postgres://...' }]] });
 ```
 
 `setup` runs once per process (main and every worker process) before step files load. Package names resolve from the
@@ -93,8 +93,8 @@ config folder; paths starting with `.` are relative to it. A missing plugin is a
 
 ## Available plugins
 
-- `plugins/playwright` (`@bddx/playwright`): `playwright`, `browser` (worker), `context`, `page`, `request` (scenario);
+- `plugins/playwright` (`@bddr/playwright`): `playwright`, `browser` (worker), `context`, `page`, `request` (scenario);
   screenshots, traces and videos by `'off' | 'on' | 'only-on-failure'`; `-D browser= / headed= / baseURL=` overrides.
   `reuseContext: 'serial'` (or `@reuseContext` on a `@serial` feature) gives the whole feature one context and page.
-  A standalone package (not a bddx workspace): Playwright is its peer dependency, never bddx's. Offline example in
+  A standalone package (not a bddr workspace): Playwright is its peer dependency, never bddr's. Offline example in
   `plugins/playwright/example`. See its README.

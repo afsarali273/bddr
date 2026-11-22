@@ -29,8 +29,8 @@ file is self-contained.
 - [x] Example project
 - [x] Class-based steps with decorators (`@Steps()` + `@Given`…) + DI container (`static inject`, per-scenario instances, `dispose()`)
 - [x] Cucumber JSON reporter (`cucumber-json` / `json`)
-- [x] `bddx snippets` command
-- [x] `bddx validate`: parse/plan/config errors, undefined/ambiguous steps, duplicate ids, unused steps, unmatched hooks, optional tag governance
+- [x] `bddr snippets` command
+- [x] `bddr validate`: parse/plan/config errors, undefined/ambiguous steps, duplicate ids, unused steps, unmatched hooks, optional tag governance
 - [x] Gate: a real project runs end to end (`examples/playwright-showcase`: 125 Playwright UI/API scenarios across 13
       feature files, mixing serial and parallel groups in one command)
 
@@ -77,8 +77,8 @@ groups: {
 Tags: `@group:<name>`, `@id:<id>`, `@dependsOn:<id|group:name>[:soft]`, `@lock:<name>`, `@priority:<n>`, `@requires:<file.feature>`, `@exclusive`.
 
 - [x] Planner (`core/src/plan`): DAG of instances + groups; validates cycles, unknown ids/groups, bad priority/workers
-- [x] `bddx plan` (`--plan-format text|json|mermaid`)
-- [x] `bddx plan --explain <id>`
+- [x] `bddr plan` (`--plan-format text|json|mermaid`)
+- [x] `bddr plan --explain <id>`
 - [x] Dependencies of selected scenarios are pulled in by default (`--no-deps` to disable); deps resolved across all spec files
 - [x] Scheduler (`runtime/src/scheduler.ts`): ready queue by priority, workers, group modes/caps, locks, exclusive (in-process async)
 - [x] Worker processes (`pool: 'process'`, child_process fork), IPC of events, BeforeWorker/AfterWorker, run-store seed, crash recovery
@@ -100,7 +100,7 @@ Tags: `@group:<name>`, `@id:<id>`, `@dependsOn:<id|group:name>[:soft]`, `@lock:<
 - [x] Policies: attempts, delay/backoff, `retry.on` (error name / message / regex), worker-crash retry, `setRetryAnalyzer` (TestNG-style)
 - [x] ~~`attempt` hook level~~ not needed: scenario hooks run per attempt; step hooks have `eachAttempt`
 - [x] Flaky status (pass after fail, incl. merged reruns), `--fail-on-flaky`, `@quarantine`
-- [x] Rerun-failed from an NDJSON file + `bddx report` merge
+- [x] Rerun-failed from an NDJSON file + `bddr report` merge
 - [x] Soft assertions (`ctx.soft.check/run`)
 - [x] Scenario time budget (`@timeout` on scenarios, `scenarioTimeout`)
 - [x] Group/run time budgets; cancellation via `AbortSignal`; graceful Ctrl+C (exit 130)
@@ -110,8 +110,8 @@ Tags: `@group:<name>`, `@id:<id>`, `@dependsOn:<id|group:name>[:soft]`, `@lock:<
 - [x] HTML report v1 (single file): summary, groups, filters, steps, logs with images, attachments, errors (`html` reporter)
 - [x] HTML report v2: timeline per worker lane (attempts, retried attempts, worker start-up, busy %, group spans),
       dependency graph (scenarios + groups, soft dashed), history view; all inline SVG, one offline file
-- [x] Living documentation view: `bddx docs` (folder tree = requirements; README.md per folder)
-- [x] History store (`history` config, `.bddx/history`, keep N) + flakiness score + `bddx history`
+- [x] Living documentation view: `bddr docs` (folder tree = requirements; README.md per folder)
+- [x] History store (`history` config, `.bddr/history`, keep N) + flakiness score + `bddr history`
 - [x] Cucumber Messages adapter (ADR-007): `-f messages[:file]`
 - [x] Interactive debug mode: `--debug` (pause on failure), `--debug-step`, `--inspect`
 - [ ] VS Code extension + language server (step completion, go to definition)
@@ -126,8 +126,8 @@ in TS/Java; the annotated document is the report. Design note: [design/code-link
 - [ ] Settle binding syntax and file selection (open questions in the design note)
 - [ ] Registry: index step definitions by symbol (class.method / function) in addition to pattern
 - [ ] `SpecParser` for Markdown with bindings
-- [x] `bddx validate` (general project validation; delivered outside this parked design)
-- [ ] `bddx bind --fix` (rewrite line links to symbols)
+- [x] `bddr validate` (general project validation; delivered outside this parked design)
+- [ ] `bddr bind --fix` (rewrite line links to symbols)
 - [ ] Markdown report renderer with inline statuses
 
 ## Phase 6: Ecosystem

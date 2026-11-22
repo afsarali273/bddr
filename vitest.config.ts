@@ -11,7 +11,7 @@ const src = (pkg: string) => fileURLToPath(new URL(`./packages/${pkg}/src/index.
  */
 function tc39Decorators(): Plugin {
   return {
-    name: 'bddx:tc39-decorators',
+    name: 'bddr:tc39-decorators',
     enforce: 'pre',
     transform(code, id) {
       if (!/\.[cm]?ts$/.test(id) || id.includes('node_modules') || !/^\s*@\w+\(/m.test(code)) return null;
@@ -29,9 +29,9 @@ export default defineConfig({
   plugins: [tc39Decorators()],
   resolve: {
     alias: {
-      '@bddx/core': src('core'),
-      '@bddx/runtime': src('runtime'),
-      '@bddx/reporters': src('reporters'),
+      '@bddr/core': src('core'),
+      '@bddr/runtime': src('runtime'),
+      '@bddr/reporters': src('reporters'),
     },
   },
   test: {

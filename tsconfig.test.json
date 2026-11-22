@@ -7,16 +7,16 @@
     "noEmit": true,
     "rootDir": ".",
     "paths": {
-      "@bddx/core": [
+      "@bddr/core": [
         "./packages/core/src/index.ts"
       ],
-      "@bddx/runtime": [
+      "@bddr/runtime": [
         "./packages/runtime/src/index.ts"
       ],
-      "@bddx/reporters": [
+      "@bddr/reporters": [
         "./packages/reporters/src/index.ts"
       ],
-      "@bddx/cli": [
+      "@bddr/cli": [
         "./packages/cli/src/index.ts"
       ]
     }

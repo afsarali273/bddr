@@ -1,5 +1,5 @@
 import { strict as assert } from 'node:assert';
-import { Then, When } from '@bddx/runtime';
+import { Then, When } from '@bddr/runtime';
 
 // API steps use the `request` fixture: no browser is launched for these scenarios.
 When('I GET {string}', async ({ request, shop, state }, path: string) => {

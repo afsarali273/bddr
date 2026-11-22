@@ -13,5 +13,5 @@
     "skipLibCheck": true,
     "types": ["node"]
   },
-  "include": ["bddx.config.ts", "src/**/*.ts"]
+  "include": ["bddr.config.ts", "src/**/*.ts"]
 }

@@ -1,9 +1,9 @@
 {
-  "name": "@bddx/cli",
+  "name": "@bddr/cli",
   "version": "0.1.0",
-  "description": "bddx command line: run, dry-run, snippets",
+  "description": "bddr command line: run, dry-run, snippets",
   "type": "module",
-  "bin": { "bddx": "./dist/bin.js" },
+  "bin": { "bddr": "./dist/bin.js" },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -11,9 +11,9 @@
   },
   "files": ["dist"],
   "dependencies": {
-    "@bddx/core": "0.1.0",
-    "@bddx/runtime": "0.1.0",
-    "@bddx/reporters": "0.1.0",
+    "@bddr/core": "0.1.0",
+    "@bddr/runtime": "0.1.0",
+    "@bddr/reporters": "0.1.0",
     "tinyglobby": "^0.2.17",
     "tsx": "^4.23.15"
   }

@@ -1,5 +1,5 @@
-import { EventBus, parseSpec, type BddxEvent, type ScenarioInstance } from '@bddx/core';
-import { Executor, SupportRegistry, type ExecuteOptions } from '@bddx/runtime';
+import { EventBus, parseSpec, type BddrEvent, type ScenarioInstance } from '@bddr/core';
+import { Executor, SupportRegistry, type ExecuteOptions } from '@bddr/runtime';
 
 /** Parse inline Gherkin (one or more features) into scenarios. */
 export function scenariosOf(...features: string[]): ScenarioInstance[] {
@@ -18,7 +18,7 @@ export async function run(
   const bus = new EventBus({ keepHistory: true });
   const result = await new Executor({ registry, bus, ...options }).execute(scenarios);
   const events = bus.history!;
-  const of = <T extends BddxEvent['type']>(type: T) => events.filter((e): e is Extract<BddxEvent, { type: T }> => e.type === type);
+  const of = <T extends BddrEvent['type']>(type: T) => events.filter((e): e is Extract<BddrEvent, { type: T }> => e.type === type);
   const statusOf = (id: string) => result.scenarioStatuses.get(id);
   const stepStatuses = (scenarioId: string) =>
     of('stepFinished')

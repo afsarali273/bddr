@@ -9,9 +9,9 @@ const bin = fileURLToPath(new URL('../dist/bin.js', import.meta.url));
 const project = fileURLToPath(new URL('./fixtures/fixtures-project/', import.meta.url));
 
 function runProject(args: string[]) {
-  const dir = mkdtempSync(join(tmpdir(), 'bddx-fx-'));
+  const dir = mkdtempSync(join(tmpdir(), 'bddr-fx-'));
   const log = join(dir, 'fx.log');
-  const r = spawnSync(process.execPath, [bin, ...args], { cwd: project, encoding: 'utf8', env: { ...process.env, BDDX_FX_LOG: log } });
+  const r = spawnSync(process.execPath, [bin, ...args], { cwd: project, encoding: 'utf8', env: { ...process.env, BDDR_FX_LOG: log } });
   let lines: string[] = [];
   try {
     lines = readFileSync(log, 'utf8').trim().split('\n');
@@ -53,9 +53,9 @@ describe('fixtures + plugins end to end (groups, dependencies, retry, workers)',
   });
 
   it('a missing plugin is a usage error (exit 2) that says how to fix it', () => {
-    const { r } = runProject(['--set', 'plugins=["@bddx/does-not-exist"]']);
+    const { r } = runProject(['--set', 'plugins=["@bddr/does-not-exist"]']);
     expect(r.status).toBe(2);
-    expect(r.stderr).toContain('plugin "@bddx/does-not-exist" not found');
+    expect(r.stderr).toContain('plugin "@bddr/does-not-exist" not found');
   });
 
   it('a @serial feature keeps one feature-scoped session in one worker process (process pool, 2 workers)', () => {

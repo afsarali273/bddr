@@ -1,5 +1,5 @@
-import { AfterAll, BeforeAll, BeforeFeature } from '@bddx/runtime';
-import '@bddx/selenium'; // types for ctx.driver / ctx.open / inject('driver'); the plugin itself is in bddx.config.ts
+import { AfterAll, BeforeAll, BeforeFeature } from '@bddr/runtime';
+import '@bddr/selenium'; // types for ctx.driver / ctx.open / inject('driver'); the plugin itself is in bddr.config.ts
 
 BeforeAll((ctx) => {
   ctx.log.info('Starting Selenium showcase', { sauce: ctx.params['sauceBaseUrl'], browser: ctx.params['browser'] ?? 'chrome (config)' });

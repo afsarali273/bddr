@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { EventBus, parseSpec } from '@bddx/core';
+import { EventBus, parseSpec } from '@bddr/core';
 import {
   After,
   AfterSuite,
@@ -21,7 +21,7 @@ import {
   type FeatureContext,
   type RunContext,
   type StepContext,
-} from '@bddx/runtime';
+} from '@bddr/runtime';
 
 afterEach(() => void resetGlobalRegistry());
 
@@ -33,7 +33,7 @@ async function runFeature(src: string) {
 
 describe('class-based steps', () => {
   it('the package can be dynamically imported (no thenable namespace)', async () => {
-    const mod = await import('@bddx/runtime');
+    const mod = await import('@bddr/runtime');
     expect('then' in mod).toBe(false);
   });
 

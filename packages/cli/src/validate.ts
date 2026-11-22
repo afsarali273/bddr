@@ -1,5 +1,5 @@
-import { buildPlan, compileTagExpression, parseDuration, type Plan, type ScenarioInstance } from '@bddx/core';
-import type { HookDefinition, StepDefinition, SupportRegistry } from '@bddx/runtime';
+import { buildPlan, compileTagExpression, parseDuration, type Plan, type ScenarioInstance } from '@bddr/core';
+import type { HookDefinition, StepDefinition, SupportRegistry } from '@bddr/runtime';
 import { loadSupportCode, prepareRun, type RunRequest } from './run.js';
 
 export type ValidationSeverity = 'error' | 'warning';
@@ -162,7 +162,7 @@ const BUILT_IN_TAG_KEYS = [
   'stepRetry', 'stepDelay', 'stepTimeout',
 ] as const;
 
-function validateConfig(opts: import('./config.js').BddxOptions, add: (d: ValidationDiagnostic) => void): void {
+function validateConfig(opts: import('./config.js').BddrOptions, add: (d: ValidationDiagnostic) => void): void {
   const error = (message: string) => add({ severity: 'error', code: 'config', message });
   if (opts.pool !== undefined && opts.pool !== 'inline' && opts.pool !== 'process') error(`pool must be inline or process`);
   if (opts.defaultMode !== undefined && !['parallel', 'serial', 'exclusive'].includes(opts.defaultMode)) error(`defaultMode must be parallel, serial or exclusive`);

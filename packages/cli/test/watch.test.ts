@@ -22,11 +22,11 @@ describe('watch planning', () => {
     expect(planWatchRun(['features/b.feature', 'features/a.feature', 'features/a.feature'])).toEqual({ paths: ['features/a.feature', 'features/b.feature'] });
     expect(planWatchRun(['features/a.feature', 'steps/x.ts'])).toEqual({});
     expect(planWatchRun(['data/users.csv'])).toEqual({});
-    expect(planWatchRun(['bddx.config.ts'])).toEqual({});
+    expect(planWatchRun(['bddr.config.ts'])).toEqual({});
   });
 
   it('ignores build output, reports, history and editor temp files', () => {
-    for (const f of ['node_modules/x/index.js', '.bddx/history/1.json', 'reports/report.html', 'dist/a.js', '.git/HEAD', 'features/a.feature~', 'features/.a.feature.swp']) {
+    for (const f of ['node_modules/x/index.js', '.bddr/history/1.json', 'reports/report.html', 'dist/a.js', '.git/HEAD', 'features/a.feature~', 'features/.a.feature.swp']) {
       expect(isIgnored(f)).toBe(true);
     }
     expect(isIgnored('features/a.feature')).toBe(false);
@@ -34,7 +34,7 @@ describe('watch planning', () => {
   });
 });
 
-describe('bddx --watch', () => {
+describe('bddr --watch', () => {
   it('runs once, re-runs when a feature changes, and quits on q', async () => {
     const dir = mkdtempSync(join(fixtures, 'tmp-watch-'));
     try {
@@ -51,7 +51,7 @@ describe('bddx --watch', () => {
         }
       };
       await until(/Waiting for changes/g, 1);
-      expect(out).toContain('bddx watch: watching');
+      expect(out).toContain('bddr watch: watching');
       appendFileSync(join(dir, 'features', 'mixed.feature'), '\n  @green\n  Scenario: added later\n    Given the env is "local"\n');
       await until(/Waiting for changes/g, 2);
       expect(out).toContain('running features/mixed.feature');

@@ -13,7 +13,7 @@
  *
  * In-process concurrency (async). Worker processes (true isolation) plug in later behind `runNode`.
  */
-import type { Plan, PlanNode, Status } from '@bddx/core';
+import type { Plan, PlanNode, Status } from '@bddr/core';
 import { TimeoutError } from './signals.js';
 
 export interface SchedulerCallbacks {

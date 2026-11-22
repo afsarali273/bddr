@@ -1,5 +1,5 @@
 /**
- * bddx event schema (v1).
+ * bddr event schema (v1).
  *
  * Everything that happens in a run is an event. Reporters, the debugger and
  * history tooling consume ONLY this stream, so it must be complete and stable.
@@ -27,7 +27,7 @@ export interface RunStarted extends Base {
   type: 'runStarted';
   runId: string;
   schemaVersion: number;
-  framework: { name: 'bddx'; version: string };
+  framework: { name: 'bddr'; version: string };
   runtime: { name: string; version: string };
   dryRun: boolean;
 }
@@ -212,8 +212,8 @@ export interface Log extends Base {
   message: string;
   /** Default 'info' (events written before levels existed have none). */
   level?: LogLevel;
-  /** 'user' = steps/hooks/helpers; 'bddx' = the framework's own diagnostics. */
-  source?: 'user' | 'bddx';
+  /** 'user' = steps/hooks/helpers; 'bddr' = the framework's own diagnostics. */
+  source?: 'user' | 'bddr';
   /** Structured payload (JSON-serialisable), shown by reporters on request. */
   data?: unknown;
   /** Attempt number when logged inside a @repeat / @retry step. */
@@ -277,7 +277,7 @@ export interface RunFinished extends Base {
   error?: ErrorInfo;
 }
 
-export type BddxEvent =
+export type BddrEvent =
   | RunStarted
   | SpecParsed
   | PlanReady
@@ -298,13 +298,13 @@ export type BddxEvent =
   | ScenarioFinished
   | RunFinished;
 
-export type BddxEventType = BddxEvent['type'];
+export type BddrEventType = BddrEvent['type'];
 
-/** Distributive Omit so `Omit<BddxEvent, 'ts'>` keeps the union discriminated. */
+/** Distributive Omit so `Omit<BddrEvent, 'ts'>` keeps the union discriminated. */
 export type DistributiveOmit<T, K extends PropertyKey> = T extends unknown ? Omit<T, K> : never;
-export type EventInput = DistributiveOmit<BddxEvent, 'ts'>;
+export type EventInput = DistributiveOmit<BddrEvent, 'ts'>;
 
-export type EventListener = (event: BddxEvent) => void | Promise<void>;
+export type EventListener = (event: BddrEvent) => void | Promise<void>;
 
 /**
  * Minimal ordered event bus.
@@ -316,7 +316,7 @@ export class EventBus {
   private listeners: EventListener[] = [];
   private pending: Promise<unknown>[] = [];
   private listenerErrors: unknown[] = [];
-  readonly history: BddxEvent[] | undefined;
+  readonly history: BddrEvent[] | undefined;
 
   constructor(options: { keepHistory?: boolean } = {}) {
     this.history = options.keepHistory ? [] : undefined;
@@ -329,8 +329,8 @@ export class EventBus {
     };
   }
 
-  emit(input: EventInput): BddxEvent {
-    const event = { ts: Date.now(), ...input } as BddxEvent;
+  emit(input: EventInput): BddrEvent {
+    const event = { ts: Date.now(), ...input } as BddrEvent;
     this.history?.push(event);
     for (const l of this.listeners) {
       try {

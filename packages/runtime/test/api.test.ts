@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { Before, Given, getGlobalRegistry, resetGlobalRegistry, setDefaultTimeout, DataTable } from '@bddx/runtime';
+import { Before, Given, getGlobalRegistry, resetGlobalRegistry, setDefaultTimeout, DataTable } from '@bddr/runtime';
 
 afterEach(() => {
   resetGlobalRegistry();
@@ -24,7 +24,7 @@ describe('global API', () => {
 
   it('shares one registry through globalThis', () => {
     const a = getGlobalRegistry();
-    expect((globalThis as Record<symbol, unknown>)[Symbol.for('bddx.registry.v1')]).toBe(a);
+    expect((globalThis as Record<symbol, unknown>)[Symbol.for('bddr.registry.v1')]).toBe(a);
   });
 
   it('rejects invalid hook tag expressions at registration time', () => {

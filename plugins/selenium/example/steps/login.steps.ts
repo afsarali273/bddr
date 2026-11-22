@@ -1,5 +1,5 @@
 import { strict as assert } from 'node:assert';
-import { Given, Steps, Then, When, inject } from '@bddx/runtime';
+import { Given, Steps, Then, When, inject } from '@bddr/runtime';
 import { LoginPage } from '../pages/login.page.js';
 
 // Class style: inject() the page object.

@@ -1,6 +1,6 @@
 # Implementation guide
 
-How bddx works today, module by module. Keep this in sync with the code; it is the first thing a new
+How bddr works today, module by module. Keep this in sync with the code; it is the first thing a new
 contributor (human or AI) reads after PROGRESS.md.
 
 Last updated: 2026-11-15 (Phases 0–1 done, Phase 2 data core done, Phase 3 planner + in-process scheduler done).
@@ -17,7 +17,7 @@ Last updated: 2026-11-15 (Phases 0–1 done, Phase 2 data core done, Phase 3 pla
 - **Everything becomes `ScenarioInstance`s first.** One instance = one executable test (an outline row is
   its own instance). Later phases will expand `@data:` tags the same way.
 - **Everything observable is an event.** Reporters never look at runtime internals.
-- **The CLI is a thin shell** around `runBddx()` (packages/cli/src/run.ts), which is also the programmatic API.
+- **The CLI is a thin shell** around `runBddr()` (packages/cli/src/run.ts), which is also the programmatic API.
 
 The **Planner** (`core/src/plan`) turns the selection into a validated graph; the **Scheduler**
 (`runtime/src/scheduler.ts`) decides what runs when; the **Executor** runs nodes and owns scopes/hooks/events.
@@ -26,8 +26,8 @@ global state.
 
 ## 2. Own core, swappable third-party parts (ports & adapters)
 
-bddx's runner, hooks, context, DI, data, ids, events, reports and CLI are its own code. Third-party libraries are used
-only for three narrow jobs, each behind an interface bddx owns:
+bddr's runner, hooks, context, DI, data, ids, events, reports and CLI are its own code. Third-party libraries are used
+only for three narrow jobs, each behind an interface bddr owns:
 
 | Port (interface) | Defined in | Default adapter | Library |
 | --- | --- | --- | --- |
@@ -42,7 +42,7 @@ suffix (`specParserFor`); the CLI's folder globs come from `specFileGlobSuffix()
 
 ## 2b. Packages
 
-### 2.1 `@bddx/core` (no internal deps)
+### 2.1 `@bddr/core` (no internal deps)
 
 | File | Responsibility |
 | --- | --- |
@@ -53,8 +53,8 @@ suffix (`specParserFor`); the CLI's folder globs come from `specFileGlobSuffix()
 | `data/csv.ts` | RFC 4180 CSV parser |
 | `tags.ts` | `parseTag()` (key/value split), `tagsToMeta()`, `compileTagExpression()` (wraps `@cucumber/tag-expressions`) |
 | `selection.ts` | `selectScenarios(all, {tags, name, lines, ids})`, `parsePathWithLines('a.feature:12')` |
-| `events.ts` | Event schema v1 (`BddxEvent` union), `EventBus`, `emptySummary()`, `LogLevel` |
-| `events-merge.ts` | `parseNdjson`, `finalResults`, `idsToRerun` (--rerun-failed), `mergeEventStreams` (`bddx report`) |
+| `events.ts` | Event schema v1 (`BddrEvent` union), `EventBus`, `emptySummary()`, `LogLevel` |
+| `events-merge.ts` | `parseNdjson`, `finalResults`, `idsToRerun` (--rerun-failed), `mergeEventStreams` (`bddr report`) |
 | `step-tags.ts` | Step-line trailing tags (`@repeat` … `@concurrency`), scenario step defaults, `parseDuration` |
 | `plan/` | Planner (`buildPlan`: groups, deps, locks, priority, retry, quarantine, validation), plan types, text/JSON/Mermaid rendering |
 | `ids.ts` | `slugify()`, `createIdGenerator()` |
@@ -90,12 +90,12 @@ bare tags). Effective tags = feature + rule + scenario + examples, de-duplicated
 5. Any data problem → a `ParseErrorInfo` on the tag line and the scenario is removed from the document.
    The CLI exits 2 when there are parse errors (other scenarios still run).
 
-### 2.2 `@bddx/runtime` (depends on core)
+### 2.2 `@bddr/runtime` (depends on core)
 
 | File | Responsibility |
 | --- | --- |
 | `ports.ts`, `adapters/cucumber-expressions.ts` | `StepExpressionEngine` interface + Cucumber Expressions adapter |
-| `registry.ts` | `SupportRegistry`: steps, hooks, parameter types (delegated to the engine), matching, snippets. `getGlobalRegistry()` (stored on `globalThis[Symbol.for('bddx.registry.v1')]`), `resetGlobalRegistry()`, `callerLocation()` |
+| `registry.ts` | `SupportRegistry`: steps, hooks, parameter types (delegated to the engine), matching, snippets. `getGlobalRegistry()` (stored on `globalThis[Symbol.for('bddr.registry.v1')]`), `resetGlobalRegistry()`, `callerLocation()` |
 | `api.ts` | Global user API: `Given/When/Then/Step`, `BeforeAll/AfterAll` (= `BeforeSuite/AfterSuite`), `BeforeWorker/AfterWorker`, `BeforeGroup/AfterGroup`, `BeforeFeature/AfterFeature`, `BeforeRule/AfterRule`, `Before/After` (= `BeforeScenario/AfterScenario`), `BeforeStep/AfterStep`, `defineParameterType`, `setDefaultTimeout`, `setRetryAnalyzer` |
 | `executor.ts` | `Executor` / `execute()`: plan execution (lazy ref-counted scopes), hooks, contexts, step repeat/retry, scenario/group retry, soft asserts, events, summary; coordinator mode and worker mode for the process pool |
 | `scheduler.ts` | `schedule(plan, callbacks)`: ready queue by priority, lanes (`workers`), group modes/caps, locks, exclusive, dependency waits, group-retry settling |
@@ -171,30 +171,30 @@ Run success (strict, default): no scenario failed/pending/undefined/ambiguous an
 
 **Dry run**: no hooks run, no step bodies run; matched steps are `skipped`, unmatched are `undefined` with snippets.
 
-### 2.3 `@bddx/reporters` (depends on core)
+### 2.3 `@bddr/reporters` (depends on core)
 
 | Reporter | Notes |
 | --- | --- |
 | `console` (`pretty`, `progress`) | Scenario lines, failing steps, failure list with first user stack frame, undefined-step snippets, summary. Options: `style`, `verbose`, `colors`, `write` |
-| `ndjson` | Every event as one JSON line. Option `outputFile` (default `reports/bddx.ndjson`) |
+| `ndjson` | Every event as one JSON line. Option `outputFile` (default `reports/bddr.ndjson`) |
 | `html` | Single self-contained page: summary, groups, filters (status, log level, framework logs, search), scenarios with steps, errors, snippets, skip reasons, logs + images, attachments, run-level logs and hook failures. Options `outputFile` (default `reports/report.html`), `title`, `logLevel` |
 | `cucumber-json` (alias `json`) | Legacy Cucumber JSON (features → elements → steps, ns durations, embeddings) for existing dashboards. Option `outputFile` (default `reports/cucumber.json`) |
 | `junit` | One testsuite per feature. failed/undefined/ambiguous → `<failure>`, skipped/pending → `<skipped>`, retried attempts before a pass → `<flakyFailure>`, quarantined failures → `<skipped>`, logs in `<system-out>`/`<system-err>`. Option `outputFile`, `suiteName` |
 
 `createReporter(spec)` accepts `'name'`, `'name:outputFile'`, `['name', options]` or a `Reporter` object.
 
-### 2.4 `@bddx/cli` (depends on all)
+### 2.4 `@bddr/cli` (depends on all)
 
 | File | Responsibility |
 | --- | --- |
-| `config.ts` | `BddxConfig`, `defineConfig`, `loadConfig()` (ts/mts/js/mjs/json), profiles, `mergeOptions()` (tags ANDed, params/groups/retry merged), `--set` (`applySetOverrides`, `OPTION_KEYS`) |
-| `run.ts` | `prepareRun()` (config → specs → selection → plan, incl. `--rerun-failed`), `runBddx()` pipeline (support code, reporters, Executor, process pool), `prepareWorker()`, `reportFromEvents()` (`bddx report`); `registerTypeScriptLoader()` (tsx `register()`) |
+| `config.ts` | `BddrConfig`, `defineConfig`, `loadConfig()` (ts/mts/js/mjs/json), profiles, `mergeOptions()` (tags ANDed, params/groups/retry merged), `--set` (`applySetOverrides`, `OPTION_KEYS`) |
+| `run.ts` | `prepareRun()` (config → specs → selection → plan, incl. `--rerun-failed`), `runBddr()` pipeline (support code, reporters, Executor, process pool), `prepareWorker()`, `reportFromEvents()` (`bddr report`); `registerTypeScriptLoader()` (tsx `register()`) |
 | `validate.ts` | Static checks: parse/config/plan errors, duplicate ids, undefined/ambiguous steps without running transformers, unused definitions, unmatched hooks, optional tag governance |
 | `main.ts` | Argument parsing (`node:util` `parseArgs`), `run`, `list`, `snippets`, `validate`, `plan`, `report` commands, help, exit codes |
 | `worker.ts` | Worker process entry for `pool: 'process'` (`serveWorker(prepareWorker)`) |
 | `bin.ts` | `#!/usr/bin/env node` entry |
 
-**`runBddx()` pipeline**: register tsx → load config (+profile) → merge CLI overrides → discover specs
+**`runBddr()` pipeline**: register tsx → load config (+profile) → merge CLI overrides → discover specs
 (paths/globs/`file:line`) → parse → select → import support files (they register on the global registry) →
 create reporters (output paths resolved against the config folder; specs parsed with `parseSpecAsync` and a
 file data loader built from `dataDir` + `--profile`) → build the plan → `Executor.execute()` (with a `ProcessPool`
@@ -273,7 +273,7 @@ once. Each attempt runs `eachAttempt` step hooks around the body, uses its own c
 | Flaky | final pass after any non-passed attempt (scenario retry, group retry, or merged rerun) → `scenarioFinished.flaky`, `summary.flaky`; `--fail-on-flaky` / `retry.failOnFlaky` fails the run | `finishScenario`, `mergeEventStreams` |
 | Quarantine | `@quarantine`: runs and reports, excluded from the success decision and fail-fast | planner `quarantined`, executor summary |
 | Rerun failed | `--rerun-failed <events.ndjson>`: selects ids whose final status was not `passed` (`idsToRerun`), dependencies pulled in | `prepareRun` |
-| Merge reports | `bddx report a.ndjson b.ndjson -f html:… -f junit:…`: later streams win per scenario, recovered = flaky, summary recomputed | `core/src/events-merge.ts`, `reportFromEvents` |
+| Merge reports | `bddr report a.ndjson b.ndjson -f html:… -f junit:…`: later streams win per scenario, recovered = flaky, summary recomputed | `core/src/events-merge.ts`, `reportFromEvents` |
 | Soft assertions | `ctx.soft.check(cond, msg)`, `ctx.soft.run(fn)`; the step fails at its end with all failures | `createSoftAssert`, `attemptOnce` |
 | Scenario time budget | `@timeout:<dur>` on a scenario / config `scenarioTimeout`; each step's timeout is capped to the time left; after the deadline remaining steps are skipped | `runScenario`, `runStep` |
 | Group time budget | `groups.x.timeout`; starts with the first member of each group attempt, aborts in-flight members and skips queued members | scheduler group budget controllers |
@@ -337,14 +337,14 @@ parent (coordinator)                                   worker process wK (forked
 - Worker crash (exit / kill) → that scenario fails with `WorkerCrashedError`; with `retry.workerCrash` it is retried on
   a fresh process, otherwise the lane respawns on its next node. Worker init failure (support code throws, plan mismatch) → `WorkerInitError`,
   the run stops scheduling and fails.
-- Env in workers: `BDDX_WORKER_ID` (`w1`…), `BDDX_WORKER_INDEX` (1…), e.g. for per-worker ports or test accounts.
+- Env in workers: `BDDR_WORKER_ID` (`w1`…), `BDDR_WORKER_INDEX` (1…), e.g. for per-worker ports or test accounts.
 - `--dry-run` always uses the inline pool. Ctrl+C aborts the run, flushes hooks/reporters where possible, kills process
   workers, and exits 130; a worker also exits when the parent disconnects.
 
 ## 2c-quater. Real Playwright project
 
 `examples/playwright-showcase` is a standalone TypeScript consumer project rather than a framework package. It depends
-on the local built `@bddx/*` packages and uses bddx for discovery, planning, execution, retries and reporting;
+on the local built `@bddr/*` packages and uses bddr for discovery, planning, execution, retries and reporting;
 Playwright supplies only Chromium and `APIRequestContext`.
 
 - `BeforeWorker` launches one browser and creates one API request context in each process-local run store.
@@ -370,7 +370,7 @@ plugin. Automatic failure-only trace capture still belongs to that package-level
 | `HistoryRecorder` (events → `HistoryRun`), `loadHistory`, `saveHistory` (keep N), `scenarioHistory`, `rankScenarios` | `core/src/history.ts` |
 | Timeline / dependency graph / history views (inline SVG + CSS) | `reporters/src/html-views.ts` |
 | HTML reporter: collects attempt intervals (scenarioStarted/Finished by `id#attempt`), `workerStarted` start-ups, option `history` (previous runs) | `reporters/src/html.ts` |
-| `history` config, write after the run, previous runs injected into `html` reporters, `bddx history` | `cli/src/run.ts` (`historySettings`, `withHistory`, `historyReport`), `cli/src/main.ts` |
+| `history` config, write after the run, previous runs injected into `html` reporters, `bddr history` | `cli/src/run.ts` (`historySettings`, `withHistory`, `historyReport`), `cli/src/main.ts` |
 | `workerStarted` event (fork → ready) | `runtime/src/pool.ts` |
 
 - **Record** (`HistoryRun` v1): runId, startedAt, durationMs, success, workers, and per scenario id the final status,
@@ -387,7 +387,7 @@ plugin. Automatic failure-only trace capture still belongs to that package-level
 **HTML report v3 (statistics + redesign).** `html-stats.ts` holds `computeStats` (pass rate = passed / executed, nearest-rank
 percentiles, duration histogram, failure clusters keyed by the first error line with digits normalised, breakdowns by
 feature/tag/group, delta vs the previous history run) and the Overview renderers. `html.ts` lays the page out as tabs and
-embeds the results as JSON (`#bddx-data`, `<` escaped) that the share buttons use. View state (tab, search, hidden
+embeds the results as JSON (`#bddr-data`, `<` escaped) that the share buttons use. View state (tab, search, hidden
 statuses) is kept in `location.hash` so a link reproduces the view. No external assets. JUnit also reports failed
 non-scenario hooks as errored cases in a `Hooks` suite.
 
@@ -397,7 +397,7 @@ carry the step argument (`arg`: data table or doc string; optional, additive) so
 
 ## 2d. Configuration sources and precedence
 
-Lowest → highest: built-in defaults → `bddx.config.*` → `--profile <p>` (merged; tags ANDed, params/groups merged by
+Lowest → highest: built-in defaults → `bddr.config.*` → `--profile <p>` (merged; tags ANDed, params/groups merged by
 key) → `--set path=value` (repeatable, JSON-typed, unknown top-level keys rejected; `applySetOverrides`) → dedicated CLI
 flags (`-t`, `-w`, `-D`, `--log-level`, `--fail-fast`, …). Orchestration facts per scenario come from tags in specs.
 
@@ -405,15 +405,15 @@ flags (`-t`, `-w`, `-D`, `--log-level`, `--fail-fast`, …). Orchestration facts
 
 - API: `ctx.log(msg)` (= info), `ctx.log.debug|info|warn|error(msg, data?)`, `ctx.log.image(msg, bytes, {level,
   mediaType, name})`; bytes (Uint8Array/Buffer) passed as `data` also become an image on that log line. Media type is
-  sniffed (png, jpeg, gif, webp, svg, pdf). Global `log` from `@bddx/runtime` for code outside steps (page objects,
+  sniffed (png, jpeg, gif, webp, svg, pdf). Global `log` from `@bddr/runtime` for code outside steps (page objects,
   API clients). `runtime/src/logger.ts`. Playwright: `ctx.log.image('after login', await page.screenshot())`.
 - Attribution: steps and hooks run inside `withLogger(ctx.log, …)` (AsyncLocalStorage), so the global `log` resolves to
   the scenario/step/hook running in the current async context, correct under concurrency. Outside: the run-level
   logger (`setFallbackLogger`), else warn/error go to stderr.
 - Every call → a `log` event `{level, source:'user', message, data?, scenarioId?, stepId?}`; Error data is normalised to
-  `{name, message, stack}`. The framework emits `source:'bddx'` debug diagnostics (plan summary, `start <id> on wN after
+  `{name, message, stack}`. The framework emits `source:'bddr'` debug diagnostics (plan summary, `start <id> on wN after
   … holding …`, `skip <id>: reason`). The CLI writes its own pre-run diagnostics (config, --set, counts, support code) to
-  stderr as `[bddx:debug]` at `--log-level debug`.
+  stderr as `[bddr:debug]` at `--log-level debug`.
 - Log events may carry `attachment {mediaType, encoding:'base64', body, name?, bytes}` (the image).
 - Display: console reporters show logs at or above `logLevel` (default `info`; `silent` hides all); image logs are
   marked `[🖼 image: name]`. Scenario logs are
@@ -456,5 +456,5 @@ vocabulary in `conformance/ts/steps.ts`. See `conformance/README.md`. The Java e
   right place in `executor.ts`, document failure semantics in both places, add conformance coverage.
 - **A new reporter**: implement `Reporter` in `packages/reporters/src`, register it in `builtInReporters`, add a test
   that drives it with a real `Executor` run.
-- **A new CLI option**: `main.ts` (parseArgs + help text) → `RunRequest` in `run.ts` → `BddxOptions` in `config.ts`
+- **A new CLI option**: `main.ts` (parseArgs + help text) → `RunRequest` in `run.ts` → `BddrOptions` in `config.ts`
   if it should also be configurable; add a CLI end-to-end test.

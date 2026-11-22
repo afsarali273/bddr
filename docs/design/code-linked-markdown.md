@@ -7,7 +7,7 @@ Status: idea captured 2026-11-15 from the project owner; not scheduled yet. Plug
 
 Write specs as **ordinary Markdown documents** (no Gherkin keywords, no fixed template). Where the document describes
 an action or a check, it **references the actual automation code**: a function/method name, a file + line, or a link.
-bddx resolves those references to step implementations (TypeScript now, Java later) and runs them in document order.
+bddr resolves those references to step implementations (TypeScript now, Java later) and runs them in document order.
 The same document, annotated with results, becomes the report.
 
 Why it matters:
@@ -39,9 +39,9 @@ Then `CheckoutSteps.left("12.50")` should hold, and a receipt is issued: `Receip
 | Form | Example | Notes |
 | --- | --- | --- |
 | Markdown link to a symbol | `[pay 7.50](../steps/checkout.steps.ts#CheckoutSteps.pay "7.50")` | Link text is prose; title carries args. Clickable in GitHub/IDEs |
-| Link to file + line | `[pay](../steps/checkout.steps.ts#L42)` | Easy for humans, fragile when code moves; `bddx bind --fix` can rewrite to symbols |
+| Link to file + line | `[pay](../steps/checkout.steps.ts#L42)` | Easy for humans, fragile when code moves; `bddr bind --fix` can rewrite to symbols |
 | Inline code call | `` `CheckoutSteps.pay("7.50")` `` | Args inline, type-checked against the method signature |
-| Fenced block | ```` ```bddx ```` with one call per line | For longer sequences |
+| Fenced block | ```` ```bddr ```` with one call per line | For longer sequences |
 | Java | `com.acme.CheckoutSteps#pay("7.50")` | Same resolver, JVM side |
 
 Resolution prefers **symbols** (class.method / exported function) over line numbers, which drift.
@@ -59,8 +59,8 @@ Resolution prefers **symbols** (class.method / exported function) over line numb
 ## Open questions
 
 1. Which binding forms to support first (proposal: symbol links + inline calls).
-2. File selection: a suffix (`.spec.md`) vs. any `.md` with front matter `bddx: true` vs. config globs only.
+2. File selection: a suffix (`.spec.md`) vs. any `.md` with front matter `bddr: true` vs. config globs only.
 3. Argument typing: strings only, or parse literals against the TS/Java signature?
 4. How a heading with bindings in nested sub-headings is split into scenarios.
 5. Report renderer: Markdown → HTML with status badges inline, attachments collapsed under each binding.
-6. Tooling: `bddx validate` (every reference resolves), step catalogue export with symbols for AI, an MCP tool.
+6. Tooling: `bddr validate` (every reference resolves), step catalogue export with symbols for AI, an MCP tool.

@@ -1,2 +1,2 @@
-import { defineConfig } from '@bddx/cli';
+import { defineConfig } from '@bddr/cli';
 export default defineConfig({ reporters: [['console', { colors: false }]] });

@@ -1,15 +1,15 @@
 import { createWriteStream, mkdirSync, type WriteStream } from 'node:fs';
 import { dirname } from 'node:path';
-import type { BddxEvent } from '@bddx/core';
+import type { BddrEvent } from '@bddr/core';
 import type { Reporter, ReporterOptions } from './types.js';
 
 /** Writes every event as one JSON line. The canonical machine-readable output. */
 export function ndjsonReporter(raw: ReporterOptions = {}): Reporter {
-  const outputFile = String(raw['outputFile'] ?? 'reports/bddx.ndjson');
+  const outputFile = String(raw['outputFile'] ?? 'reports/bddr.ndjson');
   let stream: WriteStream | undefined;
   return {
     name: 'ndjson',
-    onEvent(e: BddxEvent) {
+    onEvent(e: BddrEvent) {
       if (!stream) {
         mkdirSync(dirname(outputFile), { recursive: true });
         stream = createWriteStream(outputFile, { encoding: 'utf8' });

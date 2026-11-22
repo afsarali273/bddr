@@ -1,5 +1,5 @@
-import { defineConfig } from '@bddx/cli';
-import { selenium } from '@bddx/selenium';
+import { defineConfig } from '@bddr/cli';
+import { selenium } from '@bddr/selenium';
 
 export default defineConfig({
   features: 'features/**/*.feature',
@@ -31,7 +31,7 @@ export default defineConfig({
   validation: {
     allowedTagKeys: ['alerts', 'auth', 'browser', 'dynamic', 'forms', 'journey', 'owner', 'reuseSession', 'saucedemo', 'serial', 'smoke', 'the-internet', 'ui'],
   },
-  reporters: ['console', ['html', { outputFile: 'reports/report.html', title: 'bddx + Selenium showcase' }], ['junit', { outputFile: 'reports/junit.xml', suiteName: 'bddx-selenium-showcase' }]],
+  reporters: ['console', ['html', { outputFile: 'reports/report.html', title: 'bddr + Selenium showcase' }], ['junit', { outputFile: 'reports/junit.xml', suiteName: 'bddr-selenium-showcase' }]],
   profiles: {
     ci: { reporters: ['progress', 'junit:reports/junit.xml'], logLevel: 'warn' },
     smoke: { tags: '@smoke' },

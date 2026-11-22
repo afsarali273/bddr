@@ -1,4 +1,4 @@
-import { Given, Then, When, type DataTable } from '@bddx/runtime';
+import { Given, Then, When, type DataTable } from '@bddr/runtime';
 import { TodoMvcPage } from '../pages/todomvc.page.js';
 import { requiredParam } from '../support/world.js';
 

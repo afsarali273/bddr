@@ -2,7 +2,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 import type {
   Attachment,
-  BddxEvent,
+  BddrEvent,
   ErrorInfo,
   GroupRetrying,
   HookFinished,
@@ -15,8 +15,8 @@ import type {
   Status,
   StepAttemptFinished,
   StepFinished,
-} from '@bddx/core';
-import { HistoryRecorder, scenarioHistory, type HistoryRun } from '@bddx/core';
+} from '@bddr/core';
+import { HistoryRecorder, scenarioHistory, type HistoryRun } from '@bddr/core';
 import { renderGraph, renderHistory, renderTimeline, trendDots, VIEW_CSS, type Interval, type Startup } from './html-views.js';
 import { buildDatasets, DATA_CSS, renderArg, renderDatasetClose, renderDatasetOpen } from './html-data.js';
 import { RESPONSIVE_CSS } from './html-responsive.js';
@@ -42,7 +42,7 @@ import type { Reporter, ReporterOptions } from './types.js';
  */
 export function htmlReporter(raw: ReporterOptions = {}): Reporter {
   const outputFile = String(raw['outputFile'] ?? 'reports/report.html');
-  const title = String(raw['title'] ?? 'bddx report');
+  const title = String(raw['title'] ?? 'bddr report');
   const logs = new LogIndex((raw['logLevel'] as ReportLogLevel | undefined) ?? 'debug', true);
   const recorder = new HistoryRecorder();
   const opened = new Map<string, { ts: number; worker: string }>();
@@ -67,7 +67,7 @@ export function htmlReporter(raw: ReporterOptions = {}): Reporter {
   let html = '';
   return {
     name: 'html',
-    onEvent(e: BddxEvent) {
+    onEvent(e: BddrEvent) {
       recorder.onEvent(e);
       switch (e.type) {
         case 'runStarted':
@@ -203,7 +203,7 @@ function renderLogs(list: Log[]): string {
         : a.mediaType.startsWith('image/')
           ? `<a class="logimg" href="data:${esc(a.mediaType)};base64,${a.body}" target="_blank" rel="noopener"><img loading="lazy" alt="${esc(a.name ?? l.message)}" src="data:${esc(a.mediaType)};base64,${a.body}"></a>`
           : `<a class="logfile" download="${esc(a.name ?? 'attachment')}" href="data:${esc(a.mediaType)};base64,${a.body}">📎 ${esc(a.name ?? a.mediaType)}</a>`;
-      return `<div class="log lv-${level}${l.source === 'bddx' ? ' src-bddx' : ''}"><span class="lvl">${l.source === 'bddx' ? 'bddx:' : ''}${level}</span>${
+      return `<div class="log lv-${level}${l.source === 'bddr' ? ' src-bddr' : ''}"><span class="lvl">${l.source === 'bddr' ? 'bddr:' : ''}${level}</span>${
         l.attempt ? `<span class="nth">#${l.attempt}</span>` : ''
       }<span class="msg">${esc(l.message)}</span>${d}${att}</div>`;
     })
@@ -234,8 +234,8 @@ function renderAttachments(list: Attachment[]): string {
     .join('')}</div>`;
 }
 
-/** Stack lines inside bddx itself or Node internals are noise for test authors. */
-const INTERNAL_FRAME = /[\\/](node_modules[\\/]@bddx|packages[\\/](runtime|core|cli|reporters)[\\/](dist|src))[\\/]|node:internal|node:async_hooks/;
+/** Stack lines inside bddr itself or Node internals are noise for test authors. */
+const INTERNAL_FRAME = /[\\/](node_modules[\\/]@bddr|packages[\\/](runtime|core|cli|reporters)[\\/](dist|src))[\\/]|node:internal|node:async_hooks/;
 
 export function trimStack(stack: string): string {
   const lines = stack.split('\n');
@@ -389,7 +389,7 @@ ${ds ? dataSummary : `<summary><span class="ico">${ICON[status]}</span><span cla
     graph ? `<details class="view"${d.plan.length <= 60 ? ' open' : ''}><summary>Dependencies</summary>${graph}</details>` : '',
   ].join('\n');
   const historyPanel = historyView ? `<details class="view" open><summary>History</summary>${historyView}</details>` : '';
-  const onlyFrameworkLogs = !hookFailures.length && !d.runError && !d.groupRetries.length && d.logs.run.every((l) => l.source === 'bddx');
+  const onlyFrameworkLogs = !hookFailures.length && !d.runError && !d.groupRetries.length && d.logs.run.every((l) => l.source === 'bddr');
   const runSection =
     hookFailures.length || d.logs.run.length || d.runError || d.groupRetries.length
       ? `<section class="feature run${onlyFrameworkLogs ? ' only-fw' : ''}"><h2>Run</h2>${renderError(d.runError)}${d.groupRetries
@@ -500,7 +500,7 @@ pre.err{border-color:var(--failed);color:var(--failed)}pre.snippet{border-style:
 .atts{margin:2px 0 2px 22px}figure{margin:6px 0}figcaption{font-size:12px;color:var(--muted)}figure img{max-width:min(100%,900px);border:1px solid var(--line);border-radius:4px}
 .att summary{cursor:pointer;font-size:12px}
 body.min-info .lv-debug,body.min-warn .lv-debug,body.min-warn .lv-info,body.min-error .lv-debug,body.min-error .lv-info,body.min-error .lv-warn{display:none}
-body:not(.show-bddx) .src-bddx,body:not(.show-bddx) .only-fw{display:none}details.scenario.flash{box-shadow:0 0 0 3px var(--accent)}.hidden{display:none!important}
+body:not(.show-bddr) .src-bddr,body:not(.show-bddr) .only-fw{display:none}details.scenario.flash{box-shadow:0 0 0 3px var(--accent)}.hidden{display:none!important}
 .empty{color:var(--muted);text-align:center;padding:30px 0}
 @media print{header.top{position:static}.tabs,.actions,.toolbar,.perma,pre .cp{display:none}.panel{display:block!important;margin-bottom:24px}body{background:#fff}.card,.kpi{box-shadow:none;break-inside:avoid}}
 ${STATS_CSS}
@@ -522,7 +522,7 @@ ${VIEW_CSS}</style></head>
 <div class="tb-row">${totals}<span class="tb-count" id="shown"></span><span class="presets"><button type="button" data-preset="all">All</button><button type="button" data-preset="failures">Failures only</button></span></div>
 <div class="tb-row"><input type="search" id="q" placeholder="Search name, tag, id, group, data…" title="Shortcuts: / search · n / p next / previous failure · 1-4 switch tab">
 <label class="sub">logs <select id="lvl"><option value="debug">debug</option><option value="info" selected>info</option><option value="warn">warn</option><option value="error">error</option><option value="none">none</option></select></label>
-<label class="sub"><input type="checkbox" id="bddx"> framework logs</label>
+<label class="sub"><input type="checkbox" id="bddr"> framework logs</label>
 <button id="expand">Expand all</button><button id="collapse">Collapse all</button></div>
 </div>
 ${features}
@@ -534,11 +534,11 @@ ${historyPanel ? `<div class="panel" id="tab-history">${historyPanel}</div>` : '
 </main>
 <div id="toast" role="status"></div>
 <button id="totop" type="button" aria-label="Back to top" title="Back to top">↑</button>
-<script type="application/json" id="bddx-data">${dataJson(payload)}</script>
+<script type="application/json" id="bddr-data">${dataJson(payload)}</script>
 <script>
 (function(){
   var body=document.body,root=document.documentElement,q=document.getElementById('q');
-  var data={};try{data=JSON.parse(document.getElementById('bddx-data').textContent)}catch(e){}
+  var data={};try{data=JSON.parse(document.getElementById('bddr-data').textContent)}catch(e){}
   var TABS=['overview','results','execution','history'],current='overview',fi=-1;
   function $$(s){return Array.prototype.slice.call(document.querySelectorAll(s))}
   function on(id,fn){var el=document.getElementById(id);if(el)el.addEventListener('click',fn)}
@@ -603,7 +603,7 @@ ${historyPanel ? `<div class="panel" id="tab-history">${historyPanel}</div>` : '
     $$('.logs').forEach(function(l){l.classList.toggle('hidden',v==='none')});
     if(v!=='debug'&&v!=='none')body.classList.add('min-'+v);
   });
-  document.getElementById('bddx').addEventListener('change',function(e){body.classList.toggle('show-bddx',e.target.checked)});
+  document.getElementById('bddr').addEventListener('change',function(e){body.classList.toggle('show-bddr',e.target.checked)});
   on('expand',function(){$$('details.scenario:not(.hidden)').forEach(function(d){d.open=true})});
   on('collapse',function(){$$('details.scenario').forEach(function(d){d.open=false})});
   on('share',function(){copy(data.summary||'','Summary copied')});
@@ -611,12 +611,12 @@ ${historyPanel ? `<div class="panel" id="tab-history">${historyPanel}</div>` : '
   on('print',function(){window.print()});
   on('json',function(){
     var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');
-    a.href=URL.createObjectURL(blob);a.download='bddx-results.json';document.body.appendChild(a);a.click();a.remove();
+    a.href=URL.createObjectURL(blob);a.download='bddr-results.json';document.body.appendChild(a);a.click();a.remove();
   });
   var themes=['auto','light','dark'],ti=0;
-  try{var saved=localStorage.getItem('bddx-theme');if(saved)ti=Math.max(0,themes.indexOf(saved))}catch(e){}
+  try{var saved=localStorage.getItem('bddr-theme');if(saved)ti=Math.max(0,themes.indexOf(saved))}catch(e){}
   function setTheme(){var t=themes[ti];if(t==='auto')root.removeAttribute('data-theme');else root.setAttribute('data-theme',t);document.getElementById('theme').textContent='Theme: '+t}
-  on('theme',function(){ti=(ti+1)%themes.length;try{localStorage.setItem('bddx-theme',themes[ti])}catch(e){}setTheme()});
+  on('theme',function(){ti=(ti+1)%themes.length;try{localStorage.setItem('bddr-theme',themes[ti])}catch(e){}setTheme()});
   setTheme();
   $$('pre.err').forEach(function(p){
     var b=document.createElement('button'),text=p.textContent;b.type='button';b.className='cp';b.textContent='copy';b.title='Copy error';

@@ -1,7 +1,7 @@
 /**
  * The public, global registration API used in step files:
  *
- *   import { Given, When, Then, Before, defineParameterType } from '@bddx/runtime';
+ *   import { Given, When, Then, Before, defineParameterType } from '@bddr/runtime';
  *
  *   Given('I have {int} cukes', async (ctx, count: number) => {
  *     ctx.state.set('cukes', count);
@@ -25,7 +25,7 @@ import type {
   StepContext,
   FeatureContext,
 } from './types.js';
-import type { HookKind, HookLevel } from '@bddx/core';
+import type { HookKind, HookLevel } from '@bddr/core';
 
 type StepRegistrar = {
   (pattern: string | RegExp, fn: StepFn): void;
@@ -101,7 +101,7 @@ export const AfterStep = makeHook<ScenarioHookFn>('step', 'after');
 /**
  * Once per process that runs scenarios: with `pool: 'process'` in every worker process (start / end), with the
  * default inline pool once per run (right after BeforeAll / before AfterAll). Put per-process resources here
- * (browser instances, DB connections, servers on BDDX_WORKER_INDEX-based ports); `ctx.run` is that process's store.
+ * (browser instances, DB connections, servers on BDDR_WORKER_INDEX-based ports); `ctx.run` is that process's store.
  */
 export const BeforeWorker = makeHook<RunHookFn>('worker', 'before');
 export const AfterWorker = makeHook<RunHookFn>('worker', 'after');
@@ -140,16 +140,16 @@ export function defineFixture(name: string, setup: (ctx: never) => unknown, opti
 }
 
 /**
- * A plugin bundles fixtures, hooks, steps and parameter types (Playwright, Selenium, HTTP ...). bddx itself depends
- * on none of them. Enable one in the config: `plugins: ['@bddx/playwright', ['./support/my-plugin.ts', { opt: 1 }]]`.
+ * A plugin bundles fixtures, hooks, steps and parameter types (Playwright, Selenium, HTTP ...). bddr itself depends
+ * on none of them. Enable one in the config: `plugins: ['@bddr/playwright', ['./support/my-plugin.ts', { opt: 1 }]]`.
  * `setup` runs once per process (the main process and every worker process) before the step files load.
  */
-export interface BddxPlugin<O = Record<string, unknown>> {
+export interface BddrPlugin<O = Record<string, unknown>> {
   name: string;
   setup(options: O): void | Promise<void>;
 }
 
-export function definePlugin<O = Record<string, unknown>>(plugin: BddxPlugin<O>): BddxPlugin<O> {
+export function definePlugin<O = Record<string, unknown>>(plugin: BddrPlugin<O>): BddrPlugin<O> {
   if (!plugin || typeof plugin.setup !== 'function' || !plugin.name) throw new Error('definePlugin needs { name, setup(options) }');
   return plugin;
 }

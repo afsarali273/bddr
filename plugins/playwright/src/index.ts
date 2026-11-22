@@ -1,8 +1,8 @@
 /**
- * @bddx/playwright: Playwright for bddx, as a plugin. bddx does not depend on Playwright; your project does.
+ * @bddr/playwright: Playwright for bddr, as a plugin. bddr does not depend on Playwright; your project does.
  *
- *   // bddx.config.ts
- *   import { playwright } from '@bddx/playwright';
+ *   // bddr.config.ts
+ *   import { playwright } from '@bddr/playwright';
  *   export default defineConfig({ plugins: [playwright({ browser: 'chromium', screenshot: 'only-on-failure' })] });
  *
  *   // steps
@@ -36,7 +36,7 @@ import type {
   Page,
   Video,
 } from 'playwright';
-import { defineFixture, definePlugin, type BddxPlugin, type FeatureContext, type RunContext, type StepContext } from '@bddx/runtime';
+import { defineFixture, definePlugin, type BddrPlugin, type FeatureContext, type RunContext, type StepContext } from '@bddr/runtime';
 
 type PlaywrightModule = typeof import('playwright');
 type ExpectModule = typeof import('@playwright/test');
@@ -45,7 +45,7 @@ export type Expect = ExpectModule['expect'];
 /** Options of `playwright.request.newContext()`. */
 export type APIRequestContextOptions = NonNullable<Parameters<APIRequest['newContext']>[0]>;
 
-declare module '@bddx/runtime' {
+declare module '@bddr/runtime' {
   interface Fixtures {
     playwright: PlaywrightModule;
     browser: Browser;
@@ -119,7 +119,7 @@ const BROWSERS: readonly BrowserName[] = ['chromium', 'firefox', 'webkit'];
 export function createPlaywrightPlugin(
   load: () => Promise<PlaywrightModule> = () => import('playwright'),
   loadExpect: () => Promise<{ expect?: Expect; default?: { expect: Expect } }> = () => import('@playwright/test'),
-): BddxPlugin<PlaywrightPluginOptions> {
+): BddrPlugin<PlaywrightPluginOptions> {
   return definePlugin<PlaywrightPluginOptions>({
     name: 'playwright',
     setup(o = {}) {
@@ -149,7 +149,7 @@ export function createPlaywrightPlugin(
             base = (mod.expect ?? mod.default?.expect) as Expect;
             if (!base) throw new Error('no "expect" export');
           } catch (e) {
-            throw new Error(`@bddx/playwright: the "expect" fixture needs the optional package @playwright/test (npm i -D @playwright/test, same version as playwright): ${e instanceof Error ? e.message : String(e)}`);
+            throw new Error(`@bddr/playwright: the "expect" fixture needs the optional package @playwright/test (npm i -D @playwright/test, same version as playwright): ${e instanceof Error ? e.message : String(e)}`);
           }
           return o.expectTimeoutMs === undefined ? base : base.configure({ timeout: o.expectTimeoutMs });
         },
@@ -160,12 +160,12 @@ export function createPlaywrightPlugin(
         'browser',
         async ({ playwright, params }) => {
           const name = (params['browser'] ?? o.browser ?? 'chromium') as BrowserName;
-          if (!BROWSERS.includes(name)) throw new Error(`@bddx/playwright: browser must be ${BROWSERS.join(', ')} (got "${name}")`);
+          if (!BROWSERS.includes(name)) throw new Error(`@bddr/playwright: browser must be ${BROWSERS.join(', ')} (got "${name}")`);
           const headed = bool(params['headed']);
           const type = playwright[name];
           if (o.connect) return type.connect(o.connect.wsEndpoint, o.connect.options);
           if (o.cdpUrl) {
-            if (name !== 'chromium') throw new Error('@bddx/playwright: cdpUrl needs browser "chromium"');
+            if (name !== 'chromium') throw new Error('@bddr/playwright: cdpUrl needs browser "chromium"');
             return playwright.chromium.connectOverCDP(o.cdpUrl);
           }
           return type.launch({
@@ -182,7 +182,7 @@ export function createPlaywrightPlugin(
         const name = ctx.params['device'] ?? o.device;
         if (!name) return {};
         const device = (ctx.playwright as PlaywrightModule).devices[name];
-        if (!device) throw new Error(`@bddx/playwright: unknown device "${name}" (see Object.keys(playwright.devices))`);
+        if (!device) throw new Error(`@bddr/playwright: unknown device "${name}" (see Object.keys(playwright.devices))`);
         return device;
       };
       const openContext = async (browser: Browser, ctx: RunContext, title: string): Promise<BrowserContext> => {
@@ -226,7 +226,7 @@ export function createPlaywrightPlugin(
         try {
           ctx.attach(await page.screenshot({ fullPage: true }), 'image/png', `screenshot ${status ?? ''}`.trim());
         } catch (e) {
-          ctx.log.warn(`@bddx/playwright: could not take a screenshot: ${e instanceof Error ? e.message : String(e)}`);
+          ctx.log.warn(`@bddr/playwright: could not take a screenshot: ${e instanceof Error ? e.message : String(e)}`);
         }
       };
 
@@ -330,11 +330,11 @@ export function createPlaywrightPlugin(
   });
 }
 
-/** The plugin with Playwright from your project. Use as `plugins: ['@bddx/playwright']` or `plugins: [playwright({ ... })]`. */
+/** The plugin with Playwright from your project. Use as `plugins: ['@bddr/playwright']` or `plugins: [playwright({ ... })]`. */
 const plugin = createPlaywrightPlugin();
 export default plugin;
 
-/** Typed form for bddx.config.ts: `plugins: [playwright({ browser: 'firefox', trace: 'only-on-failure' })]`. */
+/** Typed form for bddr.config.ts: `plugins: [playwright({ browser: 'firefox', trace: 'only-on-failure' })]`. */
 export function playwright(options: PlaywrightPluginOptions = {}): { name: string; setup(): void | Promise<void> } {
   return { name: plugin.name, setup: () => plugin.setup(options) };
 }

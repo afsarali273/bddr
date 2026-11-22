@@ -15,7 +15,7 @@
  */
 import { fork, type ChildProcess } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { EventBus, toErrorInfo, type BddxEvent, type ErrorInfo, type Plan, type Status } from '@bddx/core';
+import { EventBus, toErrorInfo, type BddrEvent, type ErrorInfo, type Plan, type Status } from '@bddr/core';
 
 /** What the coordinator sends to run one plan node on a worker. */
 export interface NodeRequest {
@@ -71,7 +71,7 @@ export interface RemotePool {
   cancel?(workerId: string): void;
 }
 
-/** The stack would point into bddx internals; the message carries the cause. */
+/** The stack would point into bddr internals; the message carries the cause. */
 export class WorkerInitError extends Error {
   override name = 'WorkerInitError';
   constructor(message: string) {
@@ -101,7 +101,7 @@ export interface ProcessPoolOptions {
   init: unknown;
   planFingerprint: string;
   /** Events from workers. */
-  onEvent: (e: BddxEvent) => void;
+  onEvent: (e: BddrEvent) => void;
   execArgv?: string[];
   env?: NodeJS.ProcessEnv;
 }
@@ -122,7 +122,7 @@ class Lane {
   constructor(
     readonly workerId: string,
     readonly child: ChildProcess,
-    onEvent: (e: BddxEvent) => void,
+    onEvent: (e: BddrEvent) => void,
   ) {
     let readyResolve!: () => void;
     let readyReject!: (e: unknown) => void;
@@ -197,7 +197,7 @@ export class ProcessPool implements RemotePool {
       const child = fork(this.opts.entry, [], {
         serialization: 'advanced',
         execArgv: this.opts.execArgv ?? process.execArgv,
-        env: { ...process.env, ...this.opts.env, BDDX_WORKER_ID: workerId, BDDX_WORKER_INDEX: String(index) },
+        env: { ...process.env, ...this.opts.env, BDDR_WORKER_ID: workerId, BDDR_WORKER_INDEX: String(index) },
         stdio: ['ignore', 'inherit', 'inherit', 'ipc'],
       });
       lane = new Lane(workerId, child, this.opts.onEvent);
@@ -271,7 +271,7 @@ export class ProcessPool implements RemotePool {
 // ------------------------------------------------------------------ child side
 
 type ChildMessage =
-  | { t: 'event'; e: BddxEvent }
+  | { t: 'event'; e: BddrEvent }
   | { t: 'ready' }
   | { t: 'initError'; error: ErrorInfo }
   | { t: 'result'; id: number; value: unknown }

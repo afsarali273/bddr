@@ -19,9 +19,9 @@ Feature: JSONPlaceholder simulated write operations
 
       Examples:
         | title       | body              | userId |
-        | bddx alpha  | created by bddx   | 1      |
-        | bddx beta   | driven by features| 5      |
-        | bddx gamma  | sent by Playwright| 10     |
+        | bddr alpha  | created by bddr   | 1      |
+        | bddr beta   | driven by features| 5      |
+        | bddr gamma  | sent by Playwright| 10     |
 
     @id:api-replace-post
     Scenario Outline: Replace a post

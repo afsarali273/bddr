@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { EventBus, idsToRerun, mergeEventStreams, parseNdjson, parseSpec, selectScenarios, type BddxEvent } from '@bddx/core';
-import { Executor, SupportRegistry, type StepContext } from '@bddx/runtime';
+import { EventBus, idsToRerun, mergeEventStreams, parseNdjson, parseSpec, selectScenarios, type BddrEvent } from '@bddr/core';
+import { Executor, SupportRegistry, type StepContext } from '@bddr/runtime';
 
 const SRC = `Feature: M
   Scenario: a
@@ -13,7 +13,7 @@ const SRC = `Feature: M
     Given ok
 `;
 
-async function runOnce(failB: boolean, onlyIds?: string[]): Promise<BddxEvent[]> {
+async function runOnce(failB: boolean, onlyIds?: string[]): Promise<BddrEvent[]> {
   const r = new SupportRegistry();
   r.defineStep('ok', () => {});
   r.defineStep('flaky', (_c: StepContext) => {
@@ -23,7 +23,7 @@ async function runOnce(failB: boolean, onlyIds?: string[]): Promise<BddxEvent[]>
   if (onlyIds) scenarios = selectScenarios(scenarios, { ids: onlyIds });
   const bus = new EventBus({ keepHistory: true });
   await new Executor({ registry: r, bus }).execute(scenarios);
-  return JSON.parse(JSON.stringify(bus.history)) as BddxEvent[];
+  return JSON.parse(JSON.stringify(bus.history)) as BddrEvent[];
 }
 
 describe('rerun + merge', () => {

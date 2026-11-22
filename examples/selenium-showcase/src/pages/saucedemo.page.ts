@@ -1,4 +1,4 @@
-import { inject } from '@bddx/runtime';
+import { inject } from '@bddr/runtime';
 import { By, until } from 'selenium-webdriver';
 
 const tid = (id: string) => By.css(`[data-test="${id}"]`);

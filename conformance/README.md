@@ -1,6 +1,6 @@
 # Conformance suite
 
-Language-neutral contract that every bddx engine (TypeScript now, Java later) must pass.
+Language-neutral contract that every bddr engine (TypeScript now, Java later) must pass.
 
 ```
 conformance/

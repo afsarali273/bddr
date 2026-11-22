@@ -1,5 +1,5 @@
 /**
- * The bddx internal model.
+ * The bddr internal model.
  *
  * Every spec format (Gherkin today, Markdown later) is compiled into these types.
  * The runtime, planner and reporters only ever see this model, never a parser AST.

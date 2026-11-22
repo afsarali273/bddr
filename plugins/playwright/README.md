@@ -1,22 +1,22 @@
-# @bddx/playwright
+# @bddr/playwright
 
-Playwright for [bddx](../../README.md), as a plugin. bddx has no dependency on Playwright: your project installs
-both, and this plugin connects them through bddx fixtures.
+Playwright for [bddr](../../README.md), as a plugin. bddr has no dependency on Playwright: your project installs
+both, and this plugin connects them through bddr fixtures.
 
 ```bash
-npm i -D @bddx/playwright playwright
+npm i -D @bddr/playwright playwright
 npm i -D @playwright/test        # optional: only for `expect` (same version as playwright)
 npx playwright install chromium
 ```
 
 ```ts
-// bddx.config.ts
-import { defineConfig } from '@bddx/cli';
-import { playwright } from '@bddx/playwright';
+// bddr.config.ts
+import { defineConfig } from '@bddr/cli';
+import { playwright } from '@bddr/playwright';
 
 export default defineConfig({
   plugins: [playwright({ browser: 'chromium', screenshot: 'only-on-failure', trace: 'only-on-failure' })],
-  // or untyped: plugins: [['@bddx/playwright', { browser: 'firefox' }]]
+  // or untyped: plugins: [['@bddr/playwright', { browser: 'firefox' }]]
 });
 ```
 
@@ -30,10 +30,10 @@ class LoginPage { private page = inject('page'); open() { return this.page.goto(
 @Steps() class LoginSteps { private login = inject(LoginPage); /* @Given(...) methods */ }
 ```
 
-Add `import '@bddx/playwright';` (or `"types": ["@bddx/playwright"]` in tsconfig) in one support file so `ctx.page`,
+Add `import '@bddr/playwright';` (or `"types": ["@bddr/playwright"]` in tsconfig) in one support file so `ctx.page`,
 `({ page })` and `inject('page')` are typed. Importing `playwright()` in the config does not do this for step files.
 
-Tip: bddx starts a fixture only when a step names it (`({ page })`, `ctx.page`, `const { page } = ctx`, `inject('page')`).
+Tip: bddr starts a fixture only when a step names it (`({ page })`, `ctx.page`, `const { page } = ctx`, `inject('page')`).
 A helper that receives the whole `ctx` and reads `ctx.page` inside is not seen; destructure `page` in the step and pass
 it on (`docs(page)`). The error says so: `Fixture "page" is asynchronous and was not requested before use`.
 
@@ -53,9 +53,9 @@ With `reuseContext`, a `@serial` feature uses one context and page for all its s
 `sharedContext` / `sharedPage`); see below. Scenarios that use none of these start nothing. Retries get a fresh context and page. Groups, dependencies, locks,
 `--pool process`, `--shard` and `--watch` work as usual.
 
-## Playwright features, bddx runner
+## Playwright features, bddr runner
 
-bddx stays the runner (groups, retries, shards, reports); the plugin hands you Playwright itself, so everything it can do
+bddr stays the runner (groups, retries, shards, reports); the plugin hands you Playwright itself, so everything it can do
 is available:
 
 ```ts
@@ -125,7 +125,7 @@ serial group with a page object, and API scenarios that never open a browser.
 
 ```bash
 cd plugins/playwright && npm install && npx playwright install chromium
-cd example && npx bddx            # or: npx bddx --pool process -w 2, -D headed=true, --tags @api
+cd example && npx bddr            # or: npx bddr --pool process -w 2, -D headed=true, --tags @api
 ```
 
 ## Developing

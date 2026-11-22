@@ -1,9 +1,9 @@
 /**
- * Interactive debugger for `bddx run --debug`. Implements the runtime DebugController over a line-based prompt.
+ * Interactive debugger for `bddr run --debug`. Implements the runtime DebugController over a line-based prompt.
  * Commands: c(ontinue) n(ext) r(etry) s/state e <expr> h(elp) q(uit). The IO is injectable so it can be tested.
  */
 import { createInterface } from 'node:readline';
-import type { DebugController, DebugFailureView, DebugStepView } from '@bddx/runtime';
+import type { DebugController, DebugFailureView, DebugStepView } from '@bddr/runtime';
 
 export interface DebugIO {
   /** Read one line (undefined at end of input). */
@@ -69,7 +69,7 @@ export function createDebugController(o: DebugOptions): DebugController {
   async function prompt(v: DebugStepView, failed: boolean): Promise<'run' | 'continue' | 'retry' | 'quit'> {
     if (!announced) {
       announced = true;
-      o.io.write(`bddx debugger: ${failed ? 'paused after a failure' : 'step mode'}. Type h for help.\n`);
+      o.io.write(`bddr debugger: ${failed ? 'paused after a failure' : 'step mode'}. Type h for help.\n`);
     }
     for (;;) {
       const line = (await o.io.ask(failed ? 'debug (failed)> ' : 'debug> '))?.trim();

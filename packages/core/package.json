@@ -1,7 +1,7 @@
 {
-  "name": "@bddx/core",
+  "name": "@bddr/core",
   "version": "0.1.0",
-  "description": "bddx core: spec model, Gherkin compiler, tags, event schema",
+  "description": "bddr core: spec model, Gherkin compiler, tags, event schema",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

@@ -1,5 +1,5 @@
 import { strict as assert } from 'node:assert';
-import { Then, When } from '@bddx/runtime';
+import { Then, When } from '@bddr/runtime';
 import { HEALTH_STATUS, requiredParam } from '../support/world.js';
 
 When('I check the {string} target', async (ctx, target: string) => {

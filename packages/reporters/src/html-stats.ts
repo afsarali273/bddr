@@ -3,7 +3,7 @@
  * Pure functions, no external assets. `computeStats` is the single source for the cards, the "Copy summary" text and
  * the "Download JSON" export, so the numbers always agree.
  */
-import type { HistoryRun, PlannedScenario, RunSummary, ScenarioFinished, Status, StepFinished } from '@bddx/core';
+import type { HistoryRun, PlannedScenario, RunSummary, ScenarioFinished, Status, StepFinished } from '@bddr/core';
 import { esc, fmtMs, type Interval } from './html-views.js';
 
 export const STATUSES: Status[] = ['passed', 'failed', 'pending', 'undefined', 'ambiguous', 'skipped'];
@@ -340,7 +340,7 @@ export function summaryText(title: string, success: boolean | undefined, when: s
   return lines.join('\n');
 }
 
-/** JSON embedded in the page (`#bddx-data`) and offered by "Download JSON". `</` is escaped so it can sit in a <script>. */
+/** JSON embedded in the page (`#bddr-data`) and offered by "Download JSON". `</` is escaped so it can sit in a <script>. */
 export function dataJson(payload: unknown): string {
   return JSON.stringify(payload).replace(/</g, '\\u003c').replace(new RegExp(String.fromCharCode(0x2028), 'g'), '\\u2028').replace(new RegExp(String.fromCharCode(0x2029), 'g'), '\\u2029');
 }

@@ -1,7 +1,7 @@
 import { strict as assert } from 'node:assert';
 import { afterEach, describe, it } from 'node:test';
-import { EventBus, buildPlan, parseSpec, type BddxEvent } from '@bddx/core';
-import { Executor, Given, getGlobalRegistry, resetGlobalRegistry } from '@bddx/runtime';
+import { EventBus, buildPlan, parseSpec, type BddrEvent } from '@bddr/core';
+import { Executor, Given, getGlobalRegistry, resetGlobalRegistry } from '@bddr/runtime';
 import { createPlaywrightPlugin, type PlaywrightPluginOptions } from '../src/index.js';
 
 /** A fake `playwright` module that records what the plugin does. */
@@ -77,7 +77,7 @@ async function run(options: PlaywrightPluginOptions, src: string, params: Record
   const fake = fakePlaywright();
   const fakeExpect = Object.assign((v: unknown) => ({ v }), { configure: (c: { timeout: number }) => (fake.calls.push(`expect timeout ${c.timeout}`), fakeExpect) });
   const loadExpect = async () => ({ expect: fakeExpect as never });
-  await createPlaywrightPlugin(fake.load, expectLoader ?? loadExpect).setup({ outputDir: '/tmp/bddx-pw-test', ...options });
+  await createPlaywrightPlugin(fake.load, expectLoader ?? loadExpect).setup({ outputDir: '/tmp/bddr-pw-test', ...options });
   Given('I open {string}', async ({ page }, url: string) => page.goto(url));
   Given('the page fails', ({ page }) => {
     throw new Error(`failed on page ${String((page as unknown as { id: number }).id)}`);
@@ -94,7 +94,7 @@ async function run(options: PlaywrightPluginOptions, src: string, params: Record
   const scenarios = parseSpec(src, 'pw.feature').scenarios;
   const bus = new EventBus({ keepHistory: true });
   const result = await new Executor({ registry: getGlobalRegistry(), bus, plan: buildPlan(scenarios, scenarios, { workers }), params }).execute(scenarios);
-  const attachments = bus.history!.filter((e): e is Extract<BddxEvent, { type: 'attachment' }> => e.type === 'attachment');
+  const attachments = bus.history!.filter((e): e is Extract<BddrEvent, { type: 'attachment' }> => e.type === 'attachment');
   const logs = bus.history!.flatMap((e) => (e.type === 'log' ? [e.message] : []));
   const errors = bus.history!.flatMap((e) => (e.type === 'stepFinished' && e.error ? [e.error.message] : []));
   return { ...fake, result, attachments, logs, errors };
@@ -104,7 +104,7 @@ afterEach(() => void resetGlobalRegistry());
 
 const TWO = 'Feature: F\n  Scenario: one\n    Given I open "/a"\n  Scenario: two\n    Given I open "/b"\n';
 
-describe('@bddx/playwright', () => {
+describe('@bddr/playwright', () => {
   it('one browser per worker, a context and page per scenario, closed in the right order', async () => {
     const { calls, result } = await run({}, TWO);
     assert.equal(result.success, true);

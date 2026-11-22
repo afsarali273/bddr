@@ -2,12 +2,12 @@ import { describe, expect, it, beforeAll } from 'vitest';
 import { mkdtempSync, mkdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { createFileDataLoader, parseCsv, parseDataRef, parseSpec, parseSpecAsync } from '@bddx/core';
+import { createFileDataLoader, parseCsv, parseDataRef, parseSpec, parseSpecAsync } from '@bddr/core';
 
 let dir: string;
 
 beforeAll(async () => {
-  dir = mkdtempSync(join(tmpdir(), 'bddx-data-'));
+  dir = mkdtempSync(join(tmpdir(), 'bddr-data-'));
   writeFileSync(join(dir, 'users.csv'), '﻿name,role,city\r\nann,admin,"Kuala Lumpur"\r\nbob,user,Paris\r\n"o""neil",admin,"New\nYork"\r\n');
   writeFileSync(join(dir, 'users.json'), JSON.stringify({ data: { items: [{ name: 'ann', age: 30 }, { name: 'bob', age: 41, extra: true }] } }));
   writeFileSync(join(dir, 'users.yaml'), '- name: ann\n  age: 30\n- name: cy\n  age: 22\n');
@@ -174,7 +174,7 @@ describe('@data expansion', () => {
 
 describe('ports', () => {
   it('picks spec parsers by longest suffix and reports unknown files as parse errors', async () => {
-    const { registerSpecParser, specParserFor, parseSpecFile, specFileGlobSuffix } = await import('@bddx/core');
+    const { registerSpecParser, specParserFor, parseSpecFile, specFileGlobSuffix } = await import('@bddr/core');
     expect(specParserFor('a/b.feature')?.name).toBe('gherkin (cucumber)');
     expect(specParserFor('a/b.feature.md')?.name).toBe('gherkin (cucumber)');
     registerSpecParser({ name: 'test-md', extensions: ['.spec.md'], parse: async (_s, uri) => ({ uri, scenarios: [], errors: [] }) });
@@ -185,7 +185,7 @@ describe('ports', () => {
   });
 
   it('tag expression engine is swappable', async () => {
-    const { setTagExpressionEngine, compileTagExpression, cucumberTagExpressions } = await import('@bddx/core');
+    const { setTagExpressionEngine, compileTagExpression, cucumberTagExpressions } = await import('@bddr/core');
     setTagExpressionEngine({ name: 'any-of', compile: (e) => (tags) => e.split(',').some((t) => tags.includes(t)) });
     expect(compileTagExpression('@a,@b')(['@b'])).toBe(true);
     setTagExpressionEngine(cucumberTagExpressions);

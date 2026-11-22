@@ -1,5 +1,5 @@
 {
-  "name": "bddx-monorepo",
+  "name": "bddr-monorepo",
   "private": true,
   "type": "module",
   "workspaces": [
@@ -14,13 +14,13 @@
     "typecheck": "tsc -b packages/core packages/runtime packages/reporters packages/cli && tsc -p tsconfig.test.json",
     "test": "vitest run",
     "test:watch": "vitest",
-    "example": "node packages/cli/dist/bin.js run --config examples/basic/bddx.config.ts",
-    "example:dry": "node packages/cli/dist/bin.js run --config examples/basic/bddx.config.ts --dry-run",
+    "example": "node packages/cli/dist/bin.js run --config examples/basic/bddr.config.ts",
+    "example:dry": "node packages/cli/dist/bin.js run --config examples/basic/bddr.config.ts --dry-run",
     "verify": "npm run typecheck && npm test && npm run example && npm run example:orchestration && npm run example:orchestration:process && npm run example:resilience",
-    "example:orchestration": "node packages/cli/dist/bin.js run --config examples/orchestration/bddx.config.ts",
-    "plan:orchestration": "node packages/cli/dist/bin.js plan --config examples/orchestration/bddx.config.ts",
-    "example:orchestration:process": "node packages/cli/dist/bin.js run --config examples/orchestration/bddx.config.ts --pool process",
-    "example:resilience": "node packages/cli/dist/bin.js run --config examples/resilience/bddx.config.ts"
+    "example:orchestration": "node packages/cli/dist/bin.js run --config examples/orchestration/bddr.config.ts",
+    "plan:orchestration": "node packages/cli/dist/bin.js plan --config examples/orchestration/bddr.config.ts",
+    "example:orchestration:process": "node packages/cli/dist/bin.js run --config examples/orchestration/bddr.config.ts --pool process",
+    "example:resilience": "node packages/cli/dist/bin.js run --config examples/resilience/bddr.config.ts"
   },
   "devDependencies": {
     "@types/node": "^22.20.5",

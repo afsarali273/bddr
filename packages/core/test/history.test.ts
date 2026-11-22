@@ -2,7 +2,7 @@ import { mkdtempSync, readdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { HistoryRecorder, loadHistory, rankScenarios, saveHistory, scenarioHistory, type BddxEvent, type HistoryRun, type Status } from '@bddx/core';
+import { HistoryRecorder, loadHistory, rankScenarios, saveHistory, scenarioHistory, type BddrEvent, type HistoryRun, type Status } from '@bddr/core';
 
 const run = (n: number, scenarios: Record<string, Status | 'flaky'>): HistoryRun => ({
   v: 1,
@@ -34,9 +34,9 @@ describe('history', () => {
 
   it('records the final attempt from events', () => {
     const rec = new HistoryRecorder();
-    const ev = (e: Record<string, unknown>) => rec.onEvent({ ts: 100, ...e } as BddxEvent);
+    const ev = (e: Record<string, unknown>) => rec.onEvent({ ts: 100, ...e } as BddrEvent);
     expect(rec.record()).toBeUndefined();
-    ev({ type: 'runStarted', runId: 'r1', schemaVersion: 1, framework: { name: 'bddx', version: '0' }, runtime: { name: 'node', version: 'x' }, dryRun: false });
+    ev({ type: 'runStarted', runId: 'r1', schemaVersion: 1, framework: { name: 'bddr', version: '0' }, runtime: { name: 'node', version: 'x' }, dryRun: false });
     ev({ type: 'planReady', workers: 2, scenarios: [{ id: 'a', name: 'A', uri: 'x', line: 1, featureName: 'F', tags: [], steps: [] }] });
     ev({ type: 'scenarioFinished', scenarioId: 'a', attempt: 1, status: 'failed', durationMs: 3, willRetry: true });
     ev({ type: 'scenarioFinished', scenarioId: 'a', attempt: 2, status: 'passed', durationMs: 4, flaky: true });
@@ -45,7 +45,7 @@ describe('history', () => {
   });
 
   it('saves, keeps the newest N, loads oldest first and ignores junk', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'bddx-hist-'));
+    const dir = mkdtempSync(join(tmpdir(), 'bddr-hist-'));
     for (let i = 1; i <= 5; i++) saveHistory(dir, run(i, { a: 'passed' }), 3);
     writeFileSync(join(dir, '999-broken.json'), '{not json');
     expect(readdirSync(dir).filter((f) => f !== '999-broken.json')).toHaveLength(3);

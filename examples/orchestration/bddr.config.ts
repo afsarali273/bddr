@@ -1,4 +1,4 @@
-import { defineConfig } from '@bddx/cli';
+import { defineConfig } from '@bddr/cli';
 
 /**
  * Orchestration demo (Phase 3):

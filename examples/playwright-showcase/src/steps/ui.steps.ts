@@ -1,5 +1,5 @@
 import { strict as assert } from 'node:assert';
-import { CONTEXT, Given, Steps, Then, When, inject } from '@bddx/runtime';
+import { CONTEXT, Given, Steps, Then, When, inject } from '@bddr/runtime';
 import { requiredParam } from '../support/world.js';
 
 type CheckState = 'checked' | 'unchecked';

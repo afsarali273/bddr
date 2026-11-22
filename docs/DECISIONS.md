@@ -8,16 +8,16 @@ Newest last. Each record: context, decision, consequences. Do not edit old recor
 trace viewer for free. But Playwright Test cannot express cross-file scenario dependencies, group-level retry,
 named resource locks or mixed serial/parallel groups in one run, which are our main differentiators.
 
-**Decision.** bddx has its own executor and (phase 3) scheduler. Playwright will be an integration (phase 6).
+**Decision.** bddr has its own executor and (phase 3) scheduler. Playwright will be an integration (phase 6).
 
 **Consequences.** More work (workers, timeouts, reporting are ours). Full control over the plan graph.
 The decision is still open for the user to overturn (comment in the plan doc); if overturned, `core` and the
 event schema survive, `runtime/executor.ts` would be replaced by a code generator.
 
-## ADR-002 Working name "bddx", npm scope `@bddx/*` (2026-11-15)
+## ADR-002 Working name "bddr", npm scope `@bddr/*` (2026-11-15)
 
-Placeholder name. Renaming = search/replace of `bddx` / `@bddx` + config file names (`bddx.config.*`) +
-the global registry symbol (`bddx.registry.v1`).
+Placeholder name. Renaming = search/replace of `bddr` / `@bddr` + config file names (`bddr.config.*`) +
+the global registry symbol (`bddr.registry.v1`).
 
 ## ADR-003 npm workspaces + TypeScript project references (2026-11-15)
 
@@ -88,10 +88,10 @@ so they cost nothing unless used.
 Ids are built from the scenario name BEFORE `<placeholder>` substitution and, for data rows, from the source row
 number BEFORE filtering. Inline outline rows keep `[<row index>]`; data rows use `[<source>#<row>]`.
 
-## ADR-014 Ports & adapters: bddx owns the architecture, Cucumber libraries are replaceable parts (2026-11-15)
+## ADR-014 Ports & adapters: bddr owns the architecture, Cucumber libraries are replaceable parts (2026-11-15)
 
-**Context.** The owner wants bddx to be its own framework (TestNG-style lifecycle, groups, dependencies), not a Cucumber
-derivative. bddx never used Cucumber's runner, but three Cucumber libraries were imported directly in core/runtime files.
+**Context.** The owner wants bddr to be its own framework (TestNG-style lifecycle, groups, dependencies), not a Cucumber
+derivative. bddr never used Cucumber's runner, but three Cucumber libraries were imported directly in core/runtime files.
 
 **Decision.** Define `SpecParser`, `TagExpressionEngine` and `StepExpressionEngine` interfaces; move every Cucumber import
 into `adapters/`. Gherkin stays the default spec format through `cucumberGherkinParser`; other formats (the parked
@@ -103,7 +103,7 @@ the same ports with JVM libraries or its own parser. Small cost: one indirection
 
 ## ADR-015 Orchestration: pure planner + in-process scheduler first, worker processes next (2026-11-15)
 
-**Decision.** The plan is a pure data structure built in core (testable, renderable with `bddx plan`, portable to Java).
+**Decision.** The plan is a pure data structure built in core (testable, renderable with `bddr plan`, portable to Java).
 Execution concurrency starts IN-PROCESS (async), which already gives parallel I/O-bound tests (API, browser automation
 drivers) and lets us prove the semantics (deps, locks, group modes, priority, exclusive, scope ref-counting) with fast
 tests. Worker processes come next behind the same `runNode` callback; exports are already structured-clone copies so
@@ -117,7 +117,7 @@ feature (close order rule → feature → group). Priority: lower first, TestNG-
 ## ADR-016 Logging through the event stream; AsyncLocalStorage attribution (2026-11-15)
 
 Logs are events like everything else (one pipeline, available to every reporter and to the future HTML report),
-with levels debug/info/warn/error and `source` user|bddx. The global `log` uses AsyncLocalStorage so helpers need no
+with levels debug/info/warn/error and `source` user|bddr. The global `log` uses AsyncLocalStorage so helpers need no
 context parameter and stay correct with concurrent scenarios. Console default threshold is `warn` so passing runs stay
 quiet; `--log-level debug` turns on user debug logs plus framework scheduling diagnostics.
 
@@ -144,7 +144,7 @@ tags, so recognised `@key:value` tokens at the END of a step's text are parsed (
 A pass after retries is a pass (attempts recorded, not a failure). `{{i}}`/`{{n}}` give each repetition unique data.
 `@concurrency` is opt-in and only for steps safe to run in parallel with themselves (API/data); browser- or
 Selenium-driving steps must declare `{ concurrent: false }`, which turns `@concurrency` into an error. Calling scenarios
-was discussed and parked by the owner (bddx is an automation framework with BDD-style specs, not BDD-purist).
+was discussed and parked by the owner (bddr is an automation framework with BDD-style specs, not BDD-purist).
 
 ## ADR-020 Resilience model (2026-11-15)
 
@@ -173,7 +173,7 @@ was discussed and parked by the owner (bddx is an automation framework with BDD-
 
 ## ADR-022 Static validation and cancellation use existing runtime contracts (2026-11-15)
 
-**Static validation.** `bddx validate` reuses config loading, spec parsing and the pure planner, then loads support code
+**Static validation.** `bddr validate` reuses config loading, spec parsing and the pure planner, then loads support code
 and performs definition-only matching. `SupportRegistry.analyzeMatch` deliberately does not evaluate parameter
 transformers: validation must not execute user test logic. Undefined/ambiguous steps, parse/plan/config errors and
 duplicate ids are errors; unused definitions, unmatched hooks and governed unknown tags are warnings. Warnings fail
@@ -193,7 +193,7 @@ initialisation failures.
 
 ## ADR-023 Live Playwright showcase is a standalone, optional consumer project (2026-11-15)
 
-**Decision.** Prove the real-project gate with `examples/playwright-showcase`, using bddx as the sole runner and
+**Decision.** Prove the real-project gate with `examples/playwright-showcase`, using bddr as the sole runner and
 Playwright only for Chromium and HTTP transport. The Internet is the UI target because it exposes stable, purpose-built
 automation controls; JSONPlaceholder is the API target because it needs no key and simulates writes without mutating
 shared state. The project launches one browser/API context per process worker and one isolated page context per UI
@@ -211,25 +211,35 @@ configuration remain extraction work.
 ## ADR-024 HTML v2 views as inline SVG; history as per-run JSON files (2026-11-15)
 
 - **Inline SVG, no Mermaid/JS libraries.** The report must stay one self-contained file that opens offline (CI artifacts,
-  email). Timeline and dependency graph are laid out by bddx (`reporters/src/html-views.ts`): lanes from
-  `scenarioStarted.workerId`, longest-path layering for the graph. `bddx plan --plan-format mermaid` remains for docs.
-- **History = one compact JSON file per run** in `.bddx/history` (`<startedAt>-<runId>.json`, newest `keep` kept).
+  email). Timeline and dependency graph are laid out by bddr (`reporters/src/html-views.ts`): lanes from
+  `scenarioStarted.workerId`, longest-path layering for the graph. `bddr plan --plan-format mermaid` remains for docs.
+- **History = one compact JSON file per run** in `.bddr/history` (`<startedAt>-<runId>.json`, newest `keep` kept).
   Files are append-only and merge-friendly (CI can cache/restore the folder), need no database and are cheap to read.
-  Built from events by `HistoryRecorder` (core), so `bddx report` and the Java port can produce the same records.
+  Built from events by `HistoryRecorder` (core), so `bddr report` and the Java port can produce the same records.
 - **Flakiness score** = share of recorded runs that were unstable (outcome differs from the previous run, or passed only
   after a retry). Consistent failures score 0 on purpose: broken ≠ flaky.
-- **Opt-in** (`history: true`): bddx does not write into a project folder unasked. Dry runs are never recorded.
+- **Opt-in** (`history: true`): bddr does not write into a project folder unasked. Dry runs are never recorded.
 - New event `workerStarted` (additive) so the timeline can tell worker start-up apart from idle time.
 
 ## ADR-025 Fixtures, `inject()` and plugins in the runtime; integrations as separate plugins (2026-11-15)
 
 Step code had to wire everything by hand (`page(ctx)` helpers, `static inject = [CONTEXT]`, getters). Fixtures (named,
-lazy, `scenario` or `worker` scoped, with dependencies and teardown) live in `@bddx/runtime`, requested by destructuring
+lazy, `scenario` or `worker` scoped, with dependencies and teardown) live in `@bddr/runtime`, requested by destructuring
 the first parameter (as in Playwright Test), `ctx.fixture(name)` or `inject()` in classes. Worker scope means "per worker
 process" so it maps onto both pools without changing scheduling; fixtures never affect the plan, so groups, dependencies,
 locks, retries and sharding are untouched. `inject('x')` for an async fixture throws `FixtureNotReady` during
 construction; the `@Steps()` wrapper creates the fixture and constructs again (construction is synchronous, so a
 module-level "constructing" context is safe under concurrency). Integrations (Playwright, Selenium, HTTP) are plugins
-(`definePlugin`, config `plugins`) resolved from the user's project: bddx has no dependency on them (TestNG/JUnit model).
+(`definePlugin`, config `plugins`) resolved from the user's project: bddr has no dependency on them (TestNG/JUnit model).
 Considered: a lazy proxy for async values (breaks `instanceof` and identity) and re-running steps on demand (unsafe side
 effects); rejected.
+
+## ADR-026 Renamed the project from bddx to bddr (2026-11-22)
+
+**Context.** The unscoped npm package and command `bddx` already belong to another Gherkin CLI (aexol, version 0.2.3). The owner's GitHub name `smart-bdd` also collides with the existing Java "Smart BDD" framework (bit-smart-io/smart-bdd), and the planned Java port would sit next to it. The owner wanted a short name containing "bdd" that is easy to type in the CLI.
+
+**Decision.** The product, command and npm scope are now `bddr` ("BDD runner"): `@bddr/core`, `@bddr/runtime`, `@bddr/reporters`, `@bddr/cli`, `@bddr/playwright`, `@bddr/selenium`, `@bddr/axios`; config file `bddr.config.ts`; env vars `BDDR_*`; history folder `.bddr/`. Both names have four letters, so nothing was re-wrapped or re-aligned. Nothing was published yet, so there is no compatibility shim.
+
+**Checked (2026-11-22).** `bddr` is free on npm, PyPI, crates.io and RubyGems; a web search found no test tool of that name. The owner created the GitHub repo `afsarali273/bddr` the same day. NOT yet checked by us: the npm scope `@bddr`, domains, trademarks.
+
+**Consequences.** `bddr` is one letter from the other project's `bddx`, so a typo could run their tool. Old name in history entries (PROGRESS.md, git log) is `bddx`; a global replace was applied to all docs, so older entries now read `bddr`.

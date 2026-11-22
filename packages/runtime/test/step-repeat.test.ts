@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { EventBus, parseSpec, type BddxEvent, type StepAttemptFinished, type StepFinished } from '@bddx/core';
-import { Executor, SupportRegistry, log, type DataTable, type StepContext } from '@bddx/runtime';
+import { EventBus, parseSpec, type BddrEvent, type StepAttemptFinished, type StepFinished } from '@bddr/core';
+import { Executor, SupportRegistry, log, type DataTable, type StepContext } from '@bddr/runtime';
 
 async function run(r: SupportRegistry, body: string, tags = '') {
   const src = `Feature: R\n  ${tags}\n  Scenario: s\n${body}`;
@@ -9,7 +9,7 @@ async function run(r: SupportRegistry, body: string, tags = '') {
   const bus = new EventBus({ keepHistory: true });
   const result = await new Executor({ registry: r, bus }).execute(spec.scenarios);
   const ev = bus.history!;
-  const of = <T extends BddxEvent['type']>(t: T) => ev.filter((e): e is Extract<BddxEvent, { type: T }> => e.type === t);
+  const of = <T extends BddrEvent['type']>(t: T) => ev.filter((e): e is Extract<BddrEvent, { type: T }> => e.type === t);
   return { result, ev, of, status: result.scenarioStatuses.get('r.feature::s') };
 }
 

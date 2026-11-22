@@ -1,2 +1,2 @@
-import { Then } from '@bddx/runtime';
+import { Then } from '@bddr/runtime';
 Then('{word} has {int}', () => {});

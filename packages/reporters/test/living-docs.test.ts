@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { renderLivingDocs, renderMarkdown, type DocsInput } from '@bddx/reporters';
+import { renderLivingDocs, renderMarkdown, type DocsInput } from '@bddr/reporters';
 
 describe('renderMarkdown', () => {
   it('renders headings, lists, code, emphasis and safe links', () => {

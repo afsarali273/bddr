@@ -6,7 +6,7 @@ main(process.argv.slice(2)).then(
     process.exitCode = code;
   },
   (err: unknown) => {
-    process.stderr.write(`bddx: ${err instanceof Error ? (err.stack ?? err.message) : String(err)}\n`);
+    process.stderr.write(`bddr: ${err instanceof Error ? (err.stack ?? err.message) : String(err)}\n`);
     process.exitCode = 2;
   },
 );

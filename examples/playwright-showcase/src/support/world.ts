@@ -1,4 +1,4 @@
-import type { RunContext, StepContext } from '@bddx/runtime';
+import type { RunContext, StepContext } from '@bddr/runtime';
 
 export const RESPONSE = 'playwright.response';
 export const HEALTH_STATUS = 'health.status';
@@ -16,7 +16,7 @@ export function response(ctx: StepContext): ResponseSnapshot {
 
 export function requiredParam(ctx: RunContext, name: string): string {
   const value = ctx.params[name];
-  if (!value) throw new Error(`Missing required bddx parameter: ${name}`);
+  if (!value) throw new Error(`Missing required bddr parameter: ${name}`);
   return value.replace(/\/$/, '');
 }
 

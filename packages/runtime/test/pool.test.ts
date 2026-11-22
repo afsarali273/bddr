@@ -3,7 +3,7 @@
  * process (each with its own scopes and stores, like a real worker). Real processes are covered by the CLI e2e tests.
  */
 import { describe, expect, it } from 'vitest';
-import { EventBus, buildPlan, parseSpec, type BddxEvent, type Plan, type PlanOptions, type Status } from '@bddx/core';
+import { EventBus, buildPlan, parseSpec, type BddrEvent, type Plan, type PlanOptions, type Status } from '@bddr/core';
 import {
   Executor,
   SupportRegistry,
@@ -14,7 +14,7 @@ import {
   type RemotePool,
   type ScopeRef,
   type StepContext,
-} from '@bddx/runtime';
+} from '@bddr/runtime';
 
 class FakePool implements RemotePool {
   readonly lanes = new Map<string, Executor>();
@@ -84,7 +84,7 @@ async function runPooled(r: SupportRegistry, src: string, plan: PlanOptions = {}
   const pool = new FakePool(r, p, bus);
   for (const c of crashOn) pool.crashOn.add(c);
   const result = await new Executor({ registry: r, bus, plan: p, pool, ...execute }).execute(spec.scenarios);
-  const of = <T extends BddxEvent['type']>(t: T) => bus.history!.filter((e): e is Extract<BddxEvent, { type: T }> => e.type === t);
+  const of = <T extends BddrEvent['type']>(t: T) => bus.history!.filter((e): e is Extract<BddrEvent, { type: T }> => e.type === t);
   return { result, of, pool, status: (id: string) => result.scenarioStatuses.get(id) };
 }
 

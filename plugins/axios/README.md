@@ -1,22 +1,22 @@
-# @bddx/axios
+# @bddr/axios
 
-API testing for [bddx](../../README.md) with [axios](https://axios-http.com), as a plugin. bddx has no dependency on
-axios: your project installs both, and this plugin connects them through bddx fixtures. It works the same way as
-[`@bddx/playwright`](../playwright/README.md) and [`@bddx/selenium`](../selenium/README.md), and can be used together
+API testing for [bddr](../../README.md) with [axios](https://axios-http.com), as a plugin. bddr has no dependency on
+axios: your project installs both, and this plugin connects them through bddr fixtures. It works the same way as
+[`@bddr/playwright`](../playwright/README.md) and [`@bddr/selenium`](../selenium/README.md), and can be used together
 with them in one project (a scenario can call the API and drive the browser).
 
 ```bash
-npm i -D @bddx/axios axios
+npm i -D @bddr/axios axios
 ```
 
 ```ts
-// bddx.config.ts
-import { defineConfig } from '@bddx/cli';
-import { axios } from '@bddx/axios';
+// bddr.config.ts
+import { defineConfig } from '@bddr/cli';
+import { axios } from '@bddr/axios';
 
 export default defineConfig({
   plugins: [axios({ baseURL: 'https://api.example.com', auth: { bearer: process.env.API_TOKEN }, headers: { 'x-team': 'qa' } })],
-  // or untyped: plugins: [['@bddx/axios', { baseURL: 'https://api.example.com' }]]
+  // or untyped: plugins: [['@bddr/axios', { baseURL: 'https://api.example.com' }]]
 });
 ```
 
@@ -31,8 +31,8 @@ Then('it is created', ({ state }) => assert.equal(state.get<AxiosResponse>('res'
 class ProductsApi { private api = inject('api'); list() { return this.api.get('/products'); } }
 ```
 
-Add `import '@bddx/axios';` (or `"types": ["@bddx/axios"]` in tsconfig) in one support file so `ctx.api`, `({ api })`
-and `inject('api')` are typed. bddx starts a fixture only when a step names it (`({ api })`, `ctx.api`,
+Add `import '@bddr/axios';` (or `"types": ["@bddr/axios"]` in tsconfig) in one support file so `ctx.api`, `({ api })`
+and `inject('api')` are typed. bddr starts a fixture only when a step names it (`({ api })`, `ctx.api`,
 `const { api } = ctx`, `inject('api')`); a helper that reads `ctx.api` inside, without the step naming it, is not seen.
 
 ## Fixtures
@@ -86,7 +86,7 @@ token handling.
 
 ```bash
 cd plugins/axios && npm install
-cd example && npx bddx            # or: npx bddx --pool process -w 3, -D token=wrong
+cd example && npx bddr            # or: npx bddr --pool process -w 3, -D token=wrong
 ```
 
 ## Developing

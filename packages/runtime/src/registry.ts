@@ -1,7 +1,7 @@
 import { createCucumberExpressionEngine } from './adapters/cucumber-expressions.js';
 import { destructuredNames, RESERVED, type FixtureDefinition, type FixtureOptions } from './fixtures.js';
 import type { CompiledStepPattern, ParameterTypeOptions, StepExpressionEngine } from './ports.js';
-import { compileTagExpression, createIdGenerator, type HookKind, type HookLevel, type StepInstance, type TagPredicate } from '@bddx/core';
+import { compileTagExpression, createIdGenerator, type HookKind, type HookLevel, type StepInstance, type TagPredicate } from '@bddr/core';
 import type {
   AnyHookFn,
   FeatureHookFn,
@@ -226,7 +226,7 @@ export class SupportRegistry {
   }
 }
 
-const GLOBAL_KEY = Symbol.for('bddx.registry.v1');
+const GLOBAL_KEY = Symbol.for('bddr.registry.v1');
 type GlobalWithRegistry = typeof globalThis & { [GLOBAL_KEY]?: SupportRegistry };
 
 /**

@@ -1,5 +1,5 @@
 import { strict as assert } from 'node:assert';
-import { CONTEXT, Given, Steps, Then, When, type StepContext } from '@bddx/runtime';
+import { CONTEXT, Given, Steps, Then, When, type StepContext } from '@bddr/runtime';
 
 /** A plain helper class: injected, one instance per scenario, disposed at the end. */
 export class Wallet {

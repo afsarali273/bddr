@@ -8,7 +8,7 @@
  *   ctx.log.image('after login', pngBytes);            // screenshot / image with a message (level info)
  *   ctx.log.warn('cart looks wrong', screenshotBuffer); // bytes as data = image attached to that log line
  *
- *   import { log } from '@bddx/runtime';   // anywhere (page objects, API clients, helpers):
+ *   import { log } from '@bddr/runtime';   // anywhere (page objects, API clients, helpers):
  *   log.info('clicked save');              // attributed to the scenario/step currently running
  *
  * Every call becomes a `log` event (all levels, always), so NDJSON/HTML reports have everything.
@@ -18,7 +18,7 @@
  * and with concurrent scenarios. Outside any scenario/hook it logs at run level.
  */
 import { AsyncLocalStorage } from 'node:async_hooks';
-import type { LogLevel } from '@bddx/core';
+import type { LogLevel } from '@bddr/core';
 
 export type LogFn = (message: string, data?: unknown) => void;
 

@@ -1,8 +1,8 @@
 /**
- * @bddx/selenium: Selenium WebDriver for bddx, as a plugin. bddx does not depend on Selenium; your project does.
+ * @bddr/selenium: Selenium WebDriver for bddr, as a plugin. bddr does not depend on Selenium; your project does.
  *
- *   // bddx.config.ts
- *   import { selenium } from '@bddx/selenium';
+ *   // bddr.config.ts
+ *   import { selenium } from '@bddr/selenium';
  *   export default defineConfig({ plugins: [selenium({ browser: 'chrome', baseURL: 'https://shop.example.com' })] });
  *
  *   // steps
@@ -26,11 +26,11 @@
 import { createRequire } from 'node:module';
 import { join } from 'node:path';
 import type { Condition, ThenableWebDriver, WebDriver, WebElement, WebElementCondition } from 'selenium-webdriver';
-import { defineFixture, definePlugin, type BddxPlugin, type FeatureContext, type RunContext, type StepContext } from '@bddx/runtime';
+import { defineFixture, definePlugin, type BddrPlugin, type FeatureContext, type RunContext, type StepContext } from '@bddr/runtime';
 
 type SeleniumModule = typeof import('selenium-webdriver');
 
-declare module '@bddx/runtime' {
+declare module '@bddr/runtime' {
   interface Fixtures {
     selenium: SeleniumModule;
     driver: WebDriver;
@@ -116,7 +116,7 @@ async function loadProjectSelenium(): Promise<SeleniumModule> {
 }
 
 /** Build the plugin. `load` is how the `selenium-webdriver` module is imported (tests pass a fake). */
-export function createSeleniumPlugin(load: () => Promise<SeleniumModule> = loadProjectSelenium): BddxPlugin<SeleniumPluginOptions> {
+export function createSeleniumPlugin(load: () => Promise<SeleniumModule> = loadProjectSelenium): BddrPlugin<SeleniumPluginOptions> {
   return definePlugin<SeleniumPluginOptions>({
     name: 'selenium',
     setup(o = {}) {
@@ -130,7 +130,7 @@ export function createSeleniumPlugin(load: () => Promise<SeleniumModule> = loadP
       const start = async (ctx: RunContext, extra: Partial<DriverOptions> = {}): Promise<WebDriver> => {
         const selenium = await ctx.fixture('selenium');
         const name = (extra.browser ?? ctx.params['browser'] ?? o.browser ?? 'chrome') as BrowserName;
-        if (!BROWSERS.includes(name)) throw new Error(`@bddx/selenium: browser must be ${BROWSERS.join(', ')} (got "${name}")`);
+        if (!BROWSERS.includes(name)) throw new Error(`@bddr/selenium: browser must be ${BROWSERS.join(', ')} (got "${name}")`);
         const headed = bool(ctx.params['headed']);
         const headless = extra.headless ?? (headed !== undefined ? !headed : (o.headless ?? true));
         const server = extra.server ?? ctx.params['server'] ?? o.server;
@@ -172,7 +172,7 @@ export function createSeleniumPlugin(load: () => Promise<SeleniumModule> = loadP
         try {
           ctx.attach(Buffer.from(await driver.takeScreenshot(), 'base64'), 'image/png', `screenshot ${status ?? ''}`.trim());
         } catch (e) {
-          ctx.log.warn(`@bddx/selenium: could not take a screenshot: ${e instanceof Error ? e.message : String(e)}`);
+          ctx.log.warn(`@bddr/selenium: could not take a screenshot: ${e instanceof Error ? e.message : String(e)}`);
         }
       };
 
@@ -253,11 +253,11 @@ export function createSeleniumPlugin(load: () => Promise<SeleniumModule> = loadP
   });
 }
 
-/** The plugin with Selenium from your project. Use as `plugins: ['@bddx/selenium']` or `plugins: [selenium({ ... })]`. */
+/** The plugin with Selenium from your project. Use as `plugins: ['@bddr/selenium']` or `plugins: [selenium({ ... })]`. */
 const plugin = createSeleniumPlugin();
 export default plugin;
 
-/** Typed form for bddx.config.ts: `plugins: [selenium({ browser: 'firefox', screenshot: 'on' })]`. */
+/** Typed form for bddr.config.ts: `plugins: [selenium({ browser: 'firefox', screenshot: 'on' })]`. */
 export function selenium(options: SeleniumPluginOptions = {}): { name: string; setup(): void | Promise<void> } {
   return { name: plugin.name, setup: () => plugin.setup(options) };
 }

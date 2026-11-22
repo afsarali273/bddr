@@ -21,7 +21,7 @@
  *
  * How a fixture is requested:
  *   - destructure it in the first parameter of a step, hook or fixture setup: `async ({ page }, text) => ...`
- *     (bddx reads the parameter list, like Playwright Test, and creates those fixtures before calling the function);
+ *     (bddr reads the parameter list, like Playwright Test, and creates those fixtures before calling the function);
  *   - `await ctx.fixture('page')` anywhere;
  *   - `inject('page')` in a class field or constructor (`@Steps()` classes, page objects created by `inject(Class)`).
  * Reading `ctx.page` without requesting it works for fixtures whose setup is synchronous or already created;
@@ -30,7 +30,7 @@
 import type { RunContext, StepContext } from './types.js';
 
 /** Fixture name -> type. Augment it to type your fixtures on `ctx` and `inject()`:
- *    declare module '@bddx/runtime' { interface Fixtures { page: import('playwright').Page } } */
+ *    declare module '@bddr/runtime' { interface Fixtures { page: import('playwright').Page } } */
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Fixtures {}
 
@@ -278,15 +278,15 @@ export interface FixtureHost {
   workerContext: () => RunContext;
 }
 
-const HOST = Symbol.for('bddx.fixtures.host');
-const SCENARIO = Symbol.for('bddx.fixtures.scenario');
-const FEATURE = Symbol.for('bddx.fixtures.feature');
+const HOST = Symbol.for('bddr.fixtures.host');
+const SCENARIO = Symbol.for('bddr.fixtures.scenario');
+const FEATURE = Symbol.for('bddr.fixtures.feature');
 
 type Ctx = (RunContext | StepContext) & { [HOST]?: FixtureHost; [SCENARIO]?: FixtureCache; [FEATURE]?: FixtureCache };
 
 function host(ctx: Ctx): FixtureHost {
   const h = ctx[HOST];
-  if (!h) throw new Error('Fixtures are not available here (no bddx context)');
+  if (!h) throw new Error('Fixtures are not available here (no bddr context)');
   return h;
 }
 

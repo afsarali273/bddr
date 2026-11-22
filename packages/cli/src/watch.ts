@@ -1,5 +1,5 @@
 /**
- * `bddx --watch`: run, then re-run when files change.
+ * `bddr --watch`: run, then re-run when files change.
  * Every run is a fresh child process (same CLI, no --watch), so edited step code, page objects and config always reload.
  *   - a changed .feature / data file re-runs just that file (its dependencies are pulled in by the plan),
  *   - a changed step/support/config file re-runs the original selection.
@@ -11,7 +11,7 @@ import { tmpdir } from 'node:os';
 import { join, relative, sep } from 'node:path';
 import { createInterface } from 'node:readline';
 
-const IGNORED = ['node_modules', '.git', '.bddx', 'dist', 'reports', 'test-results', 'playwright-report', 'coverage'];
+const IGNORED = ['node_modules', '.git', '.bddr', 'dist', 'reports', 'test-results', 'playwright-report', 'coverage'];
 const FEATURE_FILE = /\.(feature|md)$/i;
 
 export function isIgnored(rel: string): boolean {
@@ -59,7 +59,7 @@ interface RunRequest {
 export async function watchLoop(o: WatchOptions): Promise<number> {
   const out = o.out ?? ((t: string) => void process.stdout.write(t));
   const debounce = o.debounceMs ?? 250;
-  const tmp = mkdtempSync(join(tmpdir(), 'bddx-watch-'));
+  const tmp = mkdtempSync(join(tmpdir(), 'bddr-watch-'));
   const eventsFile = join(tmp, 'last.ndjson');
   const spawnRun =
     o.spawnRun ??
@@ -101,13 +101,13 @@ export async function watchLoop(o: WatchOptions): Promise<number> {
     if (req.failedOnly) args.push('--rerun-failed', eventsFile);
     const paths = req.paths ?? o.userPaths;
     args.push(...(req.failedOnly ? [] : paths));
-    out(`\n\x1b[2m─── bddx watch: ${req.failedOnly ? 'rerunning failed scenarios' : req.paths ? `running ${req.paths.join(', ')}` : 'running'} ───\x1b[22m\n`);
+    out(`\n\x1b[2m─── bddr watch: ${req.failedOnly ? 'rerunning failed scenarios' : req.paths ? `running ${req.paths.join(', ')}` : 'running'} ───\x1b[22m\n`);
     const child = spawnRun(args);
     running = child;
     child.on('exit', (code) => {
       running = undefined;
       lastFailedKnown = code === 1;
-      out(`\n\x1b[2mbddx watch: ${code === 0 ? 'passed' : code === 1 ? 'failed' : `exit ${code}`}. Waiting for changes (Enter = all, f = failed, q = quit)\x1b[22m\n`);
+      out(`\n\x1b[2mbddr watch: ${code === 0 ? 'passed' : code === 1 ? 'failed' : `exit ${code}`}. Waiting for changes (Enter = all, f = failed, q = quit)\x1b[22m\n`);
       if (pending) {
         const next = pending;
         pending = undefined;
@@ -148,12 +148,12 @@ export async function watchLoop(o: WatchOptions): Promise<number> {
       if (k === 'q') stop();
       else if (k === 'f') {
         if (lastFailedKnown) request({ failedOnly: true });
-        else out('bddx watch: nothing failed in the last run\n');
+        else out('bddr watch: nothing failed in the last run\n');
       } else if (k === '' || k === 'a') request({});
     });
   }
 
-  out(`bddx watch: watching ${o.rootDir} (ignoring ${IGNORED.join(', ')}). Ctrl+C to stop.\n`);
+  out(`bddr watch: watching ${o.rootDir} (ignoring ${IGNORED.join(', ')}). Ctrl+C to stop.\n`);
   startRun({});
   return done;
 }

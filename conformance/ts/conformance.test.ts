@@ -2,8 +2,8 @@ import { readdirSync, readFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { EventBus, buildPlan, createFileDataLoader, parseSpecAsync, type PlanOptions, type Status } from '@bddx/core';
-import { Executor, SupportRegistry } from '@bddx/runtime';
+import { EventBus, buildPlan, createFileDataLoader, parseSpecAsync, type PlanOptions, type Status } from '@bddr/core';
+import { Executor, SupportRegistry } from '@bddr/runtime';
 import { registerConformanceSteps } from './steps.js';
 
 const dir = fileURLToPath(new URL('../features/', import.meta.url));

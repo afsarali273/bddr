@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { EventBus, parseSpec } from '@bddx/core';
-import { Executor, SupportRegistry, type StepContext } from '@bddx/runtime';
-import { consoleReporter, createReporter, junitReporter } from '@bddx/reporters';
+import { EventBus, parseSpec } from '@bddr/core';
+import { Executor, SupportRegistry, type StepContext } from '@bddr/runtime';
+import { consoleReporter, createReporter, junitReporter } from '@bddr/reporters';
 import { mkdtempSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -56,7 +56,7 @@ describe('junit reporter: run-level hook failures', () => {
     r.defineHook('worker', 'before', {}, () => {
       throw new Error('browser missing');
     });
-    const dir = mkdtempSync(join(tmpdir(), 'bddx-junit-hook-'));
+    const dir = mkdtempSync(join(tmpdir(), 'bddr-junit-hook-'));
     const file = join(dir, 'j.xml');
     const rep = junitReporter({ outputFile: file });
     const bus = new EventBus();
@@ -73,11 +73,11 @@ describe('junit reporter: run-level hook failures', () => {
 
 describe('junit reporter', () => {
   it('writes escaped XML with failures', async () => {
-    const dir = mkdtempSync(join(tmpdir(), 'bddx-junit-'));
+    const dir = mkdtempSync(join(tmpdir(), 'bddr-junit-'));
     const file = join(dir, 'out', 'junit.xml');
     await runWith(junitReporter({ outputFile: file }));
     const xml = readFileSync(file, 'utf8');
-    expect(xml).toContain('<testsuites name="bddx" tests="3" failures="2" skipped="0"');
+    expect(xml).toContain('<testsuites name="bddr" tests="3" failures="2" skipped="0"');
     expect(xml).toContain('name="Login &amp; &lt;stuff&gt;"');
     expect(xml).toContain('<failure type="failed" message="expected &lt;200&gt; got &quot;500&quot;">');
     expect(xml).toContain('<failure type="undefined"');
@@ -94,9 +94,9 @@ describe('createReporter', () => {
 
 describe('cucumber-json reporter', () => {
   it('writes features > elements > steps with statuses and nanosecond durations', async () => {
-    const dir = mkdtempSync(join(tmpdir(), 'bddx-cj-'));
+    const dir = mkdtempSync(join(tmpdir(), 'bddr-cj-'));
     const file = join(dir, 'cucumber.json');
-    const { cucumberJsonReporter } = await import('@bddx/reporters');
+    const { cucumberJsonReporter } = await import('@bddr/reporters');
     await runWith(cucumberJsonReporter({ outputFile: file }));
     const json = JSON.parse(readFileSync(file, 'utf8')) as Array<{
       name: string;
@@ -123,7 +123,7 @@ describe('console reporter log levels', () => {
     rep.onEvent({ ts: 0, type: 'log', level: 'info', source: 'user', message: 'run-level info' });
     rep.onEvent({ ts: 0, type: 'log', level: 'debug', source: 'user', message: 'dbg', scenarioId: 's', data: { k: 1 } });
     rep.onEvent({ ts: 0, type: 'log', level: 'warn', source: 'user', message: 'careful', scenarioId: 's' });
-    rep.onEvent({ ts: 0, type: 'log', level: 'debug', source: 'bddx', message: 'start s on w1', scenarioId: 's' });
+    rep.onEvent({ ts: 0, type: 'log', level: 'debug', source: 'bddr', message: 'start s on w1', scenarioId: 's' });
     rep.onEvent({ ts: 0, type: 'scenarioFinished', scenarioId: 's', attempt: 1, status: 'passed', durationMs: 1 });
     return out;
   };
@@ -138,11 +138,11 @@ describe('console reporter log levels', () => {
   it('warn hides info', () => {
     expect(logEvents({ logLevel: 'warn' })).not.toContain('run-level info');
   });
-  it('debug shows everything, framework logs tagged bddx:debug, data inline', () => {
+  it('debug shows everything, framework logs tagged bddr:debug, data inline', () => {
     const out = logEvents({ logLevel: 'debug' });
     expect(out).toContain('[info] run-level info');
     expect(out).toContain('[debug] dbg {"k":1}');
-    expect(out).toContain('[bddx:debug] start s on w1');
+    expect(out).toContain('[bddr:debug] start s on w1');
   });
   it('silent hides logs', () => {
     expect(logEvents({ logLevel: 'silent' })).not.toContain('careful');
@@ -175,8 +175,8 @@ describe('logs and images in file reports', () => {
   }
 
   it('HTML: self-contained page with logs (levels), log images, attachments, errors, escaping', async () => {
-    const { htmlReporter } = await import('@bddx/reporters');
-    const dir = mkdtempSync(join(tmpdir(), 'bddx-html-'));
+    const { htmlReporter } = await import('@bddr/reporters');
+    const dir = mkdtempSync(join(tmpdir(), 'bddr-html-'));
     const file = join(dir, 'r.html');
     await richRun(htmlReporter({ outputFile: file, title: 'My <Run>' }));
     const html = readFileSync(file, 'utf8');
@@ -193,7 +193,7 @@ describe('logs and images in file reports', () => {
   });
 
   it('JUnit: logs in system-out / system-err, CDATA-safe, step names prefixed', async () => {
-    const dir = mkdtempSync(join(tmpdir(), 'bddx-junit2-'));
+    const dir = mkdtempSync(join(tmpdir(), 'bddr-junit2-'));
     const file = join(dir, 'j.xml');
     await richRun(junitReporter({ outputFile: file }));
     const xml = readFileSync(file, 'utf8');
@@ -203,8 +203,8 @@ describe('logs and images in file reports', () => {
   });
 
   it('Cucumber JSON: step output lines, log images as embeddings, hook logs in before', async () => {
-    const { cucumberJsonReporter } = await import('@bddx/reporters');
-    const dir = mkdtempSync(join(tmpdir(), 'bddx-cj2-'));
+    const { cucumberJsonReporter } = await import('@bddr/reporters');
+    const dir = mkdtempSync(join(tmpdir(), 'bddr-cj2-'));
     const file = join(dir, 'c.json');
     await richRun(cucumberJsonReporter({ outputFile: file, logLevel: 'debug' }));
     const [feature] = JSON.parse(readFileSync(file, 'utf8')) as Array<{
@@ -227,12 +227,12 @@ describe('logs and images in file reports', () => {
 });
 
 describe('stack trimming', () => {
-  it('drops bddx-internal and node-internal frames, keeps user frames', async () => {
+  it('drops bddr-internal and node-internal frames, keeps user frames', async () => {
     const { trimStack } = await import('../src/html.js');
     const stack = [
       'Error: boom',
       '    at Object.fn (/proj/steps/a.steps.ts:3:9)',
-      '    at file:///x/node_modules/@bddx/runtime/dist/executor.js:5:1',
+      '    at file:///x/node_modules/@bddr/runtime/dist/executor.js:5:1',
       '    at /repo/packages/runtime/src/executor.ts:10:2',
       '    at AsyncLocalStorage.run (node:internal/async_local_storage/async_hooks:91:14)',
     ].join('\n');
@@ -242,8 +242,8 @@ describe('stack trimming', () => {
 
 describe('HTML report v2 views', () => {
   it('timeline lanes, dependency graph, history with trend and flaky score', async () => {
-    const { buildPlan } = await import('@bddx/core');
-    const { htmlReporter } = await import('@bddx/reporters');
+    const { buildPlan } = await import('@bddr/core');
+    const { htmlReporter } = await import('@bddr/reporters');
     const r = new SupportRegistry();
     let calls = 0;
     r.defineStep('ok', () => new Promise((res) => setTimeout(res, 5)));
@@ -274,7 +274,7 @@ describe('HTML report v2 views', () => {
       workers: 1,
       scenarios: { [spec.scenarios[1]!.id]: { s: pass ? ('passed' as const) : ('failed' as const), d: 3, n: 'Uses setup' } },
     }));
-    const dir = mkdtempSync(join(tmpdir(), 'bddx-html2-'));
+    const dir = mkdtempSync(join(tmpdir(), 'bddr-html2-'));
     const file = join(dir, 'r.html');
     const rep = htmlReporter({ outputFile: file, history: previous });
     const bus = new EventBus();
@@ -295,8 +295,8 @@ describe('HTML report v2 views', () => {
   });
 
   it('no history section without previous runs; no graph without dependencies', async () => {
-    const { htmlReporter } = await import('@bddx/reporters');
-    const dir = mkdtempSync(join(tmpdir(), 'bddx-html3-'));
+    const { htmlReporter } = await import('@bddr/reporters');
+    const dir = mkdtempSync(join(tmpdir(), 'bddr-html3-'));
     const file = join(dir, 'r.html');
     await runWith(htmlReporter({ outputFile: file }));
     const html = readFileSync(file, 'utf8');
@@ -308,8 +308,8 @@ describe('HTML report v2 views', () => {
 
 describe('html reporter v3: statistics, tabs and sharing', () => {
   async function mixedHtml() {
-    const { htmlReporter } = await import('@bddx/reporters');
-    const dir = mkdtempSync(join(tmpdir(), 'bddx-html4-'));
+    const { htmlReporter } = await import('@bddr/reporters');
+    const dir = mkdtempSync(join(tmpdir(), 'bddr-html4-'));
     const file = join(dir, 'r.html');
     await runWith(htmlReporter({ outputFile: file, title: 'Stats </script> run' }));
     return readFileSync(file, 'utf8');
@@ -331,7 +331,7 @@ describe('html reporter v3: statistics, tabs and sharing', () => {
 
   it('embeds the results as JSON that cannot break out of the script tag', async () => {
     const html = await mixedHtml();
-    const m = /<script type="application\/json" id="bddx-data">([\s\S]*?)<\/script>/.exec(html);
+    const m = /<script type="application\/json" id="bddr-data">([\s\S]*?)<\/script>/.exec(html);
     expect(m).not.toBeNull();
     const payload = JSON.parse(m![1]!) as { title: string; success: boolean; summary: string; scenarios: Array<{ name: string; status: string }>; stats: { total: number } };
     expect(payload.title).toBe('Stats </script> run');
@@ -343,7 +343,7 @@ describe('html reporter v3: statistics, tabs and sharing', () => {
   });
 
   it('computeStats: pass rate, percentiles, histogram, failure clusters (numbers normalised) and breakdowns', async () => {
-    const { computeStats, summaryText } = await import('@bddx/reporters');
+    const { computeStats, summaryText } = await import('@bddr/reporters');
     const plan = [1, 2, 3, 4].map((n) => ({
       id: `s${n}`, name: `sc${n}`, uri: n < 3 ? 'a.feature' : 'b.feature', line: n, featureName: n < 3 ? 'A' : 'B',
       tags: n === 1 ? ['@x'] : [], steps: [{ id: `st${n}`, keyword: 'Given ', text: 'x', line: n }],
@@ -366,8 +366,8 @@ describe('html reporter v3: statistics, tabs and sharing', () => {
   });
 
   it('shows a History tab and a delta vs the previous run when history exists', async () => {
-    const { htmlReporter } = await import('@bddx/reporters');
-    const dir = mkdtempSync(join(tmpdir(), 'bddx-html5-'));
+    const { htmlReporter } = await import('@bddr/reporters');
+    const dir = mkdtempSync(join(tmpdir(), 'bddr-html5-'));
     const file = join(dir, 'r.html');
     const previous = [{ v: 1 as const, runId: 'old', startedAt: 1, durationMs: 100, success: true, workers: 1, scenarios: { a: { s: 'passed' as const, d: 1, n: 'a' }, b: { s: 'passed' as const, d: 1, n: 'b' }, c: { s: 'passed' as const, d: 1, n: 'c' } } }];
     await runWith(htmlReporter({ outputFile: file, history: previous }));
@@ -419,7 +419,7 @@ describe('html report: data-driven scenarios and step arguments', () => {
 `;
 
   async function dataHtml() {
-    const { htmlReporter } = await import('@bddx/reporters');
+    const { htmlReporter } = await import('@bddr/reporters');
     const r = new SupportRegistry();
     r.defineStep('the catalogue:', () => {});
     r.defineStep('I add {int} {string}', (_c: StepContext, qty: number, item: string) => {
@@ -427,7 +427,7 @@ describe('html report: data-driven scenarios and step arguments', () => {
     });
     r.defineStep('ok', () => {});
     r.defineStep('a doc:', () => {});
-    const dir = mkdtempSync(join(tmpdir(), 'bddx-html6-'));
+    const dir = mkdtempSync(join(tmpdir(), 'bddr-html6-'));
     const file = join(dir, 'r.html');
     const rep = htmlReporter({ outputFile: file });
     const bus = new EventBus();
@@ -480,8 +480,8 @@ describe('html report: data-driven scenarios and step arguments', () => {
 
 describe('html report: responsive layout and UX hooks', () => {
   it('ships viewport meta, a sticky tab bar, phone breakpoints, labelled data cells, empty state and back-to-top', async () => {
-    const { htmlReporter } = await import('@bddx/reporters');
-    const dir = mkdtempSync(join(tmpdir(), 'bddx-html7-'));
+    const { htmlReporter } = await import('@bddr/reporters');
+    const dir = mkdtempSync(join(tmpdir(), 'bddr-html7-'));
     const file = join(dir, 'r.html');
     await runWith(htmlReporter({ outputFile: file }));
     const html = readFileSync(file, 'utf8');
@@ -496,8 +496,8 @@ describe('html report: responsive layout and UX hooks', () => {
   });
 
   it('data cells carry data-label for the stacked phone layout', async () => {
-    const { htmlReporter } = await import('@bddx/reporters');
-    const dir = mkdtempSync(join(tmpdir(), 'bddx-html8-'));
+    const { htmlReporter } = await import('@bddr/reporters');
+    const dir = mkdtempSync(join(tmpdir(), 'bddr-html8-'));
     const file = join(dir, 'r.html');
     const r = new SupportRegistry();
     r.defineStep('I add {int}', () => {});
@@ -515,12 +515,12 @@ describe('html report: responsive layout and UX hooks', () => {
 
 describe('html report: wide data sets scroll sideways', () => {
   async function htmlFor(columns: number) {
-    const { htmlReporter } = await import('@bddx/reporters');
+    const { htmlReporter } = await import('@bddr/reporters');
     const names = Array.from({ length: columns }, (_, i) => `c${i + 1}`);
     const feature = `Feature: Wide\n  Scenario Outline: row <c1>\n    Given ok\n    Examples:\n      | ${names.join(' | ')} |\n      | ${names.map((_, i) => i + 1).join(' | ')} |\n`;
     const r = new SupportRegistry();
     r.defineStep('ok', () => {});
-    const dir = mkdtempSync(join(tmpdir(), 'bddx-html9-'));
+    const dir = mkdtempSync(join(tmpdir(), 'bddr-html9-'));
     const file = join(dir, 'r.html');
     const rep = htmlReporter({ outputFile: file });
     const bus = new EventBus();

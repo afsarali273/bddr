@@ -13,20 +13,20 @@ import {
   type Pickle,
   type Timestamp,
 } from '@cucumber/messages';
-import type { BddxEvent, ErrorInfo, PlannedScenario, Status } from '@bddx/core';
+import type { BddrEvent, ErrorInfo, PlannedScenario, Status } from '@bddr/core';
 import type { Reporter, ReporterOptions } from './types.js';
 
 /**
  * Cucumber Messages (ADR-007): the standard NDJSON envelope stream, so tools from the Cucumber ecosystem
- * (HTML formatter, Cucumber Reports, Xray/Zephyr importers ...) can read bddx runs.
+ * (HTML formatter, Cucumber Reports, Xray/Zephyr importers ...) can read bddr runs.
  *
- * The bddx event stream stays the source of truth; this reporter only translates it.
+ * The bddr event stream stays the source of truth; this reporter only translates it.
  *   source / gherkinDocument / pickle   regenerated from the feature files (`sourceRoot`, default: cwd)
  *   testRunStarted, testCase*, testStep*, attachment, testRunFinished   from the run events
  * Scenarios that cannot be tied to a pickle are left out and counted in `droppedScenarios` (see below):
  *   - rows generated from data files (`@data`), because Gherkin never sees them,
  *   - features whose file cannot be read from `sourceRoot`.
- * bddx-only concepts (groups, locks, hook levels, worker lanes) have no Messages equivalent and are not emitted.
+ * bddr-only concepts (groups, locks, hook levels, worker lanes) have no Messages equivalent and are not emitted.
  */
 export function messagesReporter(raw: ReporterOptions = {}): Reporter {
   const outputFile = String(raw['outputFile'] ?? 'reports/messages.ndjson');
@@ -85,7 +85,7 @@ export class MessagesBuilder {
   private endTs = Date.now();
   private success = true;
   private meta: { name: string; version: string; runtime: { name: string; version: string } } = {
-    name: 'bddx',
+    name: 'bddr',
     version: '0.0.0',
     runtime: { name: 'node', version: process.versions.node },
   };
@@ -96,7 +96,7 @@ export class MessagesBuilder {
 
   private static_: Envelope[] = [];
 
-  onEvent(e: BddxEvent): void {
+  onEvent(e: BddrEvent): void {
     switch (e.type) {
       case 'runStarted':
         this.startTs = e.ts;
@@ -153,7 +153,7 @@ export class MessagesBuilder {
       case 'log': {
         const a = e.scenarioId ? this.attempts.get(e.scenarioId) : undefined;
         const m = e.scenarioId ? this.mapped.get(e.scenarioId) : undefined;
-        if (!a || !m || e.source === 'bddx') break;
+        if (!a || !m || e.source === 'bddr') break;
         const i = e.stepId ? m.planned.steps.findIndex((s) => s.id === e.stepId) : -1;
         const base = { testCaseStartedId: a.id, ...(i >= 0 ? { testStepId: m.stepIds[i]! } : {}), timestamp: toTimestamp(e.ts) };
         if (e.attachment) {

@@ -1,7 +1,7 @@
 /**
  * Class-based step definitions with dependency injection.
  *
- *   import { Steps, Given, When, Then, Before, CONTEXT } from '@bddx/runtime';
+ *   import { Steps, Given, When, Then, Before, CONTEXT } from '@bddr/runtime';
  *
  *   class ApiClient {                      // any plain class can be injected
  *     static inject = [CONTEXT] as const;
@@ -33,15 +33,15 @@
  * pending list. That is why `@Steps()` is REQUIRED on classes that declare steps or hooks.
  *
  * NEVER export anything named `then` from this package: a module namespace with a `then`
- * export is "thenable", and `await import('@bddx/runtime')` would hang forever.
+ * export is "thenable", and `await import('@bddr/runtime')` would hang forever.
  */
 import { callerLocation, getGlobalRegistry } from './registry.js';
 import type { HookOptions, StepContext, StepOptions } from './types.js';
 import { readFixture, withFixtureRetry, type Fixtures } from './fixtures.js';
-import type { HookLevel } from '@bddx/core';
+import type { HookLevel } from '@bddr/core';
 
 /** Injection token for the current StepContext. */
-export const CONTEXT: unique symbol = Symbol.for('bddx.inject.context');
+export const CONTEXT: unique symbol = Symbol.for('bddr.inject.context');
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Constructor<T = unknown> = new (...args: any[]) => T;
@@ -125,7 +125,7 @@ export function Steps() {
 
 // ------------------------------------------------------------------ container
 
-const CONTAINER = Symbol.for('bddx.container');
+const CONTAINER = Symbol.for('bddr.container');
 
 interface Container {
   instances: Map<Constructor, unknown>;
@@ -191,7 +191,7 @@ let constructing: StepContext | undefined;
  *     private ctx = inject(CONTEXT);       // the scenario context, if you need it
  *   }
  *
- * Works in classes bddx creates (step classes, and classes they inject). Page objects can use it too:
+ * Works in classes bddr creates (step classes, and classes they inject). Page objects can use it too:
  *   class LoginPage { private page = inject('page'); }
  */
 export function inject<T>(cls: Constructor<T>): T;
@@ -203,7 +203,7 @@ export function inject(token: InjectToken | string): unknown {
   if (!ctx) {
     throw new Error(
       `inject(${typeof token === 'string' ? `'${token}'` : typeof token === 'function' ? token.name : 'CONTEXT'}) can only be used in a field initializer or constructor ` +
-        'of a class bddx creates (a @Steps() class or a class injected into one). In function steps destructure instead: ({ page }) => ...',
+        'of a class bddr creates (a @Steps() class or a class injected into one). In function steps destructure instead: ({ page }) => ...',
     );
   }
   if (token === CONTEXT) return ctx;

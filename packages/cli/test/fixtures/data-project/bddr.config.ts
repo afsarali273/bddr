@@ -1,4 +1,4 @@
-import { defineConfig } from '@bddx/cli';
+import { defineConfig } from '@bddr/cli';
 
 export default defineConfig({
   dataDir: 'data',

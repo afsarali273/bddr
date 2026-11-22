@@ -1,4 +1,4 @@
-import { Before, Given } from '@bddx/runtime';
+import { Before, Given } from '@bddr/runtime';
 
 Given('duplicated', () => {});
 Given('duplicated', () => {});

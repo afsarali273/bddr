@@ -1,4 +1,4 @@
-import type { DataTable, StepContext, SupportRegistry } from '@bddx/runtime';
+import type { DataTable, StepContext, SupportRegistry } from '@bddr/runtime';
 
 /** Reference implementation of the shared conformance step vocabulary (see ../README.md). */
 export function registerConformanceSteps(r: SupportRegistry, trace: string[]): void {

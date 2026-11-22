@@ -1,6 +1,6 @@
 /**
- * Run history (Phase 5): one small JSON record per run, kept in a folder (default `.bddx/history`), used for
- * flakiness scores, trends in the HTML report and `bddx history`.
+ * Run history (Phase 5): one small JSON record per run, kept in a folder (default `.bddr/history`), used for
+ * flakiness scores, trends in the HTML report and `bddr history`.
  *
  * Flakiness score of a scenario over the recorded runs where it passed or failed (other statuses ignored):
  *   a run is "unstable" when the scenario was flaky in it (passed after a retry) or its outcome (pass / fail) differs
@@ -9,7 +9,7 @@
  */
 import { mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import type { BddxEvent } from './events.js';
+import type { BddrEvent } from './events.js';
 import type { Status } from './model.js';
 
 export interface HistoryEntry {
@@ -41,7 +41,7 @@ export class HistoryRecorder {
   private readonly names = new Map<string, string>();
   private done = false;
 
-  onEvent(e: BddxEvent): void {
+  onEvent(e: BddrEvent): void {
     switch (e.type) {
       case 'runStarted':
         this.run.runId = e.runId;

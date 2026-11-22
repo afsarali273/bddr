@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { EventBus, buildPlan, parseSpec, type PlanOptions } from '@bddx/core';
+import { EventBus, buildPlan, parseSpec, type PlanOptions } from '@bddr/core';
 import {
   CONTEXT,
   Executor,
@@ -11,7 +11,7 @@ import {
   inject,
   resetGlobalRegistry,
   type StepContext,
-} from '@bddx/runtime';
+} from '@bddr/runtime';
 import { destructuredNames } from '../src/fixtures.js';
 
 afterEach(() => void resetGlobalRegistry());
@@ -220,7 +220,7 @@ describe('inject()', () => {
     expect(log.sort()).toEqual(['page closed', 'page closed', 's1:/a', 's2:/b']);
   });
 
-  it('outside a bddx-created class it explains where it can be used', () => {
+  it('outside a bddr-created class it explains where it can be used', () => {
     expect(() => inject('page')).toThrow(/field initializer or constructor/);
   });
 });

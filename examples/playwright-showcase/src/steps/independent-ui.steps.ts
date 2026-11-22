@@ -1,10 +1,10 @@
 import { strict as assert } from 'node:assert';
-import { Given, Then, When } from '@bddx/runtime';
+import { Given, Then, When } from '@bddr/runtime';
 import type { Page } from 'playwright';
 import { PlaywrightDocsPage } from '../pages/playwright-docs.page.js';
 import { requiredParam } from '../support/world.js';
 
-// Steps ask for `page` themselves ({ page }): bddx only sees what a step body or its parameters name, not what a helper reads.
+// Steps ask for `page` themselves ({ page }): bddr only sees what a step body or its parameters name, not what a helper reads.
 const docs = (page: Page) => new PlaywrightDocsPage(page);
 
 Given('the independent Playwright documentation site is open', async (ctx) => {

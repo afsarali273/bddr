@@ -1,7 +1,7 @@
 {
-  "name": "@bddx/selenium",
+  "name": "@bddr/selenium",
   "version": "0.1.0",
-  "description": "Selenium WebDriver plugin for bddx: a driver per scenario, shared sessions for serial features, remote grids, screenshots",
+  "description": "Selenium WebDriver plugin for bddr: a driver per scenario, shared sessions for serial features, remote grids, screenshots",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -16,12 +16,12 @@
     "verify": "npm run typecheck && npm run build && npm test"
   },
   "peerDependencies": {
-    "@bddx/runtime": ">=0.1.0",
+    "@bddr/runtime": ">=0.1.0",
     "selenium-webdriver": ">=4.20.0"
   },
   "devDependencies": {
-    "@bddx/core": "file:../../packages/core",
-    "@bddx/runtime": "file:../../packages/runtime",
+    "@bddr/core": "file:../../packages/core",
+    "@bddr/runtime": "file:../../packages/runtime",
     "@types/node": "^22.20.5",
     "@types/selenium-webdriver": "^4.1.28",
     "selenium-webdriver": "^4.27.0",

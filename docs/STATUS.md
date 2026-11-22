@@ -1,12 +1,12 @@
-# bddx: status overview (done so far and what remains)
+# bddr: status overview (done so far and what remains)
 
 _Last updated: 2026-11-15 (after session 12: independent UI/API coverage and Page Object Model examples)._
 
-This is the one-page answer to "what does bddx do today, and what is left?". It is a summary: details live in
+This is the one-page answer to "what does bddr do today, and what is left?". It is a summary: details live in
 [IMPLEMENTATION.md](IMPLEMENTATION.md) (how), [DECISIONS.md](DECISIONS.md) (why), [ROADMAP.md](ROADMAP.md) (task
 checklist) and [PROGRESS.md](PROGRESS.md) (session log + next step).
 
-**What bddx is:** an automation framework with BDD-style specs (Gherkin), not a BDD-purist tool. It takes the best ideas
+**What bddr is:** an automation framework with BDD-style specs (Gherkin), not a BDD-purist tool. It takes the best ideas
 from Cucumber, TestNG, Karate, Serenity/JS, Reqnroll, Gauge, Behave, Robot Framework, pytest-bdd, JBehave and
 playwright-bdd, on its own architecture: Cucumber's libraries are used only for parsing and expressions, behind
 replaceable adapters. TypeScript first, Java later (same config, events and conformance suite).
@@ -22,7 +22,7 @@ replaceable adapters. TypeScript first, Java later (same config, events and conf
 | 2 Data-driven specs | CSV/TSV/JSON/YAML/XLSX via `@data:` | 🟡 Data core done; composite steps + gate left |
 | 3 Orchestration | Groups, dependencies, locks, priorities, parallel/serial, worker processes, logging, step repeat/retry | ✅ Done; `@requires` and `waitedForMs` event left |
 | 4 Resilience | Scenario/group/run retry, flaky, quarantine, rerun + merge, soft asserts, cancellation and time budgets | ✅ Done |
-| 5 Reporting + DX | HTML v2 (timeline, dependency graph, history), run history + flakiness score, `bddx history` | 🟡 Reporting done; DX tools (debug, watch, sharding, IDE, Cucumber Messages) left |
+| 5 Reporting + DX | HTML v2 (timeline, dependency graph, history), run history + flakiness score, `bddr history` | 🟡 Reporting done; DX tools (debug, watch, sharding, IDE, Cucumber Messages) left |
 | 6 Ecosystem | Plugin API, Playwright, HTTP steps, Allure, AI step catalogue/MCP, v1.0 | 🟡 Playwright showcase done; reusable integration pending |
 | 7 Java port | JUnit Platform engine, same config/events/conformance | ⬜ Not started |
 | Parked | Code-linked Markdown specs; callable scenarios | ⏸ Owner decision: later |
@@ -47,7 +47,7 @@ ungrouped and run without named-group scheduling.
 
 ### 2.2 Steps (glue code)
 - Cucumber Expressions and regex patterns, custom parameter types (`defineParameterType`), scoped steps (`{ tags }`),
-  ambiguity detection, undefined-step snippets (`bddx snippets`, `--dry-run`).
+  ambiguity detection, undefined-step snippets (`bddr snippets`, `--dry-run`).
 - Function style (`Given('…', (ctx, …) => …)`) or **class style** with decorators (`@Steps()` + `@Given` …) and a
   **DI container** (`static inject = [...]`, one instance per scenario, `CONTEXT` token, `dispose()`).
 - Step options: `timeoutMs`, `retry` (default retry for that step), `concurrent: false` (never repeat in parallel,
@@ -88,7 +88,7 @@ scope. Failure semantics (what is skipped and what still runs) are a documented 
 - **Dependencies**: `@dependsOn:<id>` (hard), `@dependsOn:<id>:soft`, `@dependsOn:group:<name>`. Cycles and unknown ids are
   reported before anything runs.
 - `@lock:<name>` (mutual exclusion), `@priority:<n>`, `@exclusive`.
-- `bddx plan` (text, JSON or Mermaid) and `bddx plan --explain <id>`.
+- `bddr plan` (text, JSON or Mermaid) and `bddr plan --explain <id>`.
 - One command runs parallel and serial work together; the scheduler respects all of the above.
 
 ### 2.7 Execution pools
@@ -98,7 +98,7 @@ scope. Failure semantics (what is skipped and what still runs) are a documented 
     checked with a fingerprint.
   - BeforeAll's run store is copied to workers. Exports are synced between workers.
   - A crashed worker fails only its own scenario and its lane respawns; a worker that cannot start stops the run.
-  - Each worker gets the `BDDX_WORKER_ID` and `BDDX_WORKER_INDEX` environment variables.
+  - Each worker gets the `BDDR_WORKER_ID` and `BDDR_WORKER_INDEX` environment variables.
 
 ### 2.8 Step-level repeat and retry (inline trailing tags)
 - `@repeat:N` (bulk data, e.g. create 100 users, with `{{i}}`/`{{n}}` placeholders), `@retry:N` (until it passes),
@@ -113,7 +113,7 @@ scope. Failure semantics (what is skipped and what still runs) are a documented 
 - **Group retry**: `groups.x.retry`, `retryMembers: all|failed` and `scenarioRetry`. Dependents wait until the group settles.
 - **Flaky detection**: a pass after a failure is reported, and fails the run only with `--fail-on-flaky`. **`@quarantine`** runs and
   reports a scenario but never fails the build.
-- **Run retry**: `--rerun-failed <events.ndjson>`; `bddx report a.ndjson b.ndjson` merges runs into any report format.
+- **Run retry**: `--rerun-failed <events.ndjson>`; `bddr report a.ndjson b.ndjson` merges runs into any report format.
 - **Soft assertions**: `ctx.soft.check()` / `ctx.soft.run()`.
 - **Time budgets**: step/hook timeouts, `@timeout:<dur>` / `scenarioTimeout`, `groups.x.timeout`, and `runTimeout` /
   `--run-timeout`. Programmatic cancellation and Ctrl+C share `ctx.signal`; Ctrl+C exits 130 after cleanup/report flush.
@@ -144,15 +144,15 @@ scope. Failure semantics (what is skipped and what still runs) are a documented 
   - **JUnit XML** (Surefire `flakyFailure`; quarantined failures become `<skipped>`; failed run/worker/group hooks become errored cases)
   - **Cucumber JSON**
   - **NDJSON** event stream (versioned schema; the source of truth for every other report)
-- **Run history** (`history: true`): one small JSON record per run in `.bddx/history` (last 50 kept). Flakiness
+- **Run history** (`history: true`): one small JSON record per run in `.bddr/history` (last 50 kept). Flakiness
   score = share of runs whose outcome flipped or that passed only after a retry (a consistently failing scenario
-  scores 0: it is broken, not flaky). `bddx history` prints the flakiest and slowest scenarios.
+  scores 0: it is broken, not flaky). `bddr history` prints the flakiest and slowest scenarios.
 
 ### 2.11 Validation, configuration and CLI
-- `bddx validate` checks every configured spec without executing tests or parameter transformers: parse/config/plan
+- `bddr validate` checks every configured spec without executing tests or parameter transformers: parse/config/plan
   errors, duplicate ids, undefined/ambiguous steps, unused definitions and unmatched hooks. Optional
   `validation.allowedTagKeys` enables tag governance; `--fail-on-warnings` makes warnings fail CI.
-- `bddx.config.{ts,mts,js,mjs,json}` via `defineConfig`, `profiles`, and `--set path=value` overrides for any option.
+- `bddr.config.{ts,mts,js,mjs,json}` via `defineConfig`, `profiles`, and `--set path=value` overrides for any option.
 - Commands: `run` (default), `list`, `snippets`, `validate`, `plan`, `report`, `history`. Exit codes: 0 passed, 1 failed,
   2 usage/config/parse error, 130 interrupted.
 
@@ -162,7 +162,7 @@ scope. Failure semantics (what is skipped and what still runs) are a documented 
 - Language-neutral **conformance suite** (9 features with expected JSON) that the Java port must also pass.
 - Four runnable examples: `examples/basic`, `examples/orchestration`, `examples/resilience`, plus the standalone
   `examples/playwright-showcase` real project (125 UI/API scenarios across 13 feature files, powered by Playwright but
-  run by bddx).
+  run by bddr).
 - 24 ADRs recording the design decisions.
 
 ---
@@ -194,7 +194,7 @@ scenarioRetry, timeout), `defaultMode`, `logLevel`, `retry` (scenario, delay, ba
 `-c/--config`, `-p/--profile`, `-t/--tags`, `--name`, `-f/--format`, `-D/--define`, `--dry-run`, `--fail-fast`,
 `--no-strict`, `--timeout`, `-w/--workers`, `--pool`, `-s/--set`, `--log-level`, `--no-deps`, `-r/--retry`,
 `--worker-crash-retry`, `--run-timeout`, `--fail-on-flaky`, `--rerun-failed`, `--fail-on-warnings`, `--plan-format`, `--explain`,
-`--top` (with `bddx history`). Commands: `run`, `list`, `snippets`, `validate`, `plan`, `report`, `history`.
+`--top` (with `bddr history`). Commands: `run`, `list`, `snippets`, `validate`, `plan`, `report`, `history`.
 
 ---
 
@@ -214,16 +214,16 @@ scenarioRetry, timeout), `defaultMode`, `logLevel`, `retry` (scenario, delay, ba
      `testCaseFinished` (`willBeRetried`), `testRunFinished`, plus `stepDefinition`. Validated with `parseEnvelope`.
      Limits: scenarios from `@data` files have no pickle and are left out; groups/locks/hook levels have no Messages equivalent;
      hooks are not emitted as `hook`/`testStep` messages yet.
-   - ~~Watch mode~~ DONE (session 13): `bddx --watch` (`cli/src/watch.ts`). Each run is a fresh child process (step code, page
+   - ~~Watch mode~~ DONE (session 13): `bddr --watch` (`cli/src/watch.ts`). Each run is a fresh child process (step code, page
      objects and config always reload). Changed `.feature`/`.md` files re-run just those files; any other change re-runs the
      original selection; changes during a run are coalesced. Keys: Enter/`a` all, `f` failed (via `--rerun-failed`), `q` quit.
-     Ignores node_modules, .git, .bddx, dist, reports. Not combinable with `--debug`/`--dry-run`. Uses recursive `fs.watch`.
+     Ignores node_modules, .git, .bddr, dist, reports. Not combinable with `--debug`/`--dry-run`. Uses recursive `fs.watch`.
    - ~~CI sharding~~ DONE (session 13): `--shard i/n` on `run` and `plan`. `core/src/plan/shard.ts`: scenarios linked by dependencies,
      named groups or locks form one unit (never split across machines); units are packed largest-first onto shards by average
      duration from run history (`history: true`; equal weights without it, unknown durations use the median). Deterministic, so
      every CI machine agrees. Warns when one unit dominates; an empty shard exits 0. CI example: matrix of `--shard $i/4`,
-     restore `.bddx/history` as a cache, merge results with `bddx report a.ndjson b.ndjson -f html`.
-   - ~~Living documentation~~ DONE (session 13): `bddx docs [paths] [-o file] [--results events.ndjson]... [--title t]`
+     restore `.bddr/history` as a cache, merge results with `bddr report a.ndjson b.ndjson -f html`.
+   - ~~Living documentation~~ DONE (session 13): `bddr docs [paths] [-o file] [--results events.ndjson]... [--title t]`
      (`cli/src/run.ts buildLivingDocs`, `reporters/src/living-docs.ts`). One offline HTML page: folder tree navigation, each
      folder's `README.md` is its introduction (first heading = folder title), features with description, scenarios, steps, data
      tables and doc strings, tag chips, search. Results (from `--results`, else the latest history run) colour scenarios and
@@ -265,7 +265,7 @@ scenarioRetry, timeout), `defaultMode`, `logLevel`, `retry` (scenario, delay, ba
 - A worker crash in the middle of a scenario loses that worker's After* hooks.
 - JavaScript promises cannot be forcibly stopped in the inline pool; framework waits stop promptly, and user code
   should pass `ctx.signal` to cancellable APIs. Process-pool cancellation terminates the lane.
-- `bddx list` does not load support code, so it cannot flag undefined steps; use `--dry-run` for that.
+- `bddr list` does not load support code, so it cannot flag undefined steps; use `--dry-run` for that.
 - Run-level hook failures are summarised in the console's "Hook failures" section, not per scenario.
 
 ### 4.4 Parked (owner decision; do not start without the owner)

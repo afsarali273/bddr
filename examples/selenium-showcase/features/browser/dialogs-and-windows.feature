@@ -18,8 +18,8 @@ Feature: Browser dialogs, windows and sessions
     Scenario: A prompt returns the typed text
       Given I open "/javascript_alerts"
       When I trigger the JS prompt
-      And I type "bddx" into the prompt and accept
-      Then the dialog result says "You entered: bddx"
+      And I type "bddr" into the prompt and accept
+      Then the dialog result says "You entered: bddr"
 
   Rule: Windows and sessions
 

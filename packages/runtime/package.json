@@ -1,7 +1,7 @@
 {
-  "name": "@bddx/runtime",
+  "name": "@bddr/runtime",
   "version": "0.1.0",
-  "description": "bddx runtime: step registry, hooks, context, executor",
+  "description": "bddr runtime: step registry, hooks, context, executor",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -10,7 +10,7 @@
   },
   "files": ["dist"],
   "dependencies": {
-    "@bddx/core": "0.1.0",
+    "@bddr/core": "0.1.0",
     "@cucumber/cucumber-expressions": "^20.2.0"
   }
 }

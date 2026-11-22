@@ -2,7 +2,7 @@
  * Debug hooks (Phase 5 DX). The executor calls a DebugController at two points; everything interactive (prompt,
  * inspection, REPL) lives in the CLI. The executor only needs these two decisions.
  */
-import type { Status, StepArgument } from '@bddx/core';
+import type { Status, StepArgument } from '@bddr/core';
 import type { StepContext } from './types.js';
 
 export interface DebugStepView {

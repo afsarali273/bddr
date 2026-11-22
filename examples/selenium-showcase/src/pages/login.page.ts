@@ -1,4 +1,4 @@
-import { inject } from '@bddx/runtime';
+import { inject } from '@bddr/runtime';
 import { By, until } from 'selenium-webdriver';
 
 /** the-internet.herokuapp.com/login. A page object gets its driver from the plugin: no constructor wiring. */

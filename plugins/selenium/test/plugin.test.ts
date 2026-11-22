@@ -1,7 +1,7 @@
 import { strict as assert } from 'node:assert';
 import { afterEach, describe, it } from 'node:test';
-import { EventBus, buildPlan, parseSpec, type BddxEvent } from '@bddx/core';
-import { Executor, Given, getGlobalRegistry, resetGlobalRegistry } from '@bddx/runtime';
+import { EventBus, buildPlan, parseSpec, type BddrEvent } from '@bddr/core';
+import { Executor, Given, getGlobalRegistry, resetGlobalRegistry } from '@bddr/runtime';
 import { createSeleniumPlugin, type SeleniumPluginOptions } from '../src/index.js';
 
 /** A fake `selenium-webdriver` module that records what the plugin does. */
@@ -69,7 +69,7 @@ async function run(options: SeleniumPluginOptions, src: string, params: Record<s
   const scenarios = parseSpec(src, 'sel.feature').scenarios;
   const bus = new EventBus({ keepHistory: true });
   const result = await new Executor({ registry: getGlobalRegistry(), bus, plan: buildPlan(scenarios, scenarios, { workers }), params }).execute(scenarios);
-  const attachments = bus.history!.filter((e): e is Extract<BddxEvent, { type: 'attachment' }> => e.type === 'attachment');
+  const attachments = bus.history!.filter((e): e is Extract<BddrEvent, { type: 'attachment' }> => e.type === 'attachment');
   const errors = bus.history!.flatMap((e) => (e.type === 'stepFinished' && e.error ? [e.error.message] : []));
   return { ...fake, result, attachments, errors };
 }
@@ -78,7 +78,7 @@ afterEach(() => void resetGlobalRegistry());
 
 const TWO = 'Feature: F\n  Scenario: one\n    Given I open "/a"\n  Scenario: two\n    Given I open "/b"\n';
 
-describe('@bddx/selenium', () => {
+describe('@bddr/selenium', () => {
   it('a headless driver per scenario, quit after each', async () => {
     const { calls, result } = await run({ baseURL: 'https://shop.test' }, TWO);
     assert.equal(result.success, true);

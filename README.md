@@ -1,8 +1,8 @@
-# bddx
+# bddr
 
 A BDD automation framework that keeps Gherkin's readability and adds TestNG-style orchestration:
 groups, dependencies, mixed parallel/serial execution and layered retries.
-TypeScript first, Java next. ("bddx" is a working name.)
+TypeScript first, Java next. ("bddr" is a working name.)
 
 > **Status:** Phases 0, 1, 3 and 4 done; Phase 2 data core done; Phase 5 started (HTML report v1).
 > Everything done and remaining: [docs/STATUS.md](docs/STATUS.md). Next step: [docs/PROGRESS.md](docs/PROGRESS.md).
@@ -32,7 +32,7 @@ Feature: Shopping basket
 
 ```ts
 // steps/basket.steps.ts
-import { Given, When, Then, Before, defineParameterType } from '@bddx/runtime';
+import { Given, When, Then, Before, defineParameterType } from '@bddr/runtime';
 
 defineParameterType({ name: 'money', regexp: /\d+\.\d{2}/, transformer: (s) => Math.round(Number(s) * 100) });
 
@@ -48,7 +48,7 @@ Then('the basket total is {money}', (ctx, cents: number) => { /* assert */ });
 Class-based steps with dependency injection:
 
 ```ts
-import { CONTEXT, Given, Steps, Then, type StepContext } from '@bddx/runtime';
+import { CONTEXT, Given, Steps, Then, type StepContext } from '@bddr/runtime';
 
 class Wallet {                       // any class can be injected; one instance per scenario
   static inject = [CONTEXT] as const;
@@ -112,13 +112,13 @@ Ungrouped scenarios run unconstrained by default; `defaultMode: 'serial'` makes 
 Any config value can be overridden from the CLI without editing files:
 
 ```bash
-bddx run -p ci --set workers=8 --set groups.checkout.mode=serial --set 'groups.api.dependsOn=["setup"]'
+bddr run -p ci --set workers=8 --set groups.checkout.mode=serial --set 'groups.api.dependsOn=["setup"]'
 ```
 
 Logging with levels, attributed to the running scenario (also from helpers via the global `log`):
 
 ```ts
-import { log } from '@bddx/runtime';
+import { log } from '@bddr/runtime';
 ctx.log.info('paying', { amount });   // in steps/hooks
 log.warn('gateway slow');             // anywhere, e.g. page objects / API clients
 ```
@@ -146,7 +146,7 @@ attempt with `{ eachAttempt: true }`.
 Parallel in separate processes (real CPU parallelism, crash isolation):
 
 ```bash
-bddx run -w 4 --pool process     # or pool: 'process' in the config
+bddr run -w 4 --pool process     # or pool: 'process' in the config
 ```
 
 ```ts
@@ -178,24 +178,24 @@ ctx.soft.check(receipt.total > 0, 'total is positive');  // soft assertions: all
 ```
 
 ```bash
-bddx run -f ndjson:reports/run1.ndjson                       # CI run
-bddx run --rerun-failed reports/run1.ndjson -f ndjson:reports/run2.ndjson
-bddx report reports/run1.ndjson reports/run2.ndjson -f html:reports/report.html -f junit:reports/junit.xml
+bddr run -f ndjson:reports/run1.ndjson                       # CI run
+bddr run --rerun-failed reports/run1.ndjson -f ndjson:reports/run2.ndjson
+bddr report reports/run1.ndjson reports/run2.ndjson -f html:reports/report.html -f junit:reports/junit.xml
 ```
 
 Reports and run history: the `html` reporter is one offline file with a timeline per worker, the dependency graph and,
 with `history: true` in the config, pass-rate trends and flakiness scores across runs:
 
 ```bash
-bddx run -f html:reports/report.html --set history=true
-bddx history --top 10        # flakiest and slowest scenarios
+bddr run -f html:reports/report.html --set history=true
+bddr history --top 10        # flakiest and slowest scenarios
 ```
 
-`bddx plan` prints the graph (`--plan-format mermaid` for a diagram, `--explain <id>` for one scenario).
+`bddr plan` prints the graph (`--plan-format mermaid` for a diagram, `--explain <id>` for one scenario).
 
 ```ts
-// bddx.config.ts
-import { defineConfig } from '@bddx/cli';
+// bddr.config.ts
+import { defineConfig } from '@bddr/cli';
 export default defineConfig({
   features: 'features/**/*.feature',
   steps: 'steps/**/*.ts',
@@ -207,17 +207,17 @@ export default defineConfig({
 ## CLI
 
 ```
-bddx [run] [paths...]  -t "@smoke and not @wip"  -p ci  -D env=qa  -f ndjson:reports/e.ndjson  --dry-run
-bddx list  [paths...]  # ids + tags of selected scenarios
-bddx snippets         # code for every undefined step
-bddx validate [paths...] [--fail-on-warnings]  # static project checks; runs no tests
-bddx plan [--explain <id>] [--plan-format text|json|mermaid]   # execution graph, runs nothing
-bddx run -w 4 --no-deps   # 4 parallel workers; do not pull in dependencies
-bddx run -w 4 --pool process   # 4 worker processes
-bddx run -r 2 --fail-on-flaky  # retry failed scenarios twice; flaky passes fail the run
-bddx run --run-timeout 30m --worker-crash-retry 1
-bddx run --rerun-failed reports/bddx.ndjson
-bddx report run1.ndjson run2.ndjson -f html:reports/report.html
+bddr [run] [paths...]  -t "@smoke and not @wip"  -p ci  -D env=qa  -f ndjson:reports/e.ndjson  --dry-run
+bddr list  [paths...]  # ids + tags of selected scenarios
+bddr snippets         # code for every undefined step
+bddr validate [paths...] [--fail-on-warnings]  # static project checks; runs no tests
+bddr plan [--explain <id>] [--plan-format text|json|mermaid]   # execution graph, runs nothing
+bddr run -w 4 --no-deps   # 4 parallel workers; do not pull in dependencies
+bddr run -w 4 --pool process   # 4 worker processes
+bddr run -r 2 --fail-on-flaky  # retry failed scenarios twice; flaky passes fail the run
+bddr run --run-timeout 30m --worker-crash-retry 1
+bddr run --rerun-failed reports/bddr.ndjson
+bddr report run1.ndjson run2.ndjson -f html:reports/report.html
 ```
 
 Paths accept files, folders, globs and `file.feature:LINE`. Exit codes: 0 passed, 1 failed, 2 usage/config/parse error,
@@ -230,12 +230,12 @@ Paths accept files, folders, globs and `file.feature:LINE`. Exit codes: 0 passed
 | `packages/core` | Spec model, Gherkin compiler, `@data` loaders, tags, selection, planner, event schema + merge |
 | `packages/runtime` | Step registry, hooks, scoped context, executor, scheduler, process pool, logging, global API |
 | `packages/reporters` | console, HTML, NDJSON, JUnit XML, Cucumber JSON |
-| `packages/cli` | `bddx` command, config loading, file discovery |
+| `packages/cli` | `bddr` command, config loading, file discovery |
 | `conformance` | Language-neutral features + expected results (Java must pass these too) |
 | `examples/basic` | Steps, hooks, outlines, class steps + DI, `@data`, step repeat/retry |
 | `examples/orchestration` | Groups, dependencies, locks, exports, logs with images (inline and `--pool process`) |
 | `examples/resilience` | Scenario/group retry, flaky, quarantine, soft assertions, time budget |
-| `examples/playwright-showcase` | Standalone real project: 125 Playwright UI/API scenarios across 13 feature files, run entirely by bddx |
+| `examples/playwright-showcase` | Standalone real project: 125 Playwright UI/API scenarios across 13 feature files, run entirely by bddr |
 | `docs` | Implementation notes, progress log, decisions, roadmap |
 
 ## Documentation

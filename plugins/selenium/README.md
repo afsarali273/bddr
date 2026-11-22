@@ -1,20 +1,20 @@
-# @bddx/selenium
+# @bddr/selenium
 
-Selenium WebDriver for [bddx](../../README.md), as a plugin. bddx has no dependency on Selenium: your project installs
-both, and this plugin connects them through bddx fixtures. It works the same way as [`@bddx/playwright`](../playwright/README.md).
+Selenium WebDriver for [bddr](../../README.md), as a plugin. bddr has no dependency on Selenium: your project installs
+both, and this plugin connects them through bddr fixtures. It works the same way as [`@bddr/playwright`](../playwright/README.md).
 
 ```bash
-npm i -D @bddx/selenium selenium-webdriver
+npm i -D @bddr/selenium selenium-webdriver
 ```
 
 ```ts
-// bddx.config.ts
-import { defineConfig } from '@bddx/cli';
-import { selenium } from '@bddx/selenium';
+// bddr.config.ts
+import { defineConfig } from '@bddr/cli';
+import { selenium } from '@bddr/selenium';
 
 export default defineConfig({
   plugins: [selenium({ browser: 'chrome', baseURL: 'https://shop.example.com', screenshot: 'only-on-failure' })],
-  // or untyped: plugins: [['@bddx/selenium', { browser: 'firefox' }]]
+  // or untyped: plugins: [['@bddr/selenium', { browser: 'firefox' }]]
 });
 ```
 
@@ -33,10 +33,10 @@ class LoginPage { private driver = inject('driver'); open() { return this.driver
 @Steps() class LoginSteps { private login = inject(LoginPage); /* @Given(...) methods */ }
 ```
 
-Add `import '@bddx/selenium';` (or `"types": ["@bddx/selenium"]` in tsconfig) in one support file so `ctx.driver`,
+Add `import '@bddr/selenium';` (or `"types": ["@bddr/selenium"]` in tsconfig) in one support file so `ctx.driver`,
 `({ driver })` and `inject('driver')` are typed.
 
-bddx starts a fixture only when a step names it (`({ driver })`, `ctx.driver`, `const { driver } = ctx`, `inject('driver')`).
+bddr starts a fixture only when a step names it (`({ driver })`, `ctx.driver`, `const { driver } = ctx`, `inject('driver')`).
 A helper that receives the whole `ctx` and reads `ctx.driver` inside is not seen; destructure it in the step and pass it on.
 
 ## Fixtures
@@ -96,7 +96,7 @@ page object, and a `@serial @reuseSession` journey.
 
 ```bash
 cd plugins/selenium && npm install
-cd example && npx bddx            # or: -D browser=firefox, -D headed=true, --pool process -w 2
+cd example && npx bddr            # or: -D browser=firefox, -D headed=true, --pool process -w 2
 ```
 
 ## Developing

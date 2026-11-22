@@ -3,10 +3,10 @@
  * Folders are requirement areas (their README.md is the introduction), features are requirements,
  * scenarios are the examples. Optional run results colour every scenario and roll up per folder.
  *
- * Pure rendering: the CLI collects the data (`bddx docs`). Safe by construction: all text is escaped,
+ * Pure rendering: the CLI collects the data (`bddr docs`). Safe by construction: all text is escaped,
  * Markdown links only allow http(s), mailto and relative targets.
  */
-import type { Status, StepArgument } from '@bddx/core';
+import type { Status, StepArgument } from '@bddr/core';
 
 export interface DocsScenario {
   id: string;
@@ -278,7 +278,7 @@ main{padding:24px 32px 80px;max-width:1000px;width:100%}h1{margin:.2em 0 .3em;fo
 </style></head><body>
 <div class="layout"><aside><input id="q" type="search" placeholder="Search scenarios, steps, tags…" aria-label="Search"><p class="muted" style="margin:8px 4px">${input.features.length} features · ${total(all)} scenarios${hasResults ? ` · ${all.passed + all.flaky} passing` : ' · no results loaded'}</p>${nav}</aside>
 <main><div id="results" hidden></div><div id="pages">${sections.join('\n')}</div>
-<p class="muted">Generated ${esc(new Date(input.generatedAt).toISOString().slice(0, 16).replace('T', ' '))} UTC by bddx${input.resultsSource ? ` · results from ${esc(input.resultsSource)}` : ''}</p></main></div>
+<p class="muted">Generated ${esc(new Date(input.generatedAt).toISOString().slice(0, 16).replace('T', ' '))} UTC by bddr${input.resultsSource ? ` · results from ${esc(input.resultsSource)}` : ''}</p></main></div>
 <script>
 (function(){
 var IDS=${JSON.stringify(ids).replace(/</g, '\\u003c')};

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildPlan, explainNode, parseSpec, planToJSON, renderPlanMermaid, renderPlanText, selectScenarios } from '@bddx/core';
+import { buildPlan, explainNode, parseSpec, planToJSON, renderPlanMermaid, renderPlanText, selectScenarios } from '@bddr/core';
 
 const SHOP = `Feature: Shop
   @id:login @group:setup

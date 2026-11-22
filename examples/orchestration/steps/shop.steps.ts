@@ -2,7 +2,7 @@ import { strict as assert } from 'node:assert';
 import { appendFileSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { AfterAll, AfterGroup, BeforeAll, BeforeGroup, BeforeWorker, Given, Then, When, log } from '@bddx/runtime';
+import { AfterAll, AfterGroup, BeforeAll, BeforeGroup, BeforeWorker, Given, Then, When, log } from '@bddr/runtime';
 import { fakeScreenshot } from './fake-screenshot.js';
 
 /** A helper outside any step: the global `log` is attributed to the running scenario. */
@@ -22,12 +22,12 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
  * (An in-memory array would only be shared with `pool: 'inline'`.)
  */
 BeforeAll((ctx) => {
-  const dir = mkdtempSync(join(tmpdir(), 'bddx-shop-'));
+  const dir = mkdtempSync(join(tmpdir(), 'bddr-shop-'));
   writeFileSync(join(dir, 'orders.txt'), '');
   ctx.run.set('backend', dir);
 });
 AfterAll((ctx) => rmSync(ctx.run.get<string>('backend'), { recursive: true, force: true }));
-BeforeWorker((ctx) => ctx.log.debug(`worker ${process.env['BDDX_WORKER_ID'] ?? 'inline'} ready (pid ${process.pid})`));
+BeforeWorker((ctx) => ctx.log.debug(`worker ${process.env['BDDR_WORKER_ID'] ?? 'inline'} ready (pid ${process.pid})`));
 
 const backend = (ctx: { run: { get<T>(k: string): T } }) => join(ctx.run.get<string>('backend'), 'orders.txt');
 const orders = (ctx: { run: { get<T>(k: string): T } }) => readFileSync(backend(ctx), 'utf8').split('\n').filter(Boolean);

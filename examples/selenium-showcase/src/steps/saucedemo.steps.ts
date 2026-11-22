@@ -1,5 +1,5 @@
 import { strict as assert } from 'node:assert';
-import { CONTEXT, Given, Steps, Then, When, inject, type DataTable } from '@bddx/runtime';
+import { CONTEXT, Given, Steps, Then, When, inject, type DataTable } from '@bddr/runtime';
 import { SauceInventoryPage, SauceLoginPage } from '../pages/saucedemo.page.js';
 
 @Steps()

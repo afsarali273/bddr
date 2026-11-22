@@ -1,4 +1,4 @@
-import { inject } from '@bddx/runtime';
+import { inject } from '@bddr/runtime';
 import { By, until } from 'selenium-webdriver';
 
 /** Page object: takes its driver and the shop from fixtures; no constructor wiring. */

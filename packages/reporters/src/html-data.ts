@@ -7,7 +7,7 @@
  * Rows of one outline / data source are wrapped in a "dataset" with a header that shows the source, the pass/fail
  * counts and a status bar.
  */
-import type { PlannedScenario, Status, StepArgument } from '@bddx/core';
+import type { PlannedScenario, Status, StepArgument } from '@bddr/core';
 import { esc, fmtMs } from './html-views.js';
 import { stackBar, STATUSES, zeroCounts } from './html-stats.js';
 

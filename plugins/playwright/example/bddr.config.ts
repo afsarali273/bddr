@@ -1,5 +1,5 @@
-import { defineConfig } from '@bddx/cli';
-import { playwright } from '../src/index.js'; // in your project: import { playwright } from '@bddx/playwright';
+import { defineConfig } from '@bddr/cli';
+import { playwright } from '../src/index.js'; // in your project: import { playwright } from '@bddr/playwright';
 
 export default defineConfig({
   features: 'features/**/*.feature',

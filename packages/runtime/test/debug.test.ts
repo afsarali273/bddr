@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { SupportRegistry, type DebugController, type StepContext } from '@bddx/runtime';
+import { SupportRegistry, type DebugController, type StepContext } from '@bddr/runtime';
 import { run, scenariosOf } from './helpers.js';
 
 const SRC = `Feature: Dbg

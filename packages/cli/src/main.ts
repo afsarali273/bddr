@@ -2,30 +2,30 @@ import { parseArgs } from 'node:util';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { BDDX_VERSION, explainNode, parseSpecFile, planToJSON, renderPlanMermaid, renderPlanText, selectScenarios } from '@bddx/core';
+import { BDDR_VERSION, explainNode, parseSpecFile, planToJSON, renderPlanMermaid, renderPlanText, selectScenarios } from '@bddr/core';
 import { DEFAULTS, loadConfig, UsageError } from './config.js';
 import { watchLoop } from './watch.js';
-import { buildLivingDocs, discoverSpecs, historyReport, makeDataLoader, prepareRun, registerTypeScriptLoader, reportFromEvents, runBddx } from './run.js';
+import { buildLivingDocs, discoverSpecs, historyReport, makeDataLoader, prepareRun, registerTypeScriptLoader, reportFromEvents, runBddr } from './run.js';
 import { formatValidation, validateProject } from './validate.js';
-import type { Reporter } from '@bddx/reporters';
+import type { Reporter } from '@bddr/reporters';
 
-const HELP = `bddx ${BDDX_VERSION}
+const HELP = `bddr ${BDDR_VERSION}
 
 Usage:
-  bddx [run] [paths...] [options]    Run scenarios (paths may be files, folders, globs, file:line)
-  bddx list  [paths...] [options]    List selected scenarios with ids and tags, without running
-  bddx snippets [paths...] [options] Print ready-to-paste code for every undefined step (runs nothing)
-  bddx validate [paths...] [options] Static checks: specs, plan, steps, hooks and unused definitions
-  bddx history [--top <n>]           Flakiest and slowest scenarios from the recorded run history (config history: true)
-  bddx docs [paths...] [options]     Living documentation: the spec folders as one HTML page (README.md per folder is the intro)
+  bddr [run] [paths...] [options]    Run scenarios (paths may be files, folders, globs, file:line)
+  bddr list  [paths...] [options]    List selected scenarios with ids and tags, without running
+  bddr snippets [paths...] [options] Print ready-to-paste code for every undefined step (runs nothing)
+  bddr validate [paths...] [options] Static checks: specs, plan, steps, hooks and unused definitions
+  bddr history [--top <n>]           Flakiest and slowest scenarios from the recorded run history (config history: true)
+  bddr docs [paths...] [options]     Living documentation: the spec folders as one HTML page (README.md per folder is the intro)
              -o reports/living-docs.html   --results <events.ndjson> (repeatable, colours scenarios)   --title <text>
-  bddx report <events.ndjson...>     Build reports from event files; several files are merged (later runs win)
+  bddr report <events.ndjson...>     Build reports from event files; several files are merged (later runs win)
              -f html:reports/report.html -f junit:reports/junit.xml
-  bddx plan  [paths...] [options]    Show the execution plan: groups, dependencies, locks (runs nothing)
+  bddr plan  [paths...] [options]    Show the execution plan: groups, dependencies, locks (runs nothing)
              --plan-format text|json|mermaid    --explain <scenario id>
 
 Options:
-  -c, --config <file>     Config file (default: bddx.config.{ts,mts,js,mjs,json} in cwd)
+  -c, --config <file>     Config file (default: bddr.config.{ts,mts,js,mjs,json} in cwd)
   -p, --profile <name>    Use a profile from the config
   -t, --tags <expr>       Tag expression, e.g. "@smoke and not @wip"
       --name <regex>      Only scenarios whose name matches
@@ -113,7 +113,7 @@ export async function main(argv: string[]): Promise<number> {
     return 0;
   }
   if (values.version) {
-    process.stdout.write(`${BDDX_VERSION}\n`);
+    process.stdout.write(`${BDDR_VERSION}\n`);
     return 0;
   }
 
@@ -238,7 +238,7 @@ export async function main(argv: string[]): Promise<number> {
       });
     }
 
-    const outcome = await runBddx({
+    const outcome = await runBddr({
       ...common,
       ...(values.config ? { config: values.config } : {}),
       ...(values.profile ? { profile: values.profile } : {}),
@@ -266,10 +266,10 @@ export async function main(argv: string[]): Promise<number> {
     return outcome.exitCode;
   } catch (err) {
     if (err instanceof UsageError) {
-      process.stderr.write(`bddx: ${err.message}\n`);
+      process.stderr.write(`bddr: ${err.message}\n`);
       return 2;
     }
-    process.stderr.write(`bddx: ${err instanceof Error ? (err.stack ?? err.message) : String(err)}\n`);
+    process.stderr.write(`bddr: ${err instanceof Error ? (err.stack ?? err.message) : String(err)}\n`);
     return 2;
   }
 }
@@ -317,7 +317,7 @@ async function snippets(paths: string[], config?: string, profile?: string, tags
     },
   };
   const where = new Map<string, string>();
-  const outcome = await runBddx({
+  const outcome = await runBddr({
     ...(config ? { config } : {}),
     ...(profile ? { profile } : {}),
     ...(paths.length ? { paths } : {}),
@@ -331,7 +331,7 @@ async function snippets(paths: string[], config?: string, profile?: string, tags
     process.stdout.write('All steps are defined.\n');
     return outcome.exitCode;
   }
-  process.stdout.write(`// ${found.size} undefined step pattern(s)\nimport { Given, When, Then, type DataTable } from '@bddx/runtime';\n\n`);
+  process.stdout.write(`// ${found.size} undefined step pattern(s)\nimport { Given, When, Then, type DataTable } from '@bddr/runtime';\n\n`);
   for (const [snippet, locations] of found) {
     process.stdout.write(`// used at: ${[...new Set(locations)].join(', ')}\n${snippet}\n\n`);
   }

@@ -35,7 +35,7 @@ Do not build in a separate workspace and hand over zips.
 - Keep packages layered: `core` imports nothing internal; `runtime` and `reporters` import only `core`;
   `cli` imports all. Reporters must work from events alone.
 - TypeScript strict mode, ESM, NodeNext resolution. Relative imports end in `.js`.
-- Tests: vitest. Unit tests next to each package in `test/`. Tests import packages by name (`@bddx/core`);
+- Tests: vitest. Unit tests next to each package in `test/`. Tests import packages by name (`@bddr/core`);
   `vitest.config.ts` aliases those to `src`, so tests need no build. CLI end-to-end tests use the built `dist`
   and are skipped when it is missing.
 - Never commit `node_modules`, `dist`, `reports`.

@@ -1,4 +1,4 @@
-import type { BddxEvent } from '@bddx/core';
+import type { BddrEvent } from '@bddr/core';
 
 /**
  * A reporter consumes the event stream. It must not assume anything that is not in
@@ -6,7 +6,7 @@ import type { BddxEvent } from '@bddx/core';
  */
 export interface Reporter {
   readonly name: string;
-  onEvent(event: BddxEvent): void | Promise<void>;
+  onEvent(event: BddrEvent): void | Promise<void>;
   /** Called once after `runFinished`, to flush files. */
   close?(): Promise<void>;
 }

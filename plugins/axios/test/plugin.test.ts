@@ -2,8 +2,8 @@ import { strict as assert } from 'node:assert';
 import { createServer, type Server } from 'node:http';
 import type { AddressInfo } from 'node:net';
 import { after, afterEach, before, describe, it } from 'node:test';
-import { EventBus, buildPlan, parseSpec, type BddxEvent } from '@bddx/core';
-import { Executor, Given, getGlobalRegistry, resetGlobalRegistry } from '@bddx/runtime';
+import { EventBus, buildPlan, parseSpec, type BddrEvent } from '@bddr/core';
+import { Executor, Given, getGlobalRegistry, resetGlobalRegistry } from '@bddr/runtime';
 import { createAxiosPlugin, type AxiosPluginOptions } from '../src/index.js';
 
 /** A real local HTTP server (real axios is used: no fake needed). */
@@ -49,7 +49,7 @@ async function run(options: AxiosPluginOptions, src: string, params: Record<stri
   const scenarios = parseSpec(src, 'api.feature').scenarios;
   const bus = new EventBus({ keepHistory: true });
   const result = await new Executor({ registry: getGlobalRegistry(), bus, plan: buildPlan(scenarios, scenarios, { workers: 1 }), params }).execute(scenarios);
-  const attachments = bus.history!.filter((e): e is Extract<BddxEvent, { type: 'attachment' }> => e.type === 'attachment');
+  const attachments = bus.history!.filter((e): e is Extract<BddrEvent, { type: 'attachment' }> => e.type === 'attachment');
   const errors = bus.history!.flatMap((e) => (e.type === 'stepFinished' && e.error ? [e.error.message] : []));
   const callsOf = (i = 0) => JSON.parse(attachments[i]!.encoding === 'base64' ? Buffer.from(attachments[i]!.body, 'base64').toString() : attachments[i]!.body) as Array<Record<string, unknown>>;
   return { result, attachments, errors, callsOf };
@@ -59,7 +59,7 @@ afterEach(() => void resetGlobalRegistry());
 
 const ONE = (steps: string) => `Feature: F\n  Scenario: s\n${steps.split('\n').map((s) => `    ${s}\n`).join('')}`;
 
-describe('@bddx/axios', () => {
+describe('@bddr/axios', () => {
   it('api uses baseURL; an HTTP error status does not throw', async () => {
     const { result } = await run({ baseURL: base }, ONE('Given I get "/missing"\nThen the status is 404'));
     assert.equal(result.success, true);

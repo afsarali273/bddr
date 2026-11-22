@@ -1,7 +1,7 @@
 {
-  "name": "@bddx/reporters",
+  "name": "@bddr/reporters",
   "version": "0.1.0",
-  "description": "bddx reporters: console, NDJSON, JUnit XML, HTML, Cucumber JSON and Messages",
+  "description": "bddr reporters: console, NDJSON, JUnit XML, HTML, Cucumber JSON and Messages",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -15,7 +15,7 @@
     "dist"
   ],
   "dependencies": {
-    "@bddx/core": "0.1.0",
+    "@bddr/core": "0.1.0",
     "@cucumber/gherkin": "^43.0.0",
     "@cucumber/messages": "^35.0.0"
   }

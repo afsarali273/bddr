@@ -13,9 +13,9 @@ Feature: Independent HTTP API checks
 
   @id:independent-api-anything
   Scenario: HTTPBin echoes request metadata
-    When I GET independent API path "/anything?source=bddx"
+    When I GET independent API path "/anything?source=bddr"
     Then the API response status is 200
-    And the independent API field path "args.source" equals "bddx"
+    And the independent API field path "args.source" equals "bddr"
 
   @id:independent-api-status
   Scenario: HTTPBin exposes explicit status responses

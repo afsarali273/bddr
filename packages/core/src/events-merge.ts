@@ -1,23 +1,23 @@
 /**
  * Event-stream utilities for reruns and merged reports.
  *
- *   bddx run                                 -> reports/events.ndjson   (run 1)
- *   bddx run --rerun-failed reports/events.ndjson -f ndjson:reports/rerun.ndjson   (run 2: only what did not pass)
- *   bddx report reports/events.ndjson reports/rerun.ndjson -f html:reports/report.html -f junit:reports/junit.xml
+ *   bddr run                                 -> reports/events.ndjson   (run 1)
+ *   bddr run --rerun-failed reports/events.ndjson -f ndjson:reports/rerun.ndjson   (run 2: only what did not pass)
+ *   bddr report reports/events.ndjson reports/rerun.ndjson -f html:reports/report.html -f junit:reports/junit.xml
  *
  * mergeEventStreams keeps, for every scenario, the events of the LAST stream that ran it, marks scenarios that passed
  * only in a later stream as flaky, and recomputes the summary.
  */
-import { emptySummary, type BddxEvent, type PlannedScenario, type RunSummary, type ScenarioFinished } from './events.js';
+import { emptySummary, type BddrEvent, type PlannedScenario, type RunSummary, type ScenarioFinished } from './events.js';
 import type { Status } from './model.js';
 
-export function parseNdjson(text: string): BddxEvent[] {
+export function parseNdjson(text: string): BddrEvent[] {
   return text
     .split('\n')
     .filter((l) => l.trim())
     .map((l, i) => {
       try {
-        return JSON.parse(l) as BddxEvent;
+        return JSON.parse(l) as BddrEvent;
       } catch {
         throw new Error(`Invalid NDJSON at line ${i + 1}`);
       }
@@ -25,18 +25,18 @@ export function parseNdjson(text: string): BddxEvent[] {
 }
 
 /** Final (non-retried) scenarioFinished per scenario id. */
-export function finalResults(events: readonly BddxEvent[]): Map<string, ScenarioFinished> {
+export function finalResults(events: readonly BddrEvent[]): Map<string, ScenarioFinished> {
   const out = new Map<string, ScenarioFinished>();
   for (const e of events) if (e.type === 'scenarioFinished' && !e.willRetry) out.set(e.scenarioId, e);
   return out;
 }
 
 /** Ids whose final status is not 'passed' (failed, skipped by a failed dependency, pending, undefined…). */
-export function idsToRerun(events: readonly BddxEvent[]): string[] {
+export function idsToRerun(events: readonly BddrEvent[]): string[] {
   return [...finalResults(events).values()].filter((r) => r.status !== 'passed').map((r) => r.scenarioId);
 }
 
-const SCENARIO_EVENTS = new Set<BddxEvent['type']>([
+const SCENARIO_EVENTS = new Set<BddrEvent['type']>([
   'scenarioStarted',
   'stepStarted',
   'stepFinished',
@@ -48,7 +48,7 @@ const SCENARIO_EVENTS = new Set<BddxEvent['type']>([
   'hookFinished',
 ]);
 
-export function mergeEventStreams(streams: readonly (readonly BddxEvent[])[], options: { strict?: boolean } = {}): BddxEvent[] {
+export function mergeEventStreams(streams: readonly (readonly BddrEvent[])[], options: { strict?: boolean } = {}): BddrEvent[] {
   if (!streams.length) return [];
   const strict = options.strict ?? true;
   // which stream owns each scenario: the last one with a final result for it
@@ -63,14 +63,14 @@ export function mergeEventStreams(streams: readonly (readonly BddxEvent[])[], op
   });
 
   const first = streams[0]!;
-  const out: BddxEvent[] = [];
+  const out: BddrEvent[] = [];
   const runStarted = first.find((e) => e.type === 'runStarted');
   if (runStarted) out.push(runStarted);
   for (const e of first) if (e.type === 'specParsed') out.push(e);
 
   // union plan, first-seen order
   const planned = new Map<string, PlannedScenario>();
-  let planMeta: Extract<BddxEvent, { type: 'planReady' }> | undefined;
+  let planMeta: Extract<BddrEvent, { type: 'planReady' }> | undefined;
   for (const events of streams) {
     for (const e of events) {
       if (e.type !== 'planReady') continue;
@@ -115,7 +115,7 @@ export function mergeEventStreams(streams: readonly (readonly BddxEvent[])[], op
     }
   }
   const durations = streams.map((s) => s.find((e) => e.type === 'runFinished')).filter(Boolean) as Array<
-    Extract<BddxEvent, { type: 'runFinished' }>
+    Extract<BddrEvent, { type: 'runFinished' }>
   >;
   summary.durationMs = durations.reduce((a, r) => a + r.summary.durationMs, 0);
   const runError = durations.find((r) => r.error)?.error;

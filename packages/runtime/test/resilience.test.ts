@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { EventBus, buildPlan, parseSpec, type BddxEvent, type PlanOptions } from '@bddx/core';
-import { Executor, SupportRegistry, type ExecuteOptions, type StepContext } from '@bddx/runtime';
+import { EventBus, buildPlan, parseSpec, type BddrEvent, type PlanOptions } from '@bddr/core';
+import { Executor, SupportRegistry, type ExecuteOptions, type StepContext } from '@bddr/runtime';
 
 async function run(r: SupportRegistry, src: string, plan: PlanOptions = {}, opts: Partial<ExecuteOptions> = {}) {
   const spec = parseSpec(src, 'x.feature');
@@ -9,7 +9,7 @@ async function run(r: SupportRegistry, src: string, plan: PlanOptions = {}, opts
   expect(p.errors).toEqual([]);
   const bus = new EventBus({ keepHistory: true });
   const result = await new Executor({ registry: r, bus, plan: p, ...opts }).execute(spec.scenarios);
-  const of = <T extends BddxEvent['type']>(t: T) => bus.history!.filter((e): e is Extract<BddxEvent, { type: T }> => e.type === t);
+  const of = <T extends BddrEvent['type']>(t: T) => bus.history!.filter((e): e is Extract<BddrEvent, { type: T }> => e.type === t);
   const id = (name: string) => spec.scenarios.find((s) => s.name === name)!.id;
   return { result, of, status: (n: string) => result.scenarioStatuses.get(id(n)), id };
 }

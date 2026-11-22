@@ -1,6 +1,6 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
-import type { BddxEvent, ErrorInfo, HookFinished, PlannedScenario, ScenarioFinished, StepFinished } from '@bddx/core';
+import type { BddrEvent, ErrorInfo, HookFinished, PlannedScenario, ScenarioFinished, StepFinished } from '@bddr/core';
 import type { Reporter, ReporterOptions } from './types.js';
 import { formatLogLine, LogIndex, type ReportLogLevel } from './logs.js';
 
@@ -12,7 +12,7 @@ import { formatLogLine, LogIndex, type ReportLogLevel } from './logs.js';
  */
 export function junitReporter(raw: ReporterOptions = {}): Reporter {
   const outputFile = String(raw['outputFile'] ?? 'reports/junit.xml');
-  const suiteName = String(raw['suiteName'] ?? 'bddx');
+  const suiteName = String(raw['suiteName'] ?? 'bddr');
   const plan: PlannedScenario[] = [];
   const results = new Map<string, ScenarioFinished>();
   const earlier = new Map<string, ScenarioFinished[]>(); // failed attempts that were retried
@@ -23,7 +23,7 @@ export function junitReporter(raw: ReporterOptions = {}): Reporter {
 
   return {
     name: 'junit',
-    onEvent(e: BddxEvent) {
+    onEvent(e: BddrEvent) {
       if (e.type === 'planReady') plan.push(...e.scenarios);
       if (e.type === 'stepFinished' && e.status !== 'passed' && e.status !== 'skipped' && !failingStep.has(e.scenarioId)) {
         failingStep.set(e.scenarioId, e);

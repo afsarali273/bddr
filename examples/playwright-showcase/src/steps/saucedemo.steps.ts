@@ -1,5 +1,5 @@
 import { strict as assert } from 'node:assert';
-import { Given, Then, When, type DataTable } from '@bddx/runtime';
+import { Given, Then, When, type DataTable } from '@bddr/runtime';
 import { SauceDemoCartPage, SauceDemoInventoryPage, SauceDemoLoginPage, SauceDemoProductPage } from '../pages/saucedemo.page.js';
 import { requiredParam } from '../support/world.js';
 

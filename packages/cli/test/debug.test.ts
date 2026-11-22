@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createDebugController, type DebugIO } from '../src/debug.js';
-import type { DebugStepView } from '@bddx/runtime';
+import type { DebugStepView } from '@bddr/runtime';
 
 function io(lines: string[]) {
   const out: string[] = [];

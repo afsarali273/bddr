@@ -2,7 +2,7 @@
  * HTML report v2 views (Phase 5): execution timeline per worker lane, dependency graph, run history.
  * Pure functions producing inline SVG/HTML (no external assets), used by html.ts.
  */
-import { scenarioHistory, worstStatus, type HistoryRun, type PlannedGroup, type PlannedScenario, type Status } from '@bddx/core';
+import { scenarioHistory, worstStatus, type HistoryRun, type PlannedGroup, type PlannedScenario, type Status } from '@bddr/core';
 
 export interface Interval {
   id: string;

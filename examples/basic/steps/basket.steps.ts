@@ -1,5 +1,5 @@
 import { strict as assert } from 'node:assert';
-import { Before, BeforeAll, Given, Then, When, defineParameterType, type DataTable } from '@bddx/runtime';
+import { Before, BeforeAll, Given, Then, When, defineParameterType, type DataTable } from '@bddr/runtime';
 
 interface Basket {
   lines: Array<{ product: string; qty: number }>;

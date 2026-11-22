@@ -1,5 +1,5 @@
 import { strict as assert } from 'node:assert';
-import { Given, Then, When } from '@bddx/runtime';
+import { Given, Then, When } from '@bddr/runtime';
 import { requiredParam, response, snapshotResponse } from '../support/world.js';
 
 type JsonObject = Record<string, unknown>;

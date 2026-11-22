@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { EventBus, buildPlan, parseSpec, type PlanOptions } from '@bddx/core';
-import { Executor, SupportRegistry, type StepContext } from '@bddx/runtime';
+import { EventBus, buildPlan, parseSpec, type PlanOptions } from '@bddr/core';
+import { Executor, SupportRegistry, type StepContext } from '@bddr/runtime';
 
 /** Steps that record timing so tests can assert overlap / ordering. */
 function timingSteps(r: SupportRegistry) {

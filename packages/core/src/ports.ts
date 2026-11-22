@@ -1,5 +1,5 @@
 /**
- * PORTS: the interfaces bddx owns. Third-party libraries (today: Cucumber's parser and
+ * PORTS: the interfaces bddr owns. Third-party libraries (today: Cucumber's parser and
  * tag-expression evaluator) are plugged in behind these through adapters in ./adapters/.
  * The runtime, planner and reporters depend only on these interfaces and on ./model.ts.
  *

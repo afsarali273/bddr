@@ -1,5 +1,5 @@
 import { strict as assert } from 'node:assert';
-import { CONTEXT, Given, Steps, Then, When, defineFixture, inject } from '@bddx/runtime';
+import { CONTEXT, Given, Steps, Then, When, defineFixture, inject } from '@bddr/runtime';
 import type { FakePage } from '../plugins/fake-browser.plugin.js';
 
 /** A page object: gets its page from the fixture, no constructor wiring. */
@@ -13,7 +13,7 @@ export class ShopPage {
   }
 }
 
-declare module '@bddx/runtime' {
+declare module '@bddr/runtime' {
   interface Fixtures {
     shop: ShopPage;
   }

@@ -1,11 +1,11 @@
 import { appendFileSync } from 'node:fs';
-import { defineFixture, definePlugin } from '@bddx/runtime';
+import { defineFixture, definePlugin } from '@bddr/runtime';
 
 /** Stands in for a Playwright/Selenium plugin: a browser per worker process, a page per scenario. */
 export interface FakeBrowser { product: string; pid: number; pages: number }
 export interface FakePage { id: string; url: string; browser: FakeBrowser }
 
-declare module '@bddx/runtime' {
+declare module '@bddr/runtime' {
   interface Fixtures {
     browser: FakeBrowser;
     page: FakePage;
@@ -13,7 +13,7 @@ declare module '@bddx/runtime' {
 }
 
 const note = (line: string) => {
-  const file = process.env['BDDX_FX_LOG'];
+  const file = process.env['BDDR_FX_LOG'];
   if (file) appendFileSync(file, `${line}\n`);
 };
 

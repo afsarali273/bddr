@@ -27,7 +27,7 @@
  *  - cancellation / run or group timeout -> in-flight cancellable work fails; queued work is skipped; After hooks run.
  */
 import {
-  BDDX_VERSION,
+  BDDR_VERSION,
   EVENT_SCHEMA_VERSION,
   buildPlan,
   parseDuration,
@@ -47,7 +47,7 @@ import {
   type ScenarioInstance,
   type Status,
   type StepInstance,
-} from '@bddx/core';
+} from '@bddr/core';
 import { randomUUID } from 'node:crypto';
 import { Scope, Store } from './context.js';
 import { DataTable, DocString } from './datatable.js';
@@ -200,7 +200,7 @@ export class Executor implements WorkerExecutor {
       type: 'runStarted',
       runId: this.opts.runId ?? randomUUID(),
       schemaVersion: EVENT_SCHEMA_VERSION,
-      framework: { name: 'bddx', version: BDDX_VERSION },
+      framework: { name: 'bddr', version: BDDR_VERSION },
       runtime: { name: 'node', version: process.version },
       dryRun: !!this.opts.dryRun,
     });
@@ -337,9 +337,9 @@ export class Executor implements WorkerExecutor {
 
   // ---------------------------------------------------------------- one plan node
 
-  /** Framework diagnostics: `log` events with source 'bddx', level 'debug' (shown with --log-level debug). */
+  /** Framework diagnostics: `log` events with source 'bddr', level 'debug' (shown with --log-level debug). */
   private debug(message: string, ids: Emitters = {}): void {
-    this.opts.bus.emit({ type: 'log', level: 'debug', source: 'bddx', message, ...(ids.scenarioId ? { scenarioId: ids.scenarioId } : {}) });
+    this.opts.bus.emit({ type: 'log', level: 'debug', source: 'bddr', message, ...(ids.scenarioId ? { scenarioId: ids.scenarioId } : {}) });
   }
 
   private cancellationReason(): string | undefined {
@@ -568,7 +568,7 @@ export class Executor implements WorkerExecutor {
       this.opts.bus.emit({
         type: 'log',
         level: 'warn',
-        source: 'bddx',
+        source: 'bddr',
         message:
           `run store key(s) [${skipped.join(', ')}] set in BeforeAll cannot be copied to worker processes (not serialisable). ` +
           `Create per-process resources (browsers, connections) in BeforeWorker instead.`,

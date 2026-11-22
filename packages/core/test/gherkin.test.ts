@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { parseSpec, parseTag, selectScenarios, parsePathWithLines, worstStatus, EventBus } from '@bddx/core';
+import { parseSpec, parseTag, selectScenarios, parsePathWithLines, worstStatus, EventBus } from '@bddr/core';
 
 const FEATURE = `@shop
 Feature: Basket

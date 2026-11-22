@@ -1,7 +1,7 @@
 /**
  * ADAPTER: Gherkin (.feature, .feature.md) via Cucumber's open-source parser and pickle compiler.
  *
- * This is the ONLY file in bddx that imports @cucumber/gherkin or @cucumber/messages. Everything it
+ * This is the ONLY file in bddr that imports @cucumber/gherkin or @cucumber/messages. Everything it
  * produces is our own model (ScenarioInstance). To replace the parser, write another SpecParser
  * (see ../ports.ts) and register it; nothing else changes.
  */

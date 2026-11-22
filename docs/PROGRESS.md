@@ -8,16 +8,16 @@ The single source of truth for "where are we" and the session history. Update it
 - **Phases 0–1:** done. **Phase 2:** data core done (composite steps + Phase 2 gate remain).
 - **Phase 3:** done (incl. worker processes `--pool process`, `workerStarted` event) except `@requires`, `waitedForMs`.
 - **Phase 5 (reporting):** HTML v2 (timeline per worker, dependency graph, history view), run history + flakiness
-  score (`history: true`, `bddx history`). DX tools of Phase 5 remain.
+  score (`history: true`, `bddr history`). DX tools of Phase 5 remain.
 - **Phase 4:** done: scenario/group retry, backoff, worker-crash retry, flaky, quarantine, rerun/merge, soft assertions,
   scenario/group/run time budgets, cancellation and graceful Ctrl+C. Plus step repeat/retry.
-- **DX:** `bddx validate` statically checks specs, config, plans, ids, step coverage, unused glue, hooks and governed tags.
+- **DX:** `bddr validate` statically checks specs, config, plans, ids, step coverage, unused glue, hooks and governed tags.
 - **Real-project gate:** `examples/playwright-showcase` passes 125 Playwright UI/API scenarios (523 steps) across 13
-  feature files through bddx using four process workers. One command mixes serial and parallel target groups and six
+  feature files through bddr using four process workers. One command mixes serial and parallel target groups and six
   additional scenarios run ungrouped against Playwright docs and HTTPBin. It is
   optional/live and therefore kept outside root `npm run verify`.
 - **Health:** `npm run verify` green (178 tests + examples: basic, orchestration (inline + process), resilience).
-- **Working copy:** `/Users/afsarali/Repository/AI_Projects/BDD_Framework`, remote `git@github.com:afsarali273/SmartBDD.git`
+- **Working copy:** `/Users/afsarali/Repository/AI_Projects/BDD_Framework`, remote `git@github.com:afsarali273/bddr.git`
   (SSH; the owner pushes from their Mac).
 - **Framing (owner):** an automation framework with BDD-style specs, not BDD-purist. Practical features first.
 
@@ -44,7 +44,7 @@ Do not start it without the owner.
   `ctx.signal`; process-pool cancellation terminates the lane.
 - Console reporter prints logs (by `--log-level`) but not attachments (those are in HTML/NDJSON).
 - Run-level hook failures are summarised under "Hook failures:" in console output, not per scenario.
-- `bddx list` does not load support code, so it cannot flag undefined steps (use `--dry-run`).
+- `bddr list` does not load support code, so it cannot flag undefined steps (use `--dry-run`).
 - No `attempt` hook level: by design (scenario hooks run per attempt; step hooks have `eachAttempt`).
 
 ## Session log
@@ -52,7 +52,7 @@ Do not start it without the owner.
 ### 2026-11-15: Session 1 (Phase 0 + Phase 1 core)
 
 Built and verified in the assistant's cloud workspace (also verified from a clean copy: `npm install && npm run verify`).
-Delivered to the user as `bddx-session1.zip` (source only: no `node_modules`, `dist`, `reports`) to extract into
+Delivered to the user as `bddr-session1.zip` (source only: no `node_modules`, `dist`, `reports`) to extract into
 their `BDD_Framework` folder, because the session could not write to their computer directly.
 
 - Scaffolding: npm workspaces, `tsconfig.base.json` + per-package project references, vitest with source aliases,
@@ -81,7 +81,7 @@ Worked directly in the user's folder via device shell.
   hang: exporting `then` made the package thenable. `vitest.config.ts` gained a TC39-decorator pre-compile plugin.
 - reporters: `cucumber-json` (+ `json` alias); events: additive `keyword`, `description`, `feature{…}`,
   `example.source/sourceRow` on `PlannedScenario`.
-- cli: `bddx snippets`; `dataDir` option; parse via `parseSpecAsync` with a file data loader (also in `list`).
+- cli: `bddr snippets`; `dataDir` option; parse via `parseSpecAsync` with a file data loader (also in `list`).
 - core: `data/` (CSV parser, loader, providers), `parseSpecAsync`, AST injection (ADR-011), template-name ids (ADR-013).
 - deps: `yaml`, `exceljs` in core; root override uuid ^11.1.1 (ADR-012); lockfile regenerated; `npm audit` clean.
 - tests: decorators (5), cucumber-json (1), snippets + data CLI (2), data (9), conformance `data.feature`.
@@ -106,7 +106,7 @@ Worked directly in the user's folder via device shell.
 - runtime: `scheduler.ts`; `executor.ts` top half rewritten around the plan: lazily opened, ref-counted feature/rule/group
   scopes; `BeforeGroup/AfterGroup`; `ctx.groups`, `ctx.export`, `ctx.from`; workerId = slot `w1..wN`.
 - events: `groupStarted/Finished`, `planReady.workers/groups`, orchestration fields on `PlannedScenario`; HookLevel `group`.
-- cli: `prepareRun()` shared by run/plan; `bddx plan` (`--plan-format`, `--explain`); `-w/--workers`, `--no-deps`; config
+- cli: `prepareRun()` shared by run/plan; `bddr plan` (`--plan-format`, `--explain`); `-w/--workers`, `--no-deps`; config
   `workers`, `groups`; all configured specs parsed so cross-file deps resolve.
 - tests: planner (5), orchestration (12, timing-based; ran 3× stable), CLI plan/deps/orchestration (3), conformance
   `dependencies.feature` (expected.json gained `config`).
@@ -117,7 +117,7 @@ Worked directly in the user's folder via device shell.
 
 - Owner asked: run parallel + sequential in one command (already true via groups), config from CLI, proper log levels.
 - cli: `-s/--set path=value` (`applySetOverrides`, `OPTION_KEYS`), `--log-level`, config `defaultMode`, `logLevel`;
-  `[bddx:debug]` CLI diagnostics on stderr; console reporters receive the log level (`withLogLevel`).
+  `[bddr:debug]` CLI diagnostics on stderr; console reporters receive the log level (`withLogLevel`).
 - core: `LogLevel`, `LOG_LEVELS`, `logLevelEnabled`; `log` event gains `level`, `source`, `data`; planner `defaultMode`
   and implicit `default` group (`PlanGroup.implicit`).
 - runtime: `logger.ts` (`createLogger`, global `log`, `withLogger` via AsyncLocalStorage); steps/hooks run inside it;
@@ -160,7 +160,7 @@ Worked directly in the user's folder via device shell.
 - runtime: `runNode` retry loop, `shouldRetry` (attempts, `retry.on`, analyzer), `settleGroup` (group retry: re-open
   scopes, requeue), summary from final attempts, soft assertions (`ctx.soft`), scenario time budget; scheduler retry-group
   settling; `setRetryAnalyzer`, `RetryOptions`.
-- cli: config `retry`, `scenarioTimeout`; `-r/--retry`, `--fail-on-flaky`, `--rerun-failed <file>`; `bddx report`.
+- cli: config `retry`, `scenarioTimeout`; `-r/--retry`, `--fail-on-flaky`, `--rerun-failed <file>`; `bddr report`.
 - reporters: console retry/flaky/quarantine display; JUnit `<flakyFailure>` + quarantined → skipped; HTML badges,
   earlier attempts, group retries, trimmed stack traces.
 - examples/resilience (+ `npm run example:resilience`, in `verify`); fixture `rerun-project`; conformance
@@ -185,9 +185,9 @@ Worked directly in the user's folder via device shell.
 - Brought README, CLAUDE.md, ROADMAP, IMPLEMENTATION (package tables: plan/, step-tags, events-merge, scheduler, pool,
   logger, worker.ts) and this file in line with the code; CLI help lists the `html` reporter.
 
-### 2026-11-15: Session 6 (`bddx validate` + resilience completion)
+### 2026-11-15: Session 6 (`bddr validate` + resilience completion)
 
-- cli: new `bddx validate` / `validateProject()` with structured errors and warnings for parse/config/plan problems,
+- cli: new `bddr validate` / `validateProject()` with structured errors and warnings for parse/config/plan problems,
   duplicate ids, undefined/ambiguous steps, unused definitions, unmatched hooks and optional tag governance;
   `--fail-on-warnings`. Matching does not run parameter transformers.
 - runtime/core: `ctx.signal`, external cancellation, abort-aware hooks/steps/delays, group-attempt budgets, run budget,
@@ -198,14 +198,14 @@ Worked directly in the user's folder via device shell.
 
 ### 2026-11-15: Session 7 (real Playwright UI/API project)
 
-- added standalone `examples/playwright-showcase` TypeScript project using local bddx packages and Playwright 1.65.1;
-  bddx remains the runner, while Playwright provides Chromium and its API request context.
+- added standalone `examples/playwright-showcase` TypeScript project using local bddr packages and Playwright 1.65.1;
+  bddr remains the runner, while Playwright provides Chromium and its API request context.
 - 66 scenarios / 289 steps: 30 UI scenarios against The Internet, 33 API scenarios against JSONPlaceholder, two
   prerequisite health scenarios and one deterministic scenario-retry demonstration.
 - exercises process workers, worker/group/feature/scenario/step hooks, browser-per-worker/page-per-scenario lifecycle,
   groups/dependencies/exports, outlines, CSV `@data`, tables, doc strings, custom parameter types, class DI, soft
   assertions, repeat concurrency, retry/flaky reporting, budgets, logging, screenshots/JSON attachments and reports.
-- verification: standalone TypeScript compile and `bddx validate --fail-on-warnings` are clean; complete live run passed
+- verification: standalone TypeScript compile and `bddr validate --fail-on-warnings` are clean; complete live run passed
   all 66 scenarios (one deliberately flaky pass on attempt 2). Root unit/conformance/example verification remains
   separate so offline CI is deterministic. ADR-023 records target and isolation choices.
 
@@ -214,8 +214,8 @@ Worked directly in the user's folder via device shell.
 - added six feature files and 53 new scenarios: SauceDemo authentication/inventory (20, serial), TodoMVC lifecycle/
   filtering (15, parallel), DummyJSON products/users (15, serial), plus three additional target-health rows.
 - expanded the single plan to six named groups: serial `health`, `sauceDemo`, `dummyJson`; parallel `theInternet`,
-  `jsonPlaceholder`, `todoMvc`, with group dependencies and worker caps visible in `bddx plan`.
-- live verification: `bddx validate` reports 119 scenarios / 504 steps / 87 definitions with zero errors or warnings;
+  `jsonPlaceholder`, `todoMvc`, with group dependencies and worker caps visible in `bddr plan`.
+- live verification: `bddr validate` reports 119 scenarios / 504 steps / 87 definitions with zero errors or warnings;
   complete process-pool run passes all 119 scenarios and 504 steps, including the intentional retry/flaky scenario.
 - corrected public-target selector timing and documented the expanded matrix in the showcase README, status, roadmap and
   implementation notes.
@@ -230,7 +230,7 @@ Worked directly in the user's folder via device shell.
 - reporters: `html-views.ts` (timeline per worker lane with retried attempts, worker start-up and group rows;
   dependency graph; history view with pass-rate bars, flakiest table, trend dots, flaky score); html.ts wiring + anchors.
 - runtime: ProcessPool emits `workerStarted`. cli: config `history`, record after each run (not dry runs), previous runs
-  passed to html reporters, `bddx history [--top n]`. `.bddx/` gitignored.
+  passed to html reporters, `bddr history [--top n]`. `.bddr/` gitignored.
 - tests: core history (score, recorder, keep/load), reporters v2 views, CLI e2e (history + workerStarted). 164 tests.
 - Not committed by this session: `examples/playwright-showcase/src/pages/` (created concurrently by another session).
 
@@ -244,7 +244,7 @@ Worked directly in the user's folder via device shell.
   duration percentiles + histogram, failures grouped by cause (numbers normalised), slowest scenarios, retried/flaky,
   breakdowns by feature, tag and group (rows link into filtered Results).
 - Sharing/UX: Copy summary (Slack/PR text), Copy link (tab + search + filters live in the URL hash), Download JSON
-  (`#bddx-data`, also embedded), Print/PDF styles, light/dark/auto theme, per-scenario permalinks, copy-error buttons,
+  (`#bddr-data`, also embedded), Print/PDF styles, light/dark/auto theme, per-scenario permalinks, copy-error buttons,
   clickable tag chips, "Failures only" preset, shortcuts `/` `n` `p` `1`-`4`.
 - Statistics come from one function (`computeStats`, exported) so cards, summary text and JSON agree.
 - tests: JUnit hook failure, html v3 (tabs, JSON payload, computeStats, history delta). 178 tests. Verified interactions in
@@ -257,7 +257,7 @@ Worked directly in the user's folder via device shell.
   step definitions so selectors, waits and component actions are centralized outside Gherkin glue.
 - Added six deliberately ungrouped `@independent` scenarios across two new feature files: Playwright documentation UI
   checks and HTTPBin API checks. They have no named group or group dependency and can run independently with
-  `npx bddx run --tags @independent`.
+  `npx bddr run --tags @independent`.
 - Validation now reports 125 scenarios / 523 steps / 96 definitions with zero errors or warnings. The independent
   run passed all 6 scenarios and 19 steps; the migrated SauceDemo/TodoMVC run passed 41 scenarios and 148 steps.
 - follow-up (same session): data-driven display. `html-data.ts`: one table per Examples block / `@data` source (rows stay
@@ -281,20 +281,20 @@ Worked directly in the user's folder via device shell.
 - Added `--shard i/n` (`core/src/plan/shard.ts`, `parseShard`/`shardPlan`; union-find units over deps/groups/locks + LPT packing by history avg). Tests: `core/test/shard.test.ts` + CLI. 197 tests green.
 - Added `--watch` (`cli/src/watch.ts`, `cli/test/watch.test.ts` incl. an end-to-end edit-and-rerun test). 200 tests green.
 - Added Cucumber Messages reporter (`reporters/src/messages.ts`, `-f messages`), 2 CLI tests (parseEnvelope validation, retry attempts). New deps on `@cucumber/gherkin`/`messages` in reporters.
-- Added `bddx docs` living documentation (tests: `reporters/test/living-docs.test.ts`, CLI test; DOM behaviour checked in jsdom). 208 tests green.
+- Added `bddr docs` living documentation (tests: `reporters/test/living-docs.test.ts`, CLI test; DOM behaviour checked in jsdom). 208 tests green.
 - Added fixtures (`defineFixture`, scenario/worker scope, teardown with status), `inject()` for classes and page objects, plugins (`definePlugin`, config `plugins`). Guide: docs/FIXTURES.md, ADR-025. Tests: runtime/test/fixtures.test.ts (11), cli/test/fixtures.test.ts (4: inline, process pool, shards, missing plugin). 223 tests green.
-- Added `plugins/playwright` (`@bddx/playwright`, standalone package, peer deps playwright + @bddx/runtime; `npm run verify` there: 7 tests with a fake Playwright). Offline example `plugins/playwright/example` (API scenarios verified live here; UI needs `npx playwright install` on a machine with browsers). Runtime: fixture teardown now gets `ctx`; fixtures are also detected from `ctx.name` / `const { name } = ctx` in function bodies.
+- Added `plugins/playwright` (`@bddr/playwright`, standalone package, peer deps playwright + @bddr/runtime; `npm run verify` there: 7 tests with a fake Playwright). Offline example `plugins/playwright/example` (API scenarios verified live here; UI needs `npx playwright install` on a machine with browsers). Runtime: fixture teardown now gets `ctx`; fixtures are also detected from `ctx.name` / `const { name } = ctx` in function bodies.
 - Added serial features: `@serial` on a Feature or Rule, config `featureMode: 'serial'` + `@parallel` opt-out (docs/SERIAL-FEATURES.md, runtime/test/serial-feature.test.ts, 7 tests). Verified live: basic example, process pool, 3 workers: 0 overlaps within a feature, features in parallel. 230 tests green.
-- Added feature-scoped fixtures (`scope: 'feature'`, also in BeforeFeature hooks), `afterScenario` for feature/worker fixtures, `ctx.scenario.serial`, scheduler affinity (process pool: a serial feature stays on one worker process). Playwright plugin: `reuseContext: 'serial'` / `@reuseContext` / `@freshContext` (sharedContext/sharedPage). Tests: runtime fixtures (13), affinity (2), CLI serial session in the process pool (x3), plugin (12). 235 bddx tests green.
+- Added feature-scoped fixtures (`scope: 'feature'`, also in BeforeFeature hooks), `afterScenario` for feature/worker fixtures, `ctx.scenario.serial`, scheduler affinity (process pool: a serial feature stays on one worker process). Playwright plugin: `reuseContext: 'serial'` / `@reuseContext` / `@freshContext` (sharedContext/sharedPage). Tests: runtime fixtures (13), affinity (2), CLI serial session in the process pool (x3), plugin (12). 235 bddr tests green.
 - NEXT: run the example UI scenarios on the Mac (incl. features/journey.feature); migrate examples/playwright-showcase to the plugin; Selenium/HTTP plugins; VS Code extension.
 
-### 2026-11-15: Showcase migrated to `@bddx/playwright`
+### 2026-11-15: Showcase migrated to `@bddr/playwright`
 
-- `examples/playwright-showcase` no longer launches Playwright itself: `bddx.config.ts` has `plugins: [playwright({...})]`
+- `examples/playwright-showcase` no longer launches Playwright itself: `bddr.config.ts` has `plugins: [playwright({...})]`
   (context baseURL/viewport, request baseURL/headers, `actionTimeoutMs`, screenshot on failure). Removed BeforeWorker/
   AfterWorker, the `@ui` Before/After hooks and the BROWSER/API/PAGE plumbing from `src/support/`. Steps use `ctx.page`,
-  `ctx.request`, `inject('page')`; `hooks.ts` imports `@bddx/playwright` for types. `-D headless=false` became `-D headed=true`.
-- Added dependency `@bddx/playwright: file:../../plugins/playwright` (plugin must be built: `npm run build` there).
+  `ctx.request`, `inject('page')`; `hooks.ts` imports `@bddr/playwright` for types. `-D headless=false` became `-D headed=true`.
+- Added dependency `@bddr/playwright: file:../../plugins/playwright` (plugin must be built: `npm run build` there).
 - Verified from the VM with real Chromium (installed, plus libxdamage1 unpacked to a local dir via LD_LIBRARY_PATH):
   full run 125/125 scenarios, `--pool process` 4 workers. First run showed the helper-reads-`ctx.page` pitfall
   (fixed in `independent-ui.steps.ts`, documented in the plugin README).
@@ -315,7 +315,7 @@ Worked directly in the user's folder via device shell.
   journey, `newContext` two-user isolation, device emulation). 131 scenarios / 539 steps pass on real Chromium (process
   pool 4 workers and inline); plugin 17 tests; root verify 236 tests.
 
-### 2026-11-15: `@bddx/selenium` plugin
+### 2026-11-15: `@bddr/selenium` plugin
 
 - New `plugins/selenium` (separate package, same shape as the Playwright plugin): fixtures `selenium`, `driver`, `open`,
   `wait`, `newDriver`, `sharedDriver` (feature scoped); options browser/headless/args/capabilities/server (Grid)/baseURL/
@@ -328,25 +328,25 @@ Worked directly in the user's folder via device shell.
 
 ### 2026-11-15: `examples/selenium-showcase`
 
-- New project with 33 scenarios / 107 steps in 6 feature files (the-internet + SauceDemo), using only `@bddx/selenium`.
+- New project with 33 scenarios / 107 steps in 6 feature files (the-internet + SauceDemo), using only `@bddr/selenium`.
   Passes on real Firefox 160 in the process pool (3 workers, 97s); the SauceDemo group also passes with `--pool inline`.
 - Plugin fixes found by it: `wait(until.elementLocated(..))` now types as `WebElement` (overloads); the plugin loads the
   PROJECT's `selenium-webdriver` (createRequire from cwd) because `until.*` conditions use `instanceof` and a second copy
   (linked/duplicated install) made `driver.wait` reject them ("Wait condition must be a promise-like object").
 - Not tried: Chrome/Edge/Safari, a remote Grid. package-lock for the new project is not committed-checked; run `npm install` on the Mac.
 
-### 2026-11-15: `@bddx/axios` plugin (API testing)
+### 2026-11-15: `@bddr/axios` plugin (API testing)
 
 - New `plugins/axios`: fixtures `axios`, `api` (instance with baseURL/headers/timeout/auth, 4xx/5xx do not throw),
   `newApi`; call log attached as `api-calls.json` (only-on-failure by default; Authorization/cookie headers masked,
   bodies truncated); `-D token`, `-D baseURL`; loads the project's axios (createRequire from cwd).
 - 9 tests with REAL axios against a local server; `example/` project (6 scenarios, local products API) passes inline and
   `--pool process -w 3`. Verified a failed scenario attaches the log with the token masked.
-- Using it together with `@bddx/playwright` / `@bddx/selenium` in one scenario: documented, not yet exercised in a showcase.
+- Using it together with `@bddr/playwright` / `@bddr/selenium` in one scenario: documented, not yet exercised in a showcase.
 
 ### 2026-11-15: mixed UI + API scenarios (Playwright showcase)
 
-- Showcase now uses both plugins: `@bddx/playwright` (`page`, `context`, `newContext`, `expect`) and `@bddx/axios` (`api`).
+- Showcase now uses both plugins: `@bddr/playwright` (`page`, `context`, `newContext`, `expect`) and `@bddr/axios` (`api`).
   `features/mixed/ui-and-api.feature` (8 scenarios, group `mixed`): API data -> UI (post title becomes a TodoMVC item),
   API vs browser status-code pages, basic auth in both (API `auth`, browser `httpCredentials` via `newContext`), browser
   login cookies handed to an API call. All pass on real Chromium; full showcase 139 scenarios / 569 steps.
@@ -362,14 +362,14 @@ Worked directly in the user's folder via device shell.
 - Verified: pages render without script errors in headless Chromium (light, dark, mobile); the getting-started project
   and its axios example were built from the page's own code blocks and pass. Screenshots in `website/.preview/` (gitignored).
 - Facts used: Playwright needs Node 20/22/24, macOS 14+, Windows 11+/Server 2019+/WSL (playwright.dev); installed
-  selenium-webdriver declares Node ^22.23.4 || ^24.22.1 || >=26.12.1. Windows not yet verified by bddx's own runs (stated on the page).
+  selenium-webdriver declares Node ^22.23.4 || ^24.22.1 || >=26.12.1. Windows not yet verified by bddr's own runs (stated on the page).
 - Next: write the planned pages listed in nav.js (ready: false), generate images from the prompts.
 
 ### 2026-11-15: documentation site, all planned pages written (`website/`)
 
 - 36 pages written in `website/src/*.page` and generated to `website/docs/*.html` by `website/tools/build-pages.mjs`
   (it also flips `ready: true` in `assets/js/nav.js`). Sidebar now has no planned-only pages left.
-  - Introduction: why-bddx, first-project, from-cucumber (plus the hand-written getting-started).
+  - Introduction: why-bddr, first-project, from-cucumber (plus the hand-written getting-started).
   - Writing tests: feature-files, steps, parameter-types, data-tables, data-files, hooks, fixtures, class-steps.
   - Running: cli, configuration, profiles, tags, debugging.
   - Orchestration: groups, dependencies, serial-features, locks, retries, process-pool, sharding.
@@ -382,10 +382,28 @@ Worked directly in the user's folder via device shell.
   in Chromium with no console errors and no horizontal overflow at 1280 and 390 px.
 - Image placeholders (AI prompt or "capture yourself") are still to be filled by the owner. List them with
   `grep -rho 'Save as <code>assets/img/[^<]*' website/docs | sort -u`.
-- Not verified: Windows runs of bddx itself; the GitHub Actions example in sharding.html was not run; Chrome/Edge/Safari/Grid for
+- Not verified: Windows runs of bddr itself; the GitHub Actions example in sharding.html was not run; Chrome/Edge/Safari/Grid for
   Selenium; examples in pages that call public sites were not re-run (they come from the showcases, which passed earlier).
-- Page claims that came from docs and not from a run: group `mode: 'exclusive'` semantics, `--inspect` attach steps, `bddx docs`
+- Page claims that came from docs and not from a run: group `mode: 'exclusive'` semantics, `--inspect` attach steps, `bddr docs`
   defaults, `messages` reporter limits. Re-check these if behaviour changes.
-- Next: owner fills images; optionally write `bddx migrate` codemod (the from-cucumber page says none exists); mark "Not on npm yet"
+- Next: owner fills images; optionally write `bddr migrate` codemod (the from-cucumber page says none exists); mark "Not on npm yet"
   wording in getting-started, plugins and sharding when packages are published.
 
+
+### 2026-11-22: feature images and Architecture page
+- `website/tools/feature-images.mjs` + `render-images.mjs` make 10 feature explainer images (`website/assets/img/features/`, one per unique feature: bddr vs Cucumber.js alone). Left-card Cucumber.js claims still need checking against the target version.
+- New Introduction page **Architecture** (`website/src/architecture.page`, last item in the Introduction nav): big-picture image (`assets/img/architecture.svg`), packages, life of a run, worker processes (`assets/img/process-pool.svg`), plugins and fixture scopes, why it is built this way.
+- Three inline SVG diagrams (packages, run pipeline, fixture scopes) are generated by `website/tools/arch-diagrams.mjs` into `website/src/diagrams/*.html` and inlined with `<include src="diagrams/x.html"/>` (new in `build-pages.mjs`). They use the theme CSS variables (`.diagram`, `.d-*` classes at the end of `theme.css`), so dark mode works. Regenerate: `node tools/arch-diagrams.mjs && node tools/build-pages.mjs architecture`.
+- The landing page "How the pieces fit" placeholder and the process-pool page placeholder now use the two SVGs. Fixed the arrow that struck through "(.feature)" in `architecture.svg`.
+- Not yet done: feature images are not placed on the landing page or a "Why bddr" gallery; nothing from this entry is committed.
+- LinkedIn post image: `website/social/linkedin-intro.html` renders to `linkedin-intro.png` (1080x1350, 2x) with `node tools/render-social.mjs` (needs Playwright in the running project). Shows the intro line, the architecture overview and six headline features. Uncommitted.
+
+### 2026-11-22: renamed bddx to bddr
+- Global rename (see the new ADR in DECISIONS.md): 287 text files, 17 files/dirs renamed (`bddx.config.ts` to `bddr.config.ts`, `why-bddx` page), `node_modules/@bddx` scope and `.bin/bddx` re-linked to `@bddr`, `dist/` rebuilt (core, runtime, reporters, cli and the three plugins).
+- Verified: `npm run typecheck` clean; `vitest run` 235/236 (the one failure, `watch.test.ts`, only fails on its temp-dir cleanup because this sandbox forbids deleting files; run it on the Mac); `example`, `example:orchestration`, `example:orchestration:process`, `example:resilience` all pass. The live `playwright-showcase` and `selenium-showcase` were NOT run.
+- Regenerated: 10 feature images, the LinkedIn image, the architecture diagrams, and all 37 docs pages.
+- On the Mac after pulling: `rm -rf node_modules */node_modules examples/*/node_modules plugins/*/node_modules && npm install`, then `npm run build` and `npm run build` in each plugin. Env vars are now `BDDR_*`, history folder `.bddr/` (old `.bddx/` can be deleted).
+- Still shows the old name (pixels, cannot be regenerated here): `website/assets/img/first-run-terminal.png`, `groups-plan.png`, `debug-prompt.png`, `first-project-report.png` (and its duplicate `data-driven-report.png`). Retake them with `npx bddr ...`.
+- GitHub repo is now https://github.com/afsarali273/bddr (public, created by the owner). `origin` was updated to `git@github.com:afsarali273/bddr.git`; GitHub links and clone/install paths in the website and docs now say `bddr` (`../bddr/plugins/...`). Not pushed yet: the repo's README on GitHub still says bddx until the next push.
+- Not renamed: the local folder `BDD_Framework`.
+- Not checked: npm scope `@bddr`, domains, trademarks.

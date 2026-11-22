@@ -8,9 +8,9 @@ import {
   BeforeFeature,
   BeforeGroup,
   BeforeStep,
-} from '@bddx/runtime';
-import '@bddx/axios'; // types for ctx.api / ctx.axios / ctx.newApi
-import '@bddx/playwright'; // types for ctx.page / ctx.request / inject('page'); the plugin itself is in bddx.config.ts
+} from '@bddr/runtime';
+import '@bddr/axios'; // types for ctx.api / ctx.axios / ctx.newApi
+import '@bddr/playwright'; // types for ctx.page / ctx.request / inject('page'); the plugin itself is in bddr.config.ts
 import { requiredParam } from './world.js';
 
 BeforeAll((ctx) => {

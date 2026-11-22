@@ -1,13 +1,13 @@
 import { existsSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import type { ReporterSpec } from '@bddx/reporters';
-import type { GroupConfig, GroupMode, LogLevel } from '@bddx/core';
+import type { ReporterSpec } from '@bddr/reporters';
+import type { GroupConfig, GroupMode, LogLevel } from '@bddr/core';
 
 /**
- * bddx.config.ts
+ * bddr.config.ts
  *
- *   import { defineConfig } from '@bddx/cli';
+ *   import { defineConfig } from '@bddr/cli';
  *   export default defineConfig({
  *     features: 'features/**\/*.feature',
  *     steps: 'steps/**\/*.ts',
@@ -21,7 +21,7 @@ import type { GroupConfig, GroupMode, LogLevel } from '@bddx/core';
 /** A plugin module name or path, optionally with options, or a plugin object. */
 export type PluginSpec = string | [string, Record<string, unknown>] | { name: string; setup(options: Record<string, unknown>): unknown };
 
-export interface BddxOptions {
+export interface BddrOptions {
   /** Spec globs. Default: features/**\/*.feature and features/**\/*.feature.md */
   features?: string | string[];
   /** Support code globs (steps, hooks, parameter types). Default: steps/**\/*.{ts,js,mjs} and features/**\/*.steps.{ts,js,mjs} */
@@ -75,24 +75,24 @@ export interface BddxOptions {
   /** Console log level: 'debug' | 'info' (default) | 'warn' | 'error' | 'silent'. Events always contain every log; file reports have their own `logLevel` option. */
   logLevel?: LogLevel | 'silent';
   /**
-   * Run history for flakiness scores, trends in the HTML report and `bddx history`. `true` = `.bddx/history`
+   * Run history for flakiness scores, trends in the HTML report and `bddr history`. `true` = `.bddr/history`
    * (relative to the config folder), keeping the last 50 runs. Dry runs are never recorded.
    */
   history?: boolean | { dir?: string; keep?: number };
   /**
    * Plugins (Playwright, Selenium, HTTP ...): packages or files whose default export is `definePlugin({ name, setup })`.
-   * Loaded before the step files, in every process. `'@bddx/playwright'`, `['./support/db.plugin.ts', { url: '...' }]`.
-   * Resolved from the config folder, so the plugin is a dependency of YOUR project, never of bddx.
+   * Loaded before the step files, in every process. `'@bddr/playwright'`, `['./support/db.plugin.ts', { url: '...' }]`.
+   * Resolved from the config folder, so the plugin is a dependency of YOUR project, never of bddr.
    */
   plugins?: PluginSpec[];
-  /** Optional governance for `bddx validate`. Built-in orchestration/data tags are always allowed. */
+  /** Optional governance for `bddr validate`. Built-in orchestration/data tags are always allowed. */
   validation?: {
     /** Custom tag keys allowed by the project, without `@` (for example `smoke`, `owner`). */
     allowedTagKeys?: string[];
   };
 }
 
-/** Every top-level option `--set` may change. Keep in sync with BddxOptions. */
+/** Every top-level option `--set` may change. Keep in sync with BddrOptions. */
 export const OPTION_KEYS = [
   'features', 'steps', 'tags', 'name', 'reporters', 'params', 'stepTimeoutMs', 'failFast', 'strict',
   'language', 'dataDir', 'workers', 'groups', 'defaultMode', 'featureMode', 'logLevel', 'retry', 'scenarioTimeout', 'runTimeout', 'pool', 'validation', 'history', 'plugins',
@@ -105,7 +105,7 @@ export const OPTION_KEYS = [
  * Values are parsed as JSON when possible (numbers, true/false, null, arrays, objects, "quoted strings"),
  * otherwise kept as plain strings. Unknown top-level keys are rejected (typo protection).
  */
-export function applySetOverrides(options: BddxOptions, sets: readonly string[]): BddxOptions {
+export function applySetOverrides(options: BddrOptions, sets: readonly string[]): BddrOptions {
   // Copy only the objects on each path being set (config may hold functions, e.g. plugin objects: not cloneable).
   const out = { ...options } as Record<string, unknown>;
   for (const raw of sets) {
@@ -133,19 +133,19 @@ export function applySetOverrides(options: BddxOptions, sets: readonly string[])
     }
     cur[path.at(-1)!] = value;
   }
-  return out as BddxOptions;
+  return out as BddrOptions;
 }
 
-export interface BddxConfig extends BddxOptions {
+export interface BddrConfig extends BddrOptions {
   /** Named overrides selected with --profile. Merged over the base config. */
-  profiles?: Record<string, BddxOptions>;
+  profiles?: Record<string, BddrOptions>;
 }
 
-export function defineConfig(config: BddxConfig): BddxConfig {
+export function defineConfig(config: BddrConfig): BddrConfig {
   return config;
 }
 
-export const CONFIG_FILES = ['bddx.config.ts', 'bddx.config.mts', 'bddx.config.js', 'bddx.config.mjs', 'bddx.config.json'];
+export const CONFIG_FILES = ['bddr.config.ts', 'bddr.config.mts', 'bddr.config.js', 'bddr.config.mjs', 'bddr.config.json'];
 
 export const DEFAULTS = {
   features: ['features/**/*.feature', 'features/**/*.feature.md'],
@@ -156,7 +156,7 @@ export interface LoadedConfig {
   /** Folder that globs and URIs are relative to. */
   rootDir: string;
   configFile?: string;
-  options: BddxOptions;
+  options: BddrOptions;
 }
 
 /** Find and load the config. Must be called after the TS loader is registered. */
@@ -170,17 +170,17 @@ export async function loadConfig(explicit: string | undefined, cwd: string, prof
   }
   if (!file) return { rootDir: cwd, options: {} };
 
-  let config: BddxConfig;
+  let config: BddrConfig;
   if (file.endsWith('.json')) {
     const { readFile } = await import('node:fs/promises');
-    config = JSON.parse(await readFile(file, 'utf8')) as BddxConfig;
+    config = JSON.parse(await readFile(file, 'utf8')) as BddrConfig;
   } else {
-    const mod = (await import(pathToFileURL(file).href)) as { default?: BddxConfig };
-    config = mod.default ?? (mod as BddxConfig);
+    const mod = (await import(pathToFileURL(file).href)) as { default?: BddrConfig };
+    config = mod.default ?? (mod as BddrConfig);
   }
 
   const { profiles, ...base } = config;
-  let options: BddxOptions = base;
+  let options: BddrOptions = base;
   if (profile) {
     const p = profiles?.[profile];
     if (!p) throw new UsageError(`Profile "${profile}" not found in ${file}. Available: ${Object.keys(profiles ?? {}).join(', ') || 'none'}`);
@@ -190,8 +190,8 @@ export async function loadConfig(explicit: string | undefined, cwd: string, prof
 }
 
 /** Later wins; `params` are merged key by key; `tags` are ANDed. */
-export function mergeOptions(a: BddxOptions, b: BddxOptions): BddxOptions {
-  const out: BddxOptions = { ...a, ...b };
+export function mergeOptions(a: BddrOptions, b: BddrOptions): BddrOptions {
+  const out: BddrOptions = { ...a, ...b };
   if (a.params || b.params) out.params = { ...a.params, ...b.params };
   if (a.tags && b.tags) out.tags = `(${a.tags}) and (${b.tags})`;
   if (a.groups || b.groups) out.groups = { ...a.groups, ...b.groups };

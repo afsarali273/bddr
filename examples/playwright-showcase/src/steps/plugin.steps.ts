@@ -1,9 +1,9 @@
-import { Given, Then, When } from '@bddx/runtime';
+import { Given, Then, When } from '@bddr/runtime';
 import type { Page } from 'playwright';
 import { requiredParam } from '../support/world.js';
 
 // Plugin features used here: `newContext` (extra isolated contexts), `playwright.devices` (emulation) and `expect`.
-// The fixtures are named in each step's parameters / `ctx.x` reads, which is how bddx knows to start them.
+// The fixtures are named in each step's parameters / `ctx.x` reads, which is how bddr knows to start them.
 
 Given('user {string} is logged in to the secure area', async (ctx, _user: string) => {
   const { page } = ctx;

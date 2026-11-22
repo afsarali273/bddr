@@ -31,11 +31,11 @@ import {
   type ParsedSpec,
   type RunSummary,
   type ScenarioInstance,
-} from '@bddx/core';
+} from '@bddr/core';
 import { createDebugController, terminalIO, type DebugIO } from './debug.js';
-import { CancellationError, Executor, ProcessPool, TimeoutError, getGlobalRegistry, planFingerprint, type ExecuteOptions, type RetryOptions, type WorkerSetup } from '@bddx/runtime';
-import { CONSOLE_REPORTERS, createReporter, renderLivingDocs, type Reporter, type ReporterSpec } from '@bddx/reporters';
-import { applySetOverrides, DEFAULTS, loadConfig, mergeOptions, UsageError, type BddxOptions, type PluginSpec } from './config.js';
+import { CancellationError, Executor, ProcessPool, TimeoutError, getGlobalRegistry, planFingerprint, type ExecuteOptions, type RetryOptions, type WorkerSetup } from '@bddr/runtime';
+import { CONSOLE_REPORTERS, createReporter, renderLivingDocs, type Reporter, type ReporterSpec } from '@bddr/reporters';
+import { applySetOverrides, DEFAULTS, loadConfig, mergeOptions, UsageError, type BddrOptions, type PluginSpec } from './config.js';
 
 export interface RunRequest {
   cwd?: string;
@@ -136,12 +136,12 @@ export async function discoverSupportFiles(rootDir: string, patterns: string[]):
   return files.sort();
 }
 
-/** The whole `bddx run` pipeline, usable programmatically. */
+/** The whole `bddr run` pipeline, usable programmatically. */
 export interface PreparedRun {
   rootDir: string;
   /** Set with --rerun-failed: the ids that did not pass in the earlier run. */
   rerunIds?: string[] | undefined;
-  opts: BddxOptions;
+  opts: BddrOptions;
   specs: ParsedSpec[];
   all: ScenarioInstance[];
   selected: ScenarioInstance[];
@@ -155,8 +155,8 @@ export async function prepareRun(req: RunRequest = {}): Promise<PreparedRun> {
   const loaded = await loadConfig(req.config, cwd, req.profile);
   const rootDir = loaded.rootDir;
 
-  let opts: BddxOptions = req.sets?.length ? applySetOverrides(loaded.options, req.sets) : loaded.options;
-  const cliOverrides: BddxOptions = {};
+  let opts: BddrOptions = req.sets?.length ? applySetOverrides(loaded.options, req.sets) : loaded.options;
+  const cliOverrides: BddrOptions = {};
   if (req.logLevel) cliOverrides.logLevel = req.logLevel;
   if (req.retry !== undefined || req.workerCrashRetry !== undefined || req.failOnFlaky !== undefined) {
     cliOverrides.retry = {
@@ -256,7 +256,7 @@ export async function prepareRun(req: RunRequest = {}): Promise<PreparedRun> {
         : []),
     ];
   }
-  if (!req.quiet) for (const line of shardNote) process.stderr.write(`bddx: ${line}\n`);
+  if (!req.quiet) for (const line of shardNote) process.stderr.write(`bddr: ${line}\n`);
   cliDebug(req.quiet ? undefined : opts.logLevel, [
     `config: ${loaded.configFile ?? '(none, defaults)'}${req.profile ? `, profile ${req.profile}` : ''}`,
     ...(req.sets?.length ? [`--set: ${req.sets.join(' ')}`] : []),
@@ -306,7 +306,7 @@ async function loadPlugins(rootDir: string, specs: PluginSpec[]): Promise<string
 }
 
 /** Debugging is one scenario at a time in this process, with nothing that fires while you think. */
-export function forDebugging(opts: BddxOptions): BddxOptions {
+export function forDebugging(opts: BddrOptions): BddrOptions {
   const { scenarioTimeout: _s, runTimeout: _r, retry: _re, ...rest } = opts;
   const groups = opts.groups
     ? Object.fromEntries(Object.entries(opts.groups).map(([k, g]) => {
@@ -324,7 +324,7 @@ export interface DocsRequest extends Pick<RunRequest, 'cwd' | 'config' | 'profil
   title?: string;
 }
 
-/** `bddx docs`: render the spec folder tree (with README.md per folder) as one offline HTML page. */
+/** `bddr docs`: render the spec folder tree (with README.md per folder) as one offline HTML page. */
 export async function buildLivingDocs(req: DocsRequest = {}): Promise<{ file: string; features: number; scenarios: number }> {
   const { rootDir, opts, specs, selected } = await prepareRun({ ...req, withDeps: false });
   const cwd = req.cwd ?? process.cwd();
@@ -414,8 +414,8 @@ async function readProjectName(rootDir: string): Promise<string | undefined> {
   }
 }
 
-/** The whole `bddx run` pipeline, usable programmatically. */
-export async function runBddx(req: RunRequest = {}): Promise<RunOutcome> {
+/** The whole `bddr run` pipeline, usable programmatically. */
+export async function runBddr(req: RunRequest = {}): Promise<RunOutcome> {
   const { rootDir, opts, specs, plan, rerunIds } = await prepareRun(req);
   if (req.shard && !plan.nodes.length) {
     process.stdout.write(`Nothing to run in shard ${req.shard}.\n`);
@@ -426,7 +426,7 @@ export async function runBddx(req: RunRequest = {}): Promise<RunOutcome> {
     return { success: true, exitCode: 0, scenarios: [] };
   }
   if (plan.errors.length) {
-    process.stderr.write(`bddx: invalid execution plan:\n${plan.errors.map((e) => `  ${e.uri ? `${e.uri}:${e.line} ` : ''}${e.message}`).join('\n')}\n`);
+    process.stderr.write(`bddr: invalid execution plan:\n${plan.errors.map((e) => `  ${e.uri ? `${e.uri}:${e.line} ` : ''}${e.message}`).join('\n')}\n`);
     return { success: false, exitCode: 2, scenarios: plan.nodes.map((n) => n.scenario) };
   }
 
@@ -503,7 +503,7 @@ export async function runBddx(req: RunRequest = {}): Promise<RunOutcome> {
     try {
       saveHistory(history.dir, record, history.keep);
     } catch (e) {
-      process.stderr.write(`bddx: could not write run history to ${history.dir}: ${(e as Error).message}\n`);
+      process.stderr.write(`bddr: could not write run history to ${history.dir}: ${(e as Error).message}\n`);
     }
   }
   for (const e of listenerErrors) process.stderr.write(`Reporter error: ${e instanceof Error ? e.stack : String(e)}\n`);
@@ -519,7 +519,7 @@ export async function runBddx(req: RunRequest = {}): Promise<RunOutcome> {
 }
 
 /** Support code: steps, hooks, parameter types. They register on the global registry. */
-export async function loadSupportCode(rootDir: string, opts: BddxOptions, quiet = false) {
+export async function loadSupportCode(rootDir: string, opts: BddrOptions, quiet = false) {
   const registry = getGlobalRegistry();
   const plugins = await loadPlugins(rootDir, opts.plugins ?? []);
   const supportFiles = await discoverSupportFiles(rootDir, asArray(opts.steps ?? DEFAULTS.steps));
@@ -534,7 +534,7 @@ export async function loadSupportCode(rootDir: string, opts: BddxOptions, quiet 
   return registry;
 }
 
-function executorOptions(opts: BddxOptions, req: RunRequest): Omit<ExecuteOptions, 'registry' | 'bus'> {
+function executorOptions(opts: BddrOptions, req: RunRequest): Omit<ExecuteOptions, 'registry' | 'bus'> {
   return {
     dryRun: !!req.dryRun,
     failFast: !!opts.failFast,
@@ -575,13 +575,13 @@ export async function prepareWorker(init: unknown, bus: EventBus): Promise<Worke
 }
 
 /** Resolved `history` option, or undefined when off. */
-export function historySettings(opts: BddxOptions, rootDir: string): { dir: string; keep: number } | undefined {
+export function historySettings(opts: BddrOptions, rootDir: string): { dir: string; keep: number } | undefined {
   const h = opts.history;
   if (!h) return undefined;
   const o = h === true ? {} : h;
   const keep = o.keep ?? 50;
   if (!Number.isInteger(keep) || keep < 1) throw new UsageError('history.keep must be a whole number >= 1');
-  return { dir: resolve(rootDir, o.dir ?? '.bddx/history'), keep };
+  return { dir: resolve(rootDir, o.dir ?? '.bddr/history'), keep };
 }
 
 /** The HTML reporter gets previous runs for trends and flakiness scores (unless its options already say otherwise). */
@@ -592,7 +592,7 @@ function withHistory(spec: ReporterSpec, runs: HistoryRun[] | undefined): Report
   return spec;
 }
 
-/** `bddx history`: flakiest and slowest scenarios from the recorded runs. */
+/** `bddr history`: flakiest and slowest scenarios from the recorded runs. */
 export async function historyReport(req: RunRequest & { top?: number } = {}): Promise<string> {
   const cwd = req.cwd ?? process.cwd();
   await registerTypeScriptLoader();
@@ -628,7 +628,7 @@ export async function historyReport(req: RunRequest & { top?: number } = {}): Pr
   return out.join('\n');
 }
 
-export function makeDataLoader(rootDir: string, opts: BddxOptions, profile?: string): DataLoader {
+export function makeDataLoader(rootDir: string, opts: BddrOptions, profile?: string): DataLoader {
   return createFileDataLoader({
     rootDir,
     dataDir: resolve(rootDir, opts.dataDir ?? '.'),
@@ -637,7 +637,7 @@ export function makeDataLoader(rootDir: string, opts: BddxOptions, profile?: str
 }
 
 /** Console reporters get the effective log level unless their own options set one. */
-function withLogLevel(spec: ReporterSpec, level: BddxOptions['logLevel']): ReporterSpec {
+function withLogLevel(spec: ReporterSpec, level: BddrOptions['logLevel']): ReporterSpec {
   if (!level) return spec;
   if (typeof spec === 'string' && CONSOLE_REPORTERS.includes(spec)) return [spec, { logLevel: level }];
   if (Array.isArray(spec) && CONSOLE_REPORTERS.includes(spec[0]) && spec[1]['logLevel'] === undefined) {
@@ -672,7 +672,7 @@ function toMs(v: string | number, name: string): number {
   }
 }
 
-function toRetryOptions(r: NonNullable<BddxOptions['retry']>): RetryOptions {
+function toRetryOptions(r: NonNullable<BddrOptions['retry']>): RetryOptions {
   const out: RetryOptions = {};
   if (r.scenario !== undefined) {
     if (!Number.isInteger(r.scenario) || r.scenario < 0) throw new UsageError(`retry.scenario must be a whole number >= 0`);
@@ -694,11 +694,11 @@ function toRetryOptions(r: NonNullable<BddxOptions['retry']>): RetryOptions {
 
 /** Replay one or more NDJSON event files (merged: later runs win) into reporters. */
 export async function reportFromEvents(files: string[], formats: ReporterSpec[], cwd = process.cwd()): Promise<0 | 1 | 2> {
-  if (!files.length) throw new UsageError('bddx report: give at least one NDJSON events file');
+  if (!files.length) throw new UsageError('bddr report: give at least one NDJSON events file');
   const streams = [];
   for (const f of files) {
     const text = await readFile(resolve(cwd, f), 'utf8').catch(() => {
-      throw new UsageError(`bddx report: cannot read ${f}`);
+      throw new UsageError(`bddr report: cannot read ${f}`);
     });
     streams.push(parseNdjson(text));
   }
@@ -711,9 +711,9 @@ export async function reportFromEvents(files: string[], formats: ReporterSpec[],
 }
 
 /** CLI-side diagnostics (before the event bus exists) go to stderr at --log-level debug. */
-function cliDebug(level: BddxOptions['logLevel'], lines: string[]): void {
+function cliDebug(level: BddrOptions['logLevel'], lines: string[]): void {
   if (level !== 'debug') return;
-  for (const l of lines) process.stderr.write(`[bddx:debug] ${l}\n`);
+  for (const l of lines) process.stderr.write(`[bddr:debug] ${l}\n`);
 }
 
 function asArray(x: string | string[]): string[] {
@@ -725,5 +725,5 @@ async function openInspector(port: number | true): Promise<void> {
   const inspector = await import('node:inspector');
   if (inspector.url()) return; // already started with --inspect
   inspector.open(port === true ? 9229 : port, '127.0.0.1', true);
-  process.stderr.write(`bddx: inspector listening at ${inspector.url()}; waiting for a debugger to attach...\n`);
+  process.stderr.write(`bddr: inspector listening at ${inspector.url()}; waiting for a debugger to attach...\n`);
 }

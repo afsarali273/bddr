@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { EventBus, buildPlan, parseSpec, shardPlan, type PlanOptions } from '@bddx/core';
-import { Executor, SupportRegistry, type StepContext } from '@bddx/runtime';
+import { EventBus, buildPlan, parseSpec, shardPlan, type PlanOptions } from '@bddr/core';
+import { Executor, SupportRegistry, type StepContext } from '@bddr/runtime';
 
 function steps() {
   const r = new SupportRegistry();

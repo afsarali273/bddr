@@ -1,6 +1,6 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
-import type { Attachment, BddxEvent, PlannedScenario, ScenarioFinished, StepFinished } from '@bddx/core';
+import type { Attachment, BddrEvent, PlannedScenario, ScenarioFinished, StepFinished } from '@bddr/core';
 import type { Reporter, ReporterOptions } from './types.js';
 import { formatLogLine, LogIndex, type ReportLogLevel } from './logs.js';
 
@@ -20,7 +20,7 @@ export function cucumberJsonReporter(raw: ReporterOptions = {}): Reporter {
 
   return {
     name: 'cucumber-json',
-    onEvent(e: BddxEvent) {
+    onEvent(e: BddrEvent) {
       switch (e.type) {
         case 'planReady':
           plan.push(...e.scenarios);
@@ -97,7 +97,7 @@ export function render(
         ? {
             before: [
               {
-                match: { location: 'bddx: scenario logs (hooks)' },
+                match: { location: 'bddr: scenario logs (hooks)' },
                 result: { status: 'passed', duration: 0 },
                 output: logs.scenarioOnly(s.id).map((l) => formatLogLine(l)),
               },

@@ -1,5 +1,5 @@
 import { strict as assert } from 'node:assert';
-import { BeforeGroup, Given, Then, When } from '@bddx/runtime';
+import { BeforeGroup, Given, Then, When } from '@bddr/runtime';
 
 class ServiceUnavailable extends Error {
   override name = 'ServiceUnavailable';

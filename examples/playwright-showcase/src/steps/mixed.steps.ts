@@ -1,10 +1,10 @@
 import { strict as assert } from 'node:assert';
-import { Given, Then, When } from '@bddx/runtime';
+import { Given, Then, When } from '@bddr/runtime';
 import { TodoMvcPage } from '../pages/todomvc.page.js';
 import { requiredParam } from '../support/world.js';
 
-// Steps in this file name fixtures from BOTH plugins: `api` (@bddx/axios) and `page`, `context`, `newContext`,
-// `expect` (@bddx/playwright). Values travel between them in the scenario state.
+// Steps in this file name fixtures from BOTH plugins: `api` (@bddr/axios) and `page`, `context`, `newContext`,
+// `expect` (@bddr/playwright). Values travel between them in the scenario state.
 
 // ---- API data -> UI
 When('I fetch the title of post {int} through the API', async (ctx, id: number) => {

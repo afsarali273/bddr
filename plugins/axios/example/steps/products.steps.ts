@@ -1,5 +1,5 @@
 import { strict as assert } from 'node:assert';
-import { Given, Steps, Then, When, inject, type DataTable } from '@bddx/runtime';
+import { Given, Steps, Then, When, inject, type DataTable } from '@bddr/runtime';
 import type { AxiosResponse } from 'axios';
 
 // Class style: `api` and the server are injected; the base URL is the local server's.

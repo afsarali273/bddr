@@ -1,4 +1,4 @@
-import { logLevelEnabled, type Log, type LogLevel } from '@bddx/core';
+import { logLevelEnabled, type Log, type LogLevel } from '@bddr/core';
 
 /** Threshold option shared by reporters: logs below it are left out of that report. */
 export type ReportLogLevel = LogLevel | 'silent';
@@ -6,7 +6,7 @@ export type ReportLogLevel = LogLevel | 'silent';
 /** One-line text form used by JUnit, Cucumber JSON and the console: `[warn] message {"data":1}`. */
 export function formatLogLine(l: Log, maxData = 2000): string {
   const level = l.level ?? 'info';
-  const tag = l.source === 'bddx' ? `bddx:${level}` : level;
+  const tag = l.source === 'bddr' ? `bddr:${level}` : level;
   let data = '';
   if (l.data !== undefined) {
     const json = JSON.stringify(l.data) ?? String(l.data);
@@ -22,7 +22,7 @@ function kb(n: number): string {
 
 /**
  * Collects logs by scenario and step, keeping only those at or above `threshold`.
- * Framework diagnostics (source 'bddx') are kept only when `includeFramework` (HTML report).
+ * Framework diagnostics (source 'bddr') are kept only when `includeFramework` (HTML report).
  */
 export class LogIndex {
   readonly byScenario = new Map<string, Log[]>();
@@ -34,7 +34,7 @@ export class LogIndex {
   ) {}
 
   add(l: Log): void {
-    if (l.source === 'bddx' && !this.includeFramework) return;
+    if (l.source === 'bddr' && !this.includeFramework) return;
     if (!logLevelEnabled(l.level ?? 'info', this.threshold)) return;
     if (!l.scenarioId) {
       this.run.push(l);

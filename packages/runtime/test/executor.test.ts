@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DataTable, SupportRegistry, type StepContext } from '@bddx/runtime';
+import { DataTable, SupportRegistry, type StepContext } from '@bddr/runtime';
 import { run, scenariosOf } from './helpers.js';
 
 const BASIC = `Feature: Calc

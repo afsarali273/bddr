@@ -1,4 +1,4 @@
-import type { FeatureInfo, HookKind, HookLevel, RuleRef } from '@bddx/core';
+import type { FeatureInfo, HookKind, HookLevel, RuleRef } from '@bddr/core';
 import type { Cleanup, Store } from './context.js';
 import type { Logger } from './logger.js';
 import type { Fixtures } from './fixtures.js';

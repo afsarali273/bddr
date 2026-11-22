@@ -1,10 +1,10 @@
 import { createServer, type Server } from 'node:http';
 import type { AddressInfo } from 'node:net';
-import { defineFixture } from '@bddx/runtime';
+import { defineFixture } from '@bddr/runtime';
 
 /** A tiny local shop, so the example needs no internet. One server per worker process. */
 export interface Shop { url: string }
-declare module '@bddx/runtime' {
+declare module '@bddr/runtime' {
   interface Fixtures { shop: Shop }
 }
 

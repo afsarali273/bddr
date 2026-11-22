@@ -1,25 +1,25 @@
 {
-  "name": "bddx-selenium-showcase",
+  "name": "bddr-selenium-showcase",
   "version": "1.0.0",
   "private": true,
-  "description": "A real-world UI automation project powered by bddx and Selenium WebDriver, using the @bddx/selenium plugin",
+  "description": "A real-world UI automation project powered by bddr and Selenium WebDriver, using the @bddr/selenium plugin",
   "type": "module",
   "scripts": {
     "build": "tsc --noEmit",
-    "validate": "bddx validate --fail-on-warnings",
-    "plan": "bddx plan",
-    "test": "bddx run",
-    "test:smoke": "bddx run --tags @smoke",
-    "test:firefox": "bddx run -D browser=firefox",
-    "test:inline": "bddx run --pool inline",
+    "validate": "bddr validate --fail-on-warnings",
+    "plan": "bddr plan",
+    "test": "bddr run",
+    "test:smoke": "bddr run --tags @smoke",
+    "test:firefox": "bddr run -D browser=firefox",
+    "test:inline": "bddr run --pool inline",
     "verify": "npm run build && npm run validate && npm test"
   },
   "dependencies": {
-    "@bddx/cli": "file:../../packages/cli",
-    "@bddx/core": "file:../../packages/core",
-    "@bddx/reporters": "file:../../packages/reporters",
-    "@bddx/runtime": "file:../../packages/runtime",
-    "@bddx/selenium": "file:../../plugins/selenium",
+    "@bddr/cli": "file:../../packages/cli",
+    "@bddr/core": "file:../../packages/core",
+    "@bddr/reporters": "file:../../packages/reporters",
+    "@bddr/runtime": "file:../../packages/runtime",
+    "@bddr/selenium": "file:../../plugins/selenium",
     "selenium-webdriver": "^4.27.0"
   },
   "devDependencies": {
