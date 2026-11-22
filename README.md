@@ -254,7 +254,7 @@ Paths accept files, folders, globs and `file.feature:LINE`. Exit codes: 0 passed
 
 ## Documentation
 
-- Documentation site: open `website/index.html` (getting started, guides, references, architecture)
+- Documentation site: https://afsarali273.github.io/bddr/ (source in `website/`; getting started, guides, references, architecture)
 - [docs/STATUS.md](docs/STATUS.md): everything done so far and everything remaining, on one page
 - [docs/IMPLEMENTATION.md](docs/IMPLEMENTATION.md): how it works, module by module
 - [docs/PROGRESS.md](docs/PROGRESS.md): what is done, what is next, how to resume

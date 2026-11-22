@@ -18,6 +18,13 @@ website/
    └─ img/                    favicon; generated diagrams and screenshots go here
 ```
 
+## Publishing on GitHub Pages
+
+Pages' "deploy from a branch" option only serves the repo root or a folder named `docs`, and this repo's `docs/` holds
+the Markdown project notes. So the site is published by `.github/workflows/pages.yml`, which deploys `website/` from
+`main`. One-time setup: Settings > Pages > Source: **GitHub Actions**. The site is then at
+`https://<user>.github.io/bddr/`. All links are relative, so the `/bddr/` sub-path works.
+
 ## Adding a page
 
 Pages are written in `src/<slug>.page` and turned into `docs/<slug>.html` by a small script (an authoring aid; the site
