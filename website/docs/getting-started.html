@@ -105,6 +105,7 @@ $ node -v</code></pre></figure>
         </div>
 
         <h2 id="get-bddr">Get and build bddr</h2>
+        <aside class="callout note"><p class="callout-title">Not on npm yet</p><p>bddr is not published to the npm registry yet, so it is installed from your clone with <code>file:</code> paths. Once it is published, you will install the <code>@bddr/*</code> packages from npm with <code>npm i -D</code> and no clone is needed.</p></aside>
         <ol class="steps">
           <li>
             <h3 id="clone">Clone the repository</h3>
@@ -153,6 +154,7 @@ PS> cd plugins/axios; npm install; npm run build; cd ../..</code></pre></figure>
           <li>
             <h3 id="package-json">package.json</h3>
             <p>The bddr packages come from the clone through <code>file:</code> paths, all four of them.</p>
+            <aside class="callout note"><p class="callout-title">Not on npm yet</p><p>bddr is not published to the npm registry yet, so it is installed from your clone with <code>file:</code> paths. Once it is published, you will install the <code>@bddr/*</code> packages from npm with <code>npm i -D</code> and no clone is needed.</p></aside>
             <figure class="code-block" data-title="my-tests/package.json"><pre><code class="lang-json">{
   "name": "my-tests",
   "private": true,
@@ -286,6 +288,7 @@ PS> npx bddr plan</code></pre></figure>
         </aside>
 
         <h2 id="plugins">Add browser or API testing</h2>
+        <aside class="callout note"><p class="callout-title">Not on npm yet</p><p>bddr is not published to the npm registry yet, so it is installed from your clone with <code>file:</code> paths. Once it is published, you will install the <code>@bddr/*</code> packages from npm with <code>npm i -D</code> and no clone is needed.</p></aside>
         <p>Install the plugin and the tool it wraps in your project, then list the plugin in the config. Its fixtures (<code>page</code>, <code>driver</code>, <code>api</code> ...) are then available in every step.</p>
         <div class="tabs" data-group="plugin">
           <section data-tab="playwright" data-label="Playwright">
