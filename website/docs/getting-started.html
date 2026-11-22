@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Getting started | bddx</title>
-  <meta name="description" content="Install bddx on macOS, Windows or Linux, create a project and run your first feature file.">
+  <title>Getting started | bddr</title>
+  <meta name="description" content="Install bddr on macOS, Windows or Linux, create a project and run your first feature file.">
   <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../assets/css/theme.css">
-  <script>(function(){var t=null;try{t=localStorage.getItem('bddx-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
+  <script>(function(){var t=null;try{t=localStorage.getItem('bddr-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
 </head>
 <body data-root="../">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -16,14 +16,14 @@
     <button class="icon-button menu-button" type="button" aria-label="Show navigation" aria-expanded="false">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
-    <a class="brand" href="../index.html" aria-label="bddx home">
+    <a class="brand" href="../index.html" aria-label="bddr home">
       <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="6" width="14" height="5" rx="1.5" fill="var(--accent)"/><rect x="9" y="13.5" width="20" height="5" rx="1.5" fill="currentColor" opacity=".85"/><rect x="5" y="21" width="11" height="5" rx="1.5" fill="currentColor" opacity=".4"/><rect x="18" y="21" width="9" height="5" rx="1.5" fill="var(--accent)"/></svg>
-      <span>bddx</span>
+      <span>bddr</span>
     </a>
     <nav class="site-nav" aria-label="Main">
       <a href="getting-started.html" aria-current="page">Docs</a>
       <a href="getting-started.html#plugins">Plugins</a>
-      <a href="https://github.com/afsarali273/SmartBDD">GitHub</a>
+      <a href="https://github.com/afsarali273/bddr">GitHub</a>
     </nav>
     <div class="header-tools">
       <button class="icon-button theme-toggle" type="button" aria-label="Use dark theme">
@@ -38,20 +38,20 @@
 
     <main class="doc" id="main">
       <article class="doc-content">
-        <p class="breadcrumb"><a href="../index.html">bddx</a> / Introduction</p>
+        <p class="breadcrumb"><a href="../index.html">bddr</a> / Introduction</p>
         <h1>Getting started</h1>
-        <p class="lede">Install Node.js, build bddx, create a project and run a feature file. About fifteen minutes on macOS, Windows or Linux.</p>
+        <p class="lede">Install Node.js, build bddr, create a project and run a feature file. About fifteen minutes on macOS, Windows or Linux.</p>
 
         <h2 id="requirements">System requirements</h2>
         <dl class="requirements">
           <dt>Node.js</dt>
-          <dd>20.10 or newer for bddx itself. Use <strong>Node.js 22 or 24 (LTS)</strong> if you plan to use the Selenium plugin: current <code>selenium-webdriver</code> releases require Node.js 22 or newer.</dd>
+          <dd>20.10 or newer for bddr itself. Use <strong>Node.js 22 or 24 (LTS)</strong> if you plan to use the Selenium plugin: current <code>selenium-webdriver</code> releases require Node.js 22 or newer.</dd>
           <dt>npm</dt>
           <dd>Comes with Node.js. Check with <code>npm -v</code>.</dd>
           <dt>Git</dt>
-          <dd>To get the bddx source. bddx is not published to npm yet, so projects use it from a local clone.</dd>
+          <dd>To get the bddr source. bddr is not published to npm yet, so projects use it from a local clone.</dd>
           <dt>Operating system</dt>
-          <dd>macOS, Windows 10 or 11, or Linux. bddx is plain Node.js and does not depend on the operating system. Browser plugins add their own requirements, listed below.</dd>
+          <dd>macOS, Windows 10 or 11, or Linux. bddr is plain Node.js and does not depend on the operating system. Browser plugins add their own requirements, listed below.</dd>
           <dt>Editor</dt>
           <dd>Any. VS Code works well with the TypeScript and Cucumber (Gherkin) extensions.</dd>
         </dl>
@@ -62,19 +62,19 @@
             <thead><tr><th>Plugin</th><th>macOS</th><th>Windows</th><th>Notes</th></tr></thead>
             <tbody>
               <tr>
-                <td><code>@bddx/playwright</code></td>
+                <td><code>@bddr/playwright</code></td>
                 <td>macOS 14 or later</td>
                 <td>Windows 11, Windows Server 2019 or later, or WSL</td>
                 <td>Node.js 20, 22 or 24. Browsers are downloaded with <code>npx playwright install</code>. These are <a href="https://playwright.dev/docs/intro#system-requirements">Playwright's requirements</a>.</td>
               </tr>
               <tr>
-                <td><code>@bddx/selenium</code></td>
+                <td><code>@bddr/selenium</code></td>
                 <td>Chrome, Firefox, Edge or Safari</td>
                 <td>Chrome, Firefox or Edge</td>
                 <td>Node.js 22 or newer. Selenium Manager downloads the matching driver on the first run. Safari needs <code>safaridriver --enable</code> once.</td>
               </tr>
               <tr>
-                <td><code>@bddx/axios</code></td>
+                <td><code>@bddr/axios</code></td>
                 <td>Any</td>
                 <td>Any</td>
                 <td>No browser. Needs network access to the API under test.</td>
@@ -104,19 +104,19 @@ $ node -v</code></pre></figure>
           </section>
         </div>
 
-        <h2 id="get-bddx">Get and build bddx</h2>
+        <h2 id="get-bddr">Get and build bddr</h2>
         <ol class="steps">
           <li>
             <h3 id="clone">Clone the repository</h3>
             <p>Put it next to the folder where your tests will live, for example in a <code>code</code> folder.</p>
-            <figure class="code-block"><pre><code class="lang-bash">$ git clone https://github.com/afsarali273/SmartBDD.git
-$ cd SmartBDD</code></pre></figure>
+            <figure class="code-block"><pre><code class="lang-bash">$ git clone https://github.com/afsarali273/bddr.git
+$ cd bddr</code></pre></figure>
           </li>
           <li>
             <h3 id="build">Install and build</h3>
             <figure class="code-block"><pre><code class="lang-bash">$ npm install
 $ npm run build</code></pre></figure>
-            <p><code>npm run verify</code> also runs bddx's own tests, if you want to check the build.</p>
+            <p><code>npm run verify</code> also runs bddr's own tests, if you want to check the build.</p>
           </li>
           <li>
             <h3 id="build-plugins">Build the plugins you need</h3>
@@ -137,13 +137,13 @@ PS> cd plugins/axios; npm install; npm run build; cd ../..</code></pre></figure>
         </ol>
 
         <h2 id="first-project">Create your first project</h2>
-        <p>A bddx project is an ordinary Node.js project with feature files, step files and a config. This one tests a shopping basket and needs no browser.</p>
+        <p>A bddr project is an ordinary Node.js project with feature files, step files and a config. This one tests a shopping basket and needs no browser.</p>
         <figure class="code-block" data-title="Folder layout"><pre><code class="lang-text">code/
-├─ SmartBDD/                 the bddx clone from above
+├─ bddr/                     the bddr clone from above
 └─ my-tests/
    ├─ package.json
    ├─ tsconfig.json
-   ├─ bddx.config.ts
+   ├─ bddr.config.ts
    ├─ features/
    │  └─ basket.feature
    └─ steps/
@@ -152,17 +152,17 @@ PS> cd plugins/axios; npm install; npm run build; cd ../..</code></pre></figure>
         <ol class="steps">
           <li>
             <h3 id="package-json">package.json</h3>
-            <p>The bddx packages come from the clone through <code>file:</code> paths, all four of them.</p>
+            <p>The bddr packages come from the clone through <code>file:</code> paths, all four of them.</p>
             <figure class="code-block" data-title="my-tests/package.json"><pre><code class="lang-json">{
   "name": "my-tests",
   "private": true,
   "type": "module",
-  "scripts": { "test": "bddx run" },
+  "scripts": { "test": "bddr run" },
   "dependencies": {
-    "@bddx/cli": "file:../SmartBDD/packages/cli",
-    "@bddx/core": "file:../SmartBDD/packages/core",
-    "@bddx/reporters": "file:../SmartBDD/packages/reporters",
-    "@bddx/runtime": "file:../SmartBDD/packages/runtime"
+    "@bddr/cli": "file:../bddr/packages/cli",
+    "@bddr/core": "file:../bddr/packages/core",
+    "@bddr/reporters": "file:../bddr/packages/reporters",
+    "@bddr/runtime": "file:../bddr/packages/runtime"
   },
   "devDependencies": {
     "@types/node": "^22.20.5",
@@ -172,7 +172,7 @@ PS> cd plugins/axios; npm install; npm run build; cd ../..</code></pre></figure>
           </li>
           <li>
             <h3 id="tsconfig">tsconfig.json</h3>
-            <p>bddx runs TypeScript directly; this file is for your editor and for <code>tsc --noEmit</code> type checks.</p>
+            <p>bddr runs TypeScript directly; this file is for your editor and for <code>tsc --noEmit</code> type checks.</p>
             <figure class="code-block" data-title="my-tests/tsconfig.json"><pre><code class="lang-json">{
   "compilerOptions": {
     "target": "ES2022",
@@ -184,12 +184,12 @@ PS> cd plugins/axios; npm install; npm run build; cd ../..</code></pre></figure>
     "skipLibCheck": true,
     "types": ["node"]
   },
-  "include": ["bddx.config.ts", "steps/**/*.ts"]
+  "include": ["bddr.config.ts", "steps/**/*.ts"]
 }</code></pre></figure>
           </li>
           <li>
-            <h3 id="config">bddx.config.ts</h3>
-            <figure class="code-block" data-title="my-tests/bddx.config.ts"><pre><code class="lang-ts">import { defineConfig } from '@bddx/cli';
+            <h3 id="config">bddr.config.ts</h3>
+            <figure class="code-block" data-title="my-tests/bddr.config.ts"><pre><code class="lang-ts">import { defineConfig } from '@bddr/cli';
 
 export default defineConfig({
   features: 'features/**/*.feature',
@@ -226,7 +226,7 @@ export default defineConfig({
             <h3 id="steps">Step definitions</h3>
             <p>A step is a pattern and a function. The first argument is the scenario context; the rest are the values the pattern captured.</p>
             <figure class="code-block" data-title="my-tests/steps/basket.steps.ts"><pre><code class="lang-ts">import { strict as assert } from 'node:assert';
-import { Given, Then, When, defineParameterType, type DataTable } from '@bddx/runtime';
+import { Given, Then, When, defineParameterType, type DataTable } from '@bddr/runtime';
 
 // {money} turns "1.00" into 100 (cents)
 defineParameterType({ name: 'money', regexp: /\d+\.\d{2}/, transformer: (s) => Math.round(Number(s) * 100) });
@@ -251,14 +251,14 @@ Then('the basket total is {money}', (ctx, cents: number) => {
         <h2 id="run">Run it</h2>
         <figure class="code-block"><pre><code class="lang-bash">$ cd my-tests
 $ npm install
-$ npx bddx run</code></pre></figure>
-        <p>bddx prints each scenario as it finishes and a summary at the end, and writes <code>reports/report.html</code>.</p>
+$ npx bddr run</code></pre></figure>
+        <p>bddr prints each scenario as it finishes and a summary at the end, and writes <code>reports/report.html</code>.</p>
 
         <figure class="placeholder" data-kind="screenshot" style="--ratio: 16 / 7">
           <div class="placeholder-frame"><p class="placeholder-what">Terminal output of the first run: three passing scenarios and the summary.</p></div>
           <figcaption>
             <p class="placeholder-how">Capture this yourself:</p>
-            <p>Run <code>npx bddx run</code> in <code>my-tests</code> in a terminal about 100 columns wide, dark terminal theme, and screenshot from the command line to the <code>PASSED</code> line.</p>
+            <p>Run <code>npx bddr run</code> in <code>my-tests</code> in a terminal about 100 columns wide, dark terminal theme, and screenshot from the command line to the <code>PASSED</code> line.</p>
             <p class="placeholder-file">Save as <code>assets/img/first-run-terminal.png</code>.</p>
           </figcaption>
         </figure>
@@ -266,16 +266,16 @@ $ npx bddx run</code></pre></figure>
         <p>Some useful variations:</p>
         <div class="tabs" data-group="os">
           <section data-tab="macos" data-label="macOS / Linux">
-            <figure class="code-block"><pre><code class="lang-bash">$ npx bddx run --tags @smoke                 # only scenarios tagged @smoke
-$ npx bddx run features/basket.feature:11    # one scenario, by line
-$ npx bddx run --set workers=4               # change any config value
-$ npx bddx plan                              # show the schedule, run nothing</code></pre></figure>
+            <figure class="code-block"><pre><code class="lang-bash">$ npx bddr run --tags @smoke                 # only scenarios tagged @smoke
+$ npx bddr run features/basket.feature:11    # one scenario, by line
+$ npx bddr run --set workers=4               # change any config value
+$ npx bddr plan                              # show the schedule, run nothing</code></pre></figure>
           </section>
           <section data-tab="windows" data-label="Windows">
-            <figure class="code-block"><pre><code class="lang-powershell">PS> npx bddx run --tags '@smoke'             # quote tags: @ means something in PowerShell
-PS> npx bddx run features/basket.feature:11
-PS> npx bddx run --set workers=4
-PS> npx bddx plan</code></pre></figure>
+            <figure class="code-block"><pre><code class="lang-powershell">PS> npx bddr run --tags '@smoke'             # quote tags: @ means something in PowerShell
+PS> npx bddr run features/basket.feature:11
+PS> npx bddr run --set workers=4
+PS> npx bddr plan</code></pre></figure>
           </section>
         </div>
 
@@ -288,26 +288,26 @@ PS> npx bddx plan</code></pre></figure>
           <li>Paths in the config use forward slashes on every system: <code>features/**/*.feature</code>.</li>
         </ul>
         <aside class="callout note">
-          <p class="callout-title">Windows is not yet part of bddx's own test runs</p>
-          <p>bddx is plain Node.js and nothing in it is specific to one system, but its test suite has so far run on macOS and Linux. If something behaves differently on Windows, please open an issue with the command and its output.</p>
+          <p class="callout-title">Windows is not yet part of bddr's own test runs</p>
+          <p>bddr is plain Node.js and nothing in it is specific to one system, but its test suite has so far run on macOS and Linux. If something behaves differently on Windows, please open an issue with the command and its output.</p>
         </aside>
 
         <h2 id="plugins">Add browser or API testing</h2>
         <p>Install the plugin and the tool it wraps in your project, then list the plugin in the config. Its fixtures (<code>page</code>, <code>driver</code>, <code>api</code> ...) are then available in every step.</p>
         <div class="tabs" data-group="plugin">
           <section data-tab="playwright" data-label="Playwright">
-            <figure class="code-block"><pre><code class="lang-bash">$ npm i -D file:../SmartBDD/plugins/playwright playwright @playwright/test
+            <figure class="code-block"><pre><code class="lang-bash">$ npm i -D file:../bddr/plugins/playwright playwright @playwright/test
 $ npx playwright install chromium</code></pre></figure>
-            <figure class="code-block" data-title="bddx.config.ts"><pre><code class="lang-ts">import { defineConfig } from '@bddx/cli';
-import { playwright } from '@bddx/playwright';
+            <figure class="code-block" data-title="bddr.config.ts"><pre><code class="lang-ts">import { defineConfig } from '@bddr/cli';
+import { playwright } from '@bddr/playwright';
 
 export default defineConfig({
   features: 'features/**/*.feature',
   steps: 'steps/**/*.ts',
   plugins: [playwright({ browser: 'chromium', context: { baseURL: 'https://example.com' } })],
 });</code></pre></figure>
-            <figure class="code-block" data-title="steps/home.steps.ts"><pre><code class="lang-ts">import { Given, Then } from '@bddx/runtime';
-import '@bddx/playwright'; // types for page, expect ...
+            <figure class="code-block" data-title="steps/home.steps.ts"><pre><code class="lang-ts">import { Given, Then } from '@bddr/runtime';
+import '@bddr/playwright'; // types for page, expect ...
 
 Given('I open the home page', async ({ page }) => {
   await page.goto('/');
@@ -318,9 +318,9 @@ Then('the heading says {string}', async ({ page, expect }, text: string) => {
 });</code></pre></figure>
           </section>
           <section data-tab="selenium" data-label="Selenium">
-            <figure class="code-block"><pre><code class="lang-bash">$ npm i -D file:../SmartBDD/plugins/selenium selenium-webdriver</code></pre></figure>
-            <figure class="code-block" data-title="bddx.config.ts"><pre><code class="lang-ts">import { defineConfig } from '@bddx/cli';
-import { selenium } from '@bddx/selenium';
+            <figure class="code-block"><pre><code class="lang-bash">$ npm i -D file:../bddr/plugins/selenium selenium-webdriver</code></pre></figure>
+            <figure class="code-block" data-title="bddr.config.ts"><pre><code class="lang-ts">import { defineConfig } from '@bddr/cli';
+import { selenium } from '@bddr/selenium';
 
 export default defineConfig({
   features: 'features/**/*.feature',
@@ -328,8 +328,8 @@ export default defineConfig({
   plugins: [selenium({ browser: 'chrome', baseURL: 'https://example.com' })],
 });</code></pre></figure>
             <figure class="code-block" data-title="steps/home.steps.ts"><pre><code class="lang-ts">import { strict as assert } from 'node:assert';
-import { Given, Then } from '@bddx/runtime';
-import '@bddx/selenium'; // types for driver, open, wait ...
+import { Given, Then } from '@bddr/runtime';
+import '@bddr/selenium'; // types for driver, open, wait ...
 
 Given('I open the home page', async ({ open }) => {
   await open('/');
@@ -341,9 +341,9 @@ Then('the heading says {string}', async ({ wait, selenium: { By, until } }, text
 });</code></pre></figure>
           </section>
           <section data-tab="axios" data-label="axios (API)">
-            <figure class="code-block"><pre><code class="lang-bash">$ npm i -D file:../SmartBDD/plugins/axios axios</code></pre></figure>
-            <figure class="code-block" data-title="bddx.config.ts"><pre><code class="lang-ts">import { defineConfig } from '@bddx/cli';
-import { axios } from '@bddx/axios';
+            <figure class="code-block"><pre><code class="lang-bash">$ npm i -D file:../bddr/plugins/axios axios</code></pre></figure>
+            <figure class="code-block" data-title="bddr.config.ts"><pre><code class="lang-ts">import { defineConfig } from '@bddr/cli';
+import { axios } from '@bddr/axios';
 
 export default defineConfig({
   features: 'features/**/*.feature',
@@ -351,8 +351,8 @@ export default defineConfig({
   plugins: [axios({ baseURL: 'https://jsonplaceholder.typicode.com' })],
 });</code></pre></figure>
             <figure class="code-block" data-title="steps/posts.steps.ts"><pre><code class="lang-ts">import { strict as assert } from 'node:assert';
-import { Then, When } from '@bddx/runtime';
-import '@bddx/axios'; // types for api, newApi ...
+import { Then, When } from '@bddr/runtime';
+import '@bddr/axios'; // types for api, newApi ...
 
 When('I fetch post {int}', async ({ api, state }, id: number) => {
   state.set('response', await api.get(`/posts/${id}`));
@@ -369,8 +369,8 @@ Then('the status is {int}', ({ state }, status: number) => {
           <table>
             <thead><tr><th>You see</th><th>Do this</th></tr></thead>
             <tbody>
-              <tr><td><code>bddx: command not found</code> or <code>npx</code> asks to install bddx</td><td>Run <code>npm install</code> in your project, and check the <code>file:</code> paths in <code>package.json</code> point at the clone.</td></tr>
-              <tr><td><code>Cannot find module '@bddx/…/dist/index.js'</code></td><td>bddx or the plugin is not built: run <code>npm run build</code> in the clone, or in the plugin folder.</td></tr>
+              <tr><td><code>bddr: command not found</code> or <code>npx</code> asks to install bddr</td><td>Run <code>npm install</code> in your project, and check the <code>file:</code> paths in <code>package.json</code> point at the clone.</td></tr>
+              <tr><td><code>Cannot find module '@bddr/…/dist/index.js'</code></td><td>bddr or the plugin is not built: run <code>npm run build</code> in the clone, or in the plugin folder.</td></tr>
               <tr><td><code>Executable doesn't exist</code> (Playwright)</td><td>Download the browser: <code>npx playwright install chromium</code>. On Linux also <code>npx playwright install-deps</code>.</td></tr>
               <tr><td><code>Fixture "page" is asynchronous and was not requested before use</code></td><td>Name the fixture in the step itself, <code>({ page })</code> or <code>const { page } = ctx</code>, instead of reading it inside a helper function.</td></tr>
               <tr><td>Safari: <code>Could not create a session</code></td><td>Run <code>safaridriver --enable</code> once and allow remote automation in Safari's Develop menu.</td></tr>

@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tags and selection | bddx</title>
-  <meta name="description" content="Every tag bddx understands, how to select scenarios by tag, name, file and line, and how to govern custom tags.">
+  <title>Tags and selection | bddr</title>
+  <meta name="description" content="Every tag bddr understands, how to select scenarios by tag, name, file and line, and how to govern custom tags.">
   <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../assets/css/theme.css">
-  <script>(function(){var t=null;try{t=localStorage.getItem('bddx-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
+  <script>(function(){var t=null;try{t=localStorage.getItem('bddr-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
 </head>
 <body data-root="../">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -16,14 +16,14 @@
     <button class="icon-button menu-button" type="button" aria-label="Show navigation" aria-expanded="false">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
-    <a class="brand" href="../index.html" aria-label="bddx home">
+    <a class="brand" href="../index.html" aria-label="bddr home">
       <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="6" width="14" height="5" rx="1.5" fill="var(--accent)"/><rect x="9" y="13.5" width="20" height="5" rx="1.5" fill="currentColor" opacity=".85"/><rect x="5" y="21" width="11" height="5" rx="1.5" fill="currentColor" opacity=".4"/><rect x="18" y="21" width="9" height="5" rx="1.5" fill="var(--accent)"/></svg>
-      <span>bddx</span>
+      <span>bddr</span>
     </a>
     <nav class="site-nav" aria-label="Main">
       <a href="getting-started.html">Docs</a>
       <a href="getting-started.html#plugins">Plugins</a>
-      <a href="https://github.com/afsarali273/SmartBDD">GitHub</a>
+      <a href="https://github.com/afsarali273/bddr">GitHub</a>
     </nav>
     <div class="header-tools">
       <button class="icon-button theme-toggle" type="button" aria-label="Use dark theme">
@@ -38,21 +38,21 @@
 
     <main class="doc" id="main">
       <article class="doc-content">
-        <p class="breadcrumb"><a href="../index.html">bddx</a> / Running</p>
+        <p class="breadcrumb"><a href="../index.html">bddr</a> / Running</p>
         <h1>Tags and selection</h1>
-        <p class="lede">Tags are how you choose what runs and how it runs. Your own tags, such as @smoke, select scenarios. bddx's tags, such as @retry:2, change behaviour.</p>
+        <p class="lede">Tags are how you choose what runs and how it runs. Your own tags, such as @smoke, select scenarios. bddr's tags, such as @retry:2, change behaviour.</p>
 
 <h2 id="select-scenarios">Select scenarios</h2>
         <div class="table-wrap"><table>
         <thead><tr><th>You want</th><th>Command</th></tr></thead>
         <tbody>
-        <tr><td>A tag expression</td><td><code>npx bddx -t "@smoke and not @wip"</code>. Operators: <code>and</code>, <code>or</code>, <code>not</code>, parentheses.</td></tr>
-        <tr><td>A name pattern</td><td><code>npx bddx --name "refund|cancel"</code>. A regular expression on the scenario name.</td></tr>
-        <tr><td>A file, folder or glob</td><td><code>npx bddx features/checkout</code>, <code>npx bddx "features/**/*.feature"</code></td></tr>
-        <tr><td>One scenario by line</td><td><code>npx bddx features/checkout.feature:12</code></td></tr>
-        <tr><td>What failed last time</td><td><code>npx bddx --rerun-failed reports/events.ndjson</code></td></tr>
+        <tr><td>A tag expression</td><td><code>npx bddr -t "@smoke and not @wip"</code>. Operators: <code>and</code>, <code>or</code>, <code>not</code>, parentheses.</td></tr>
+        <tr><td>A name pattern</td><td><code>npx bddr --name "refund|cancel"</code>. A regular expression on the scenario name.</td></tr>
+        <tr><td>A file, folder or glob</td><td><code>npx bddr features/checkout</code>, <code>npx bddr "features/**/*.feature"</code></td></tr>
+        <tr><td>One scenario by line</td><td><code>npx bddr features/checkout.feature:12</code></td></tr>
+        <tr><td>What failed last time</td><td><code>npx bddr --rerun-failed reports/events.ndjson</code></td></tr>
         </tbody></table></div>
-        <p>The config <code>tags</code> are combined with <code>-t</code> using <strong>and</strong>. When you select a scenario, the scenarios it depends on are added automatically. Add <code>--no-deps</code> to turn that off. <code>npx bddx list</code> shows what a selection would run.</p>
+        <p>The config <code>tags</code> are combined with <code>-t</code> using <strong>and</strong>. When you select a scenario, the scenarios it depends on are added automatically. Add <code>--no-deps</code> to turn that off. <code>npx bddr list</code> shows what a selection would run.</p>
 
         <h2 id="tags-that-change-how-a-scenario-runs">Tags that change how a scenario runs</h2>
         <div class="table-wrap"><table>
@@ -77,8 +77,8 @@
         <p>Any other tag is yours. <code>@smoke</code>, <code>@ui</code> and <code>@api</code> select. A <code>@key:value</code> tag becomes metadata: <code>@owner:payments</code> is <code>ctx.scenario.meta.owner</code>.</p>
 
         <h2 id="keep-tags-tidy">Keep tags tidy</h2>
-        <p>Typos in tags are silent: <code>@smoek</code> selects nothing. List the keys your project allows, and <code>bddx validate</code> reports the rest.</p>
-        <figure class="code-block" data-title="bddx.config.ts"><pre><code class="lang-ts">validation: {
+        <p>Typos in tags are silent: <code>@smoek</code> selects nothing. List the keys your project allows, and <code>bddr validate</code> reports the rest.</p>
+        <figure class="code-block" data-title="bddr.config.ts"><pre><code class="lang-ts">validation: {
   allowedTagKeys: ['smoke', 'ui', 'api', 'owner', 'wip'],
 },</code></pre></figure>
         <p>The tags in the table above are always allowed.</p>

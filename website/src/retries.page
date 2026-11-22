@@ -1,7 +1,7 @@
 title: Retries and flaky tests
 section: Orchestration
 desc: Retry scenarios, groups and whole runs, see which tests are flaky, and quarantine a known-bad test.
-lede: A retry gives a failed test another chance. bddx still tells you it failed first, so retries do not hide flaky tests.
+lede: A retry gives a failed test another chance. bddr still tells you it failed first, so retries do not hide flaky tests.
 ---
 <h2>Retry a scenario</h2>
 <div class="tabs" data-group="retry">
@@ -11,7 +11,7 @@ Scenario: Load the dashboard</cb>
 <p>Use <code>@noRetry</code> to turn retries off for a scenario when the config enables them.</p>
   </section>
   <section data-tab="config" data-label="Config">
-<cb title="bddx.config.ts">retry: {
+<cb title="bddr.config.ts">retry: {
   scenario: 1,
   delay: '200ms',
   backoff: 2,
@@ -20,16 +20,16 @@ Scenario: Load the dashboard</cb>
 <p><code>on</code> limits retries to errors whose name or message matches. Without it every failure is retried.</p>
   </section>
   <section data-tab="cli" data-label="Command line">
-<cb lang="bash">$ npx bddx run --retry 1</cb>
+<cb lang="bash">$ npx bddr run --retry 1</cb>
   </section>
 </div>
 <p>Each attempt starts with fresh scenario state and fresh scenario-scoped fixtures. The report shows every attempt.</p>
 
 <h2>Flaky, not just passed</h2>
 <p>A scenario that fails and then passes on a retry is reported as <span class="state flaky">flaky</span>. The run passes, unless you ask otherwise:</p>
-<cb lang="bash">$ npx bddx run --retry 2 --fail-on-flaky</cb>
-<p>With <code>history: true</code> in the config, bddx records every run in <code>.bddx/history</code> and gives each scenario a flakiness score: the share of runs whose outcome flipped or that passed only after a retry. A scenario that always fails scores 0, because it is broken, not flaky.</p>
-<cb lang="bash">$ npx bddx history --top 10</cb>
+<cb lang="bash">$ npx bddr run --retry 2 --fail-on-flaky</cb>
+<p>With <code>history: true</code> in the config, bddr records every run in <code>.bddr/history</code> and gives each scenario a flakiness score: the share of runs whose outcome flipped or that passed only after a retry. A scenario that always fails scores 0, because it is broken, not flaky.</p>
+<cb lang="bash">$ npx bddr history --top 10</cb>
 
 <h2>Quarantine</h2>
 <p>Add <code>@quarantine</code> to a test you know is broken but want to keep running. It runs and is reported, but a failure never fails the build. JUnit XML shows a quarantined failure as skipped.</p>
@@ -38,7 +38,7 @@ Scenario: Export to PDF</cb>
 
 <h2>Retry a group</h2>
 <p>When members depend on each other, retrying one is not enough. Retry the group instead.</p>
-<cb title="bddx.config.ts">groups: {
+<cb title="bddr.config.ts">groups: {
   warmup: { mode: 'serial', retry: 1, retryMembers: 'failed' },
 },</cb>
 <p><code>retryMembers</code> is <code>'all'</code> or <code>'failed'</code>. Groups that depend on this one wait until it settles.</p>
@@ -47,10 +47,10 @@ Scenario: Export to PDF</cb>
 <p>If a worker process crashes, only its scenario fails and the lane starts again. To retry the scenario on a fresh process, set <code>retry.workerCrash</code> or pass <code>--worker-crash-retry 1</code>.</p>
 
 <h2>Re-run only what failed</h2>
-<cb lang="bash">$ npx bddx run -f ndjson:reports/events.ndjson
-$ npx bddx run --rerun-failed reports/events.ndjson -f ndjson:reports/events2.ndjson
-$ npx bddx report reports/events.ndjson reports/events2.ndjson -f html:reports/merged.html</cb>
-<p>The first run writes the event stream. The second runs only scenarios that did not pass, plus what they depend on. <code>bddx report</code> merges the files, and later runs win.</p>
+<cb lang="bash">$ npx bddr run -f ndjson:reports/events.ndjson
+$ npx bddr run --rerun-failed reports/events.ndjson -f ndjson:reports/events2.ndjson
+$ npx bddr report reports/events.ndjson reports/events2.ndjson -f html:reports/merged.html</cb>
+<p>The first run writes the event stream. The second runs only scenarios that did not pass, plus what they depend on. <code>bddr report</code> merges the files, and later runs win.</p>
 
 <h2>Retry a step</h2>
 <p>For one slow call, retry the step instead of the scenario. Put the tags at the end of the step line.</p>
@@ -66,4 +66,4 @@ $ npx bddx report reports/events.ndjson reports/events2.ndjson -f html:reports/m
 <tr><td>One group</td><td><code>groups.name.timeout</code></td></tr>
 <tr><td>The whole run</td><td><code>runTimeout</code> or <code>--run-timeout 30m</code></td></tr>
 </tbody></table></div>
-<p>Press <kbd>Ctrl</kbd> + <kbd>C</kbd> once and bddx stops, cleans up, writes the reports and exits with code 130.</p>
+<p>Press <kbd>Ctrl</kbd> + <kbd>C</kbd> once and bddr stops, cleans up, writes the reports and exits with code 130.</p>

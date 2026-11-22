@@ -1,33 +1,33 @@
 title: How plugins work
 section: Plugins
-desc: What a bddx plugin is, how to add one to your project, and which plugins ship with bddx.
-lede: A plugin bundles fixtures, hooks, steps and parameter types. bddx core depends on no browser or HTTP library. The plugin and the library it wraps are dependencies of your project.
+desc: What a bddr plugin is, how to add one to your project, and which plugins ship with bddr.
+lede: A plugin bundles fixtures, hooks, steps and parameter types. bddr core depends on no browser or HTTP library. The plugin and the library it wraps are dependencies of your project.
 ---
-<h2>The plugins that ship with bddx</h2>
+<h2>The plugins that ship with bddr</h2>
 <div class="table-wrap"><table>
 <thead><tr><th>Plugin</th><th>Wraps</th><th>Fixtures</th><th>Page</th></tr></thead>
 <tbody>
-<tr><td><code>@bddx/playwright</code></td><td>Playwright</td><td><code>browser</code>, <code>context</code>, <code>page</code>, <code>request</code>, <code>expect</code>, <code>newContext</code>, <code>playwright</code></td><td><a href="playwright.html">Playwright</a></td></tr>
-<tr><td><code>@bddx/selenium</code></td><td>selenium-webdriver</td><td><code>driver</code>, <code>open</code>, <code>wait</code>, <code>newDriver</code>, <code>selenium</code></td><td><a href="selenium.html">Selenium</a></td></tr>
-<tr><td><code>@bddx/axios</code></td><td>axios</td><td><code>api</code>, <code>newApi</code>, <code>axios</code></td><td><a href="axios.html">axios</a></td></tr>
+<tr><td><code>@bddr/playwright</code></td><td>Playwright</td><td><code>browser</code>, <code>context</code>, <code>page</code>, <code>request</code>, <code>expect</code>, <code>newContext</code>, <code>playwright</code></td><td><a href="playwright.html">Playwright</a></td></tr>
+<tr><td><code>@bddr/selenium</code></td><td>selenium-webdriver</td><td><code>driver</code>, <code>open</code>, <code>wait</code>, <code>newDriver</code>, <code>selenium</code></td><td><a href="selenium.html">Selenium</a></td></tr>
+<tr><td><code>@bddr/axios</code></td><td>axios</td><td><code>api</code>, <code>newApi</code>, <code>axios</code></td><td><a href="axios.html">axios</a></td></tr>
 </tbody></table></div>
-<p>They live in <code>plugins/</code> in the repository. Each is a separate package, not part of the bddx workspace, so the bddx packages never depend on Playwright or Selenium.</p>
+<p>They live in <code>plugins/</code> in the repository. Each is a separate package, not part of the bddr workspace, so the bddr packages never depend on Playwright or Selenium.</p>
 
 <h2>Add one to your project</h2>
 <ol class="steps">
   <li><h4>Install the plugin and the library</h4>
-    <p>Until bddx is published, install the plugin from your clone. The command for each plugin is on its page and in <a href="getting-started.html">Getting started</a>.</p>
-    <figure class="code-block"><pre><code class="lang-bash">$ npm i -D file:../SmartBDD/plugins/axios axios</code></pre></figure></li>
+    <p>Until bddr is published, install the plugin from your clone. The command for each plugin is on its page and in <a href="getting-started.html">Getting started</a>.</p>
+    <figure class="code-block"><pre><code class="lang-bash">$ npm i -D file:../bddr/plugins/axios axios</code></pre></figure></li>
   <li><h4>List it in the config</h4>
-<cb title="bddx.config.ts">import { defineConfig } from '@bddx/cli';
-import { axios } from '@bddx/axios';
+<cb title="bddr.config.ts">import { defineConfig } from '@bddr/cli';
+import { axios } from '@bddr/axios';
 
 export default defineConfig({
   plugins: [axios({ baseURL: 'https://api.example.com' })],
 });</cb>
-    <p>Without TypeScript types you can write the plugin by name: <code>plugins: [['@bddx/axios', { baseURL: '...' }]]</code>.</p></li>
+    <p>Without TypeScript types you can write the plugin by name: <code>plugins: [['@bddr/axios', { baseURL: '...' }]]</code>.</p></li>
   <li><h4>Import it once for types</h4>
-<cb title="steps/support/types.ts">import '@bddx/axios';</cb>
+<cb title="steps/support/types.ts">import '@bddr/axios';</cb>
     <p>This types <code>ctx.api</code>, <code>({ api })</code> and <code>inject('api')</code> in your step files.</p></li>
   <li><h4>Use the fixture</h4>
 <cb title="steps/products.steps.ts">When('I list the products', async ({ api, state }) => {

@@ -1,4 +1,4 @@
-# bddx documentation site
+# bddr documentation site
 
 Static HTML, no build step. Open `index.html` in a browser, or serve the folder with any static host
 (GitHub Pages, Netlify, S3, `npx serve website`).

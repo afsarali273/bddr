@@ -1,24 +1,24 @@
 title: axios (API testing)
 section: Plugins
-desc: Test HTTP APIs from bddx steps with axios: status codes as data, a call log in the report, auth, and options.
+desc: Test HTTP APIs from bddr steps with axios: status codes as data, a call log in the report, auth, and options.
 lede: The axios plugin gives steps an axios instance that is ready for testing. A 404 does not throw, so "the status is 404" is an ordinary assertion, and every call is recorded in the report.
 ---
 <h2>Install</h2>
 <div class="tabs" data-group="os">
   <section data-tab="macos" data-label="macOS">
-<cb lang="bash">$ npm i -D file:../SmartBDD/plugins/axios axios</cb>
+<cb lang="bash">$ npm i -D file:../bddr/plugins/axios axios</cb>
   </section>
   <section data-tab="windows" data-label="Windows">
-<cb lang="powershell">PS> npm i -D file:../SmartBDD/plugins/axios axios</cb>
+<cb lang="powershell">PS> npm i -D file:../bddr/plugins/axios axios</cb>
   </section>
   <section data-tab="linux" data-label="Linux">
-<cb lang="bash">$ npm i -D file:../SmartBDD/plugins/axios axios</cb>
+<cb lang="bash">$ npm i -D file:../bddr/plugins/axios axios</cb>
   </section>
 </div>
 
 <h2>Configure</h2>
-<cb title="bddx.config.ts">import { defineConfig } from '@bddx/cli';
-import { axios } from '@bddx/axios';
+<cb title="bddr.config.ts">import { defineConfig } from '@bddr/cli';
+import { axios } from '@bddr/axios';
 
 export default defineConfig({
   features: 'features/**/*.feature',
@@ -31,7 +31,7 @@ export default defineConfig({
     }),
   ],
 });</cb>
-<p>Add <code>import '@bddx/axios';</code> to one support file so <code>ctx.api</code>, <code>({ api })</code> and <code>inject('api')</code> are typed.</p>
+<p>Add <code>import '@bddr/axios';</code> to one support file so <code>ctx.api</code>, <code>({ api })</code> and <code>inject('api')</code> are typed.</p>
 
 <h2>Use it in steps</h2>
 <cb lang="gherkin" title="features/products.feature">Scenario: Create a product
@@ -43,7 +43,7 @@ Scenario: Unknown product
   Then the response status is 404</cb>
 <cb title="steps/products.steps.ts">import { strict as assert } from 'node:assert';
 import type { AxiosResponse } from 'axios';
-import { When, Then } from '@bddx/runtime';
+import { When, Then } from '@bddr/runtime';
 
 When('I create product {string}', async ({ api, state }, name: string) => {
   state.set('res', await api.post('/products', { name }));
@@ -69,7 +69,7 @@ Then('the response status is {int}', ({ state }, status: number) => {
   <div class="placeholder-frame"><p class="placeholder-what">An <code>api-calls.json</code> attachment open in the HTML report for a failed API scenario.</p></div>
   <figcaption>
     <p class="placeholder-how">Capture this yourself:</p>
-    <p>In <code>plugins/axios/example</code> run <code>npx bddx -D token=wrong</code> so the token scenarios fail, open the HTML report, expand a failed scenario and its <code>api-calls.json</code> attachment. Light theme, about 1400 px wide.</p>
+    <p>In <code>plugins/axios/example</code> run <code>npx bddr -D token=wrong</code> so the token scenarios fail, open the HTML report, expand a failed scenario and its <code>api-calls.json</code> attachment. Light theme, about 1400 px wide.</p>
     <p class="placeholder-file">Save as <code>assets/img/axios-call-log.png</code>.</p>
   </figcaption>
 </figure>

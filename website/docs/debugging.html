@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Debugging and watch mode | bddx</title>
+  <title>Debugging and watch mode | bddr</title>
   <meta name="description" content="Pause on a failing step, step through a scenario, attach the Node inspector, and re-run on file changes.">
   <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../assets/css/theme.css">
-  <script>(function(){var t=null;try{t=localStorage.getItem('bddx-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
+  <script>(function(){var t=null;try{t=localStorage.getItem('bddr-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
 </head>
 <body data-root="../">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -16,14 +16,14 @@
     <button class="icon-button menu-button" type="button" aria-label="Show navigation" aria-expanded="false">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
-    <a class="brand" href="../index.html" aria-label="bddx home">
+    <a class="brand" href="../index.html" aria-label="bddr home">
       <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="6" width="14" height="5" rx="1.5" fill="var(--accent)"/><rect x="9" y="13.5" width="20" height="5" rx="1.5" fill="currentColor" opacity=".85"/><rect x="5" y="21" width="11" height="5" rx="1.5" fill="currentColor" opacity=".4"/><rect x="18" y="21" width="9" height="5" rx="1.5" fill="var(--accent)"/></svg>
-      <span>bddx</span>
+      <span>bddr</span>
     </a>
     <nav class="site-nav" aria-label="Main">
       <a href="getting-started.html">Docs</a>
       <a href="getting-started.html#plugins">Plugins</a>
-      <a href="https://github.com/afsarali273/SmartBDD">GitHub</a>
+      <a href="https://github.com/afsarali273/bddr">GitHub</a>
     </nav>
     <div class="header-tools">
       <button class="icon-button theme-toggle" type="button" aria-label="Use dark theme">
@@ -38,13 +38,13 @@
 
     <main class="doc" id="main">
       <article class="doc-content">
-        <p class="breadcrumb"><a href="../index.html">bddx</a> / Running</p>
+        <p class="breadcrumb"><a href="../index.html">bddr</a> / Running</p>
         <h1>Debugging and watch mode</h1>
         <p class="lede">When a scenario fails and the error is not enough, run it under the debugger. When you are writing steps, watch mode re-runs what you changed.</p>
 
 <h2 id="pause-when-a-step-fails">Pause when a step fails</h2>
-        <figure class="code-block"><pre><code class="lang-bash">$ npx bddx features/checkout.feature:12 --debug</code></pre></figure>
-        <p>bddx runs one scenario at a time, with no retries and no timeouts, and stops after the first failing step. You get a prompt:</p>
+        <figure class="code-block"><pre><code class="lang-bash">$ npx bddr features/checkout.feature:12 --debug</code></pre></figure>
+        <p>bddr runs one scenario at a time, with no retries and no timeouts, and stops after the first failing step. You get a prompt:</p>
         <div class="table-wrap"><table>
         <thead><tr><th>Key</th><th>Does</th></tr></thead>
         <tbody>
@@ -66,28 +66,28 @@
         </figure>
 
         <h2 id="use-your-editor-s-debugger">Use your editor's debugger</h2>
-        <figure class="code-block"><pre><code class="lang-bash">$ npx bddx features/checkout.feature:12 --inspect</code></pre></figure>
+        <figure class="code-block"><pre><code class="lang-bash">$ npx bddr features/checkout.feature:12 --inspect</code></pre></figure>
         <p><code>--inspect</code> opens the Node inspector on port 9229 and waits for a debugger to attach. Use <code>--inspect 9230</code> for another port. Attach VS Code with the "Attach" launch type, or open <code>chrome://inspect</code> in Chrome. Set breakpoints in your step files.</p>
 
         <h2 id="watch-mode">Watch mode</h2>
-        <figure class="code-block"><pre><code class="lang-bash">$ npx bddx --watch</code></pre></figure>
+        <figure class="code-block"><pre><code class="lang-bash">$ npx bddr --watch</code></pre></figure>
         <ul>
           <li>Each run starts in a new process, so changes to steps, page objects and the config are always picked up.</li>
           <li>Saving a <code>.feature</code> file re-runs just that file. Saving anything else re-runs your original selection.</li>
           <li>Changes during a run are collected into the next run.</li>
           <li>Keys: <kbd>Enter</kbd> or <kbd>a</kbd> runs all, <kbd>f</kbd> runs the failed ones, <kbd>q</kbd> quits.</li>
-          <li>It ignores <code>node_modules</code>, <code>.git</code>, <code>.bddx</code>, <code>dist</code> and <code>reports</code>.</li>
+          <li>It ignores <code>node_modules</code>, <code>.git</code>, <code>.bddr</code>, <code>dist</code> and <code>reports</code>.</li>
         </ul>
         <p><code>--watch</code> cannot be combined with <code>--debug</code> or <code>--dry-run</code>.</p>
 
         <h2 id="turn-up-the-logging">Turn up the logging</h2>
-        <figure class="code-block"><pre><code class="lang-bash">$ npx bddx --log-level debug</code></pre></figure>
+        <figure class="code-block"><pre><code class="lang-bash">$ npx bddr --log-level debug</code></pre></figure>
         <p>The console shows your <code>ctx.log</code> messages. At <code>debug</code> it also shows framework messages such as plugin start-up. Reports always contain every log line.</p>
 
         <h2 id="other-things-to-try-first">Other things to try first</h2>
         <ul>
-          <li><code>npx bddx validate</code> finds undefined steps and typos without running anything.</li>
-          <li><code>npx bddx plan --explain &lt;id&gt;</code> says why a scenario waits or was skipped.</li>
+          <li><code>npx bddr validate</code> finds undefined steps and typos without running anything.</li>
+          <li><code>npx bddr plan --explain &lt;id&gt;</code> says why a scenario waits or was skipped.</li>
           <li>With Playwright, set <code>trace: 'on'</code> and open the trace with <code>npx playwright show-trace</code>. With either browser plugin, run once with <code>-D headed=true --workers 1</code> to watch it.</li>
         </ul>
 

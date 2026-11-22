@@ -3,24 +3,24 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>bddx: Gherkin specs, planned runs</title>
-  <meta name="description" content="bddx is a TypeScript automation framework with BDD-style specs, groups, dependencies, serial and parallel execution, retries, shards and plugins for Playwright, Selenium and axios.">
+  <title>bddr: Gherkin specs, planned runs</title>
+  <meta name="description" content="bddr is a TypeScript automation framework with BDD-style specs, groups, dependencies, serial and parallel execution, retries, shards and plugins for Playwright, Selenium and axios.">
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/css/theme.css">
-  <script>(function(){var t=null;try{t=localStorage.getItem('bddx-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
+  <script>(function(){var t=null;try{t=localStorage.getItem('bddr-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
 </head>
 <body class="landing" data-root="">
   <a class="skip-link" href="#main">Skip to content</a>
 
   <header class="site-header">
-    <a class="brand" href="index.html" aria-label="bddx home">
+    <a class="brand" href="index.html" aria-label="bddr home">
       <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="6" width="14" height="5" rx="1.5" fill="var(--accent)"/><rect x="9" y="13.5" width="20" height="5" rx="1.5" fill="currentColor" opacity=".85"/><rect x="5" y="21" width="11" height="5" rx="1.5" fill="currentColor" opacity=".4"/><rect x="18" y="21" width="9" height="5" rx="1.5" fill="var(--accent)"/></svg>
-      <span>bddx</span>
+      <span>bddr</span>
     </a>
     <nav class="site-nav" aria-label="Main">
       <a href="docs/getting-started.html">Docs</a>
       <a href="docs/getting-started.html#plugins">Plugins</a>
-      <a href="https://github.com/afsarali273/SmartBDD">GitHub</a>
+      <a href="https://github.com/afsarali273/bddr">GitHub</a>
     </nav>
     <div class="header-tools">
       <button class="icon-button theme-toggle" type="button" aria-label="Use dark theme">
@@ -34,17 +34,17 @@
     <section class="wrap hero">
       <div>
         <h1>Write it in Gherkin. Run it like a test plan.</h1>
-        <p class="lede">bddx is a TypeScript automation framework with BDD-style specs. Feature files describe the behaviour; groups, dependencies, serial and parallel lanes, retries and shards decide how the run goes.</p>
+        <p class="lede">bddr is a TypeScript automation framework with BDD-style specs. Feature files describe the behaviour; groups, dependencies, serial and parallel lanes, retries and shards decide how the run goes.</p>
         <div class="actions">
           <a class="button primary" href="docs/getting-started.html">Get started</a>
-          <a class="button" href="https://github.com/afsarali273/SmartBDD">View the source</a>
+          <a class="button" href="https://github.com/afsarali273/bddr">View the source</a>
         </div>
         <p class="install">Node.js 20.10 or newer. Browsers and APIs come from plugins, so the runner itself depends on none of them.</p>
       </div>
 
       <figure class="schedule" role="img" aria-label="A run of 139 scenarios on 4 workers. The health group runs first on worker 1 while the other workers wait. Then theInternet and sauceDemo run on worker 1, jsonPlaceholder, todoMvc and mixed share workers 2 to 4.">
         <div class="schedule-bar">
-          <span class="prompt">npx bddx run --pool process -w 4</span>
+          <span class="prompt">npx bddr run --pool process -w 4</span>
           <span class="result">139 passed</span>
         </div>
         <div class="lanes" aria-hidden="true">
@@ -114,11 +114,11 @@ Feature: Checkout
       | product             |
       | Sauce Labs Backpack |
     Then the cart badge is 1</code></pre></div>
-            <figcaption>The spec: plain Gherkin, plus tags that bddx understands.</figcaption>
+            <figcaption>The spec: plain Gherkin, plus tags that bddr understands.</figcaption>
           </figure>
           <figure>
-            <div class="code-block" data-title="bddx.config.ts"><pre><code class="lang-ts">import { defineConfig } from '@bddx/cli';
-import { playwright } from '@bddx/playwright';
+            <div class="code-block" data-title="bddr.config.ts"><pre><code class="lang-ts">import { defineConfig } from '@bddr/cli';
+import { playwright } from '@bddr/playwright';
 
 export default defineConfig({
   plugins: [playwright({ browser: 'chromium' })],
@@ -149,7 +149,7 @@ export default defineConfig({
 
     <section class="band">
       <div class="wrap">
-        <h2>What bddx adds</h2>
+        <h2>What bddr adds</h2>
         <p class="band-intro">Everything a Cucumber-style runner does, and the orchestration that TestNG users expect.</p>
         <dl class="capabilities">
           <div><dt>Groups</dt><dd>Collect scenarios by tag and run each group serial, parallel or exclusive, with its own worker cap and time budget.</dd></div>
@@ -157,10 +157,10 @@ export default defineConfig({
           <div><dt>Serial features</dt><dd><code>@serial</code> runs one feature's scenarios in file order while other features keep running in parallel.</dd></div>
           <div><dt>Retries in layers</dt><dd>For the run, a group or one scenario (<code>@retry:2</code>), with delay, backoff, error filters and flaky reporting.</dd></div>
           <div><dt>Fixtures</dt><dd>Steps ask for what they need, <code>({ page })</code> or <code>inject('api')</code>. Set up once per scenario, feature or worker, torn down after.</dd></div>
-          <div><dt>Plugins</dt><dd>Playwright, Selenium and axios are separate packages. bddx itself has no dependency on any of them.</dd></div>
+          <div><dt>Plugins</dt><dd>Playwright, Selenium and axios are separate packages. bddr itself has no dependency on any of them.</dd></div>
           <div><dt>Processes and shards</dt><dd><code>--pool process</code> isolates workers; <code>--shard 2/4</code> splits a run across CI machines without breaking groups or dependencies.</dd></div>
           <div><dt>Reports</dt><dd>Console, an HTML report with a worker timeline and run history, JUnit, Cucumber JSON and Messages, and a raw event stream.</dd></div>
-          <div><dt>Debugging</dt><dd><code>--debug</code> pauses at a failing step, <code>--watch</code> reruns on save, and <code>bddx plan</code> shows the schedule before anything runs.</dd></div>
+          <div><dt>Debugging</dt><dd><code>--debug</code> pauses at a failing step, <code>--watch</code> reruns on save, and <code>bddr plan</code> shows the schedule before anything runs.</dd></div>
         </dl>
       </div>
     </section>
@@ -169,13 +169,9 @@ export default defineConfig({
       <div class="wrap">
         <h2>How the pieces fit</h2>
         <p class="band-intro">The runner reads your feature files and config, builds a plan, and hands each scenario to a worker. Plugins give the steps their browsers and HTTP clients.</p>
-        <figure class="placeholder" data-kind="ai" style="--ratio: 21 / 9">
-          <div class="placeholder-frame"><p class="placeholder-what">Architecture diagram: feature files and config go into the bddx runner (planner, scheduler, workers); plugins supply Playwright, Selenium and axios; reports come out.</p></div>
-          <figcaption>
-            <p class="placeholder-how">Generate with an AI diagram or image tool. Prompt:</p>
-            <pre class="prompt">Clean flat technical architecture diagram, left to right, white background, thin dark navy (#171A33) lines, one accent colour deep cyan (#0B7A86), font IBM Plex Sans. Left column: two document icons labelled "Feature files (.feature)" and "bddx.config.ts". Middle: one large rounded box labelled "bddx runner" containing three stacked boxes "Planner (groups, dependencies, tags)", "Scheduler (serial / parallel lanes, locks, retries)", "Workers w1 … w4 (inline or separate processes)". Below the runner, three small boxes connected upward with dashed lines, labelled "@bddx/playwright", "@bddx/selenium", "@bddx/axios", with a caption "plugins: browsers and HTTP clients as fixtures". Right column: output icons labelled "HTML report", "JUnit XML", "Cucumber JSON", "NDJSON events". Arrows: inputs into runner, runner to outputs. No 3D, no gradients, no people, generous spacing, 21:9 aspect ratio.</pre>
-            <p class="placeholder-file">Save as <code>assets/img/architecture.png</code> and replace this placeholder with an <code>&lt;img&gt;</code>.</p>
-          </figcaption>
+        <figure class="diagram">
+          <div class="diagram-frame"><img src="assets/img/architecture.svg" alt="Feature files and bddr.config.ts go into the bddr runner (planner, scheduler, workers). Plugins for Playwright, Selenium and axios supply fixtures. The runner writes an HTML report, JUnit XML, Cucumber JSON and NDJSON events." width="1680" height="720" style="display:block;width:100%;height:auto"></div>
+          <figcaption><a href="docs/architecture.html">Read how the pieces fit together</a></figcaption>
         </figure>
       </div>
     </section>
@@ -187,15 +183,15 @@ export default defineConfig({
         <table class="plugin-table">
           <tbody>
             <tr>
-              <th scope="row">Playwright<small>@bddx/playwright</small></th>
+              <th scope="row">Playwright<small>@bddr/playwright</small></th>
               <td>A browser per worker, a fresh context and page per scenario, <code>expect</code> assertions, screenshots, traces and video on failure, device emulation, and one shared session for a <code>@serial</code> feature.</td>
             </tr>
             <tr>
-              <th scope="row">Selenium<small>@bddx/selenium</small></th>
+              <th scope="row">Selenium<small>@bddr/selenium</small></th>
               <td>A WebDriver session per scenario in Chrome, Firefox, Edge or Safari, <code>open</code> and <code>wait</code> helpers, Selenium Grid through <code>-D server=…</code>, screenshots on failure.</td>
             </tr>
             <tr>
-              <th scope="row">axios<small>@bddx/axios</small></th>
+              <th scope="row">axios<small>@bddr/axios</small></th>
               <td>An API client with base URL, headers and auth from the config. Status codes are data, so a 404 is an assertion, not an exception. The calls of a failed scenario are attached to the report, secrets masked.</td>
             </tr>
           </tbody>
@@ -222,11 +218,11 @@ export default defineConfig({
 
   <footer class="site-footer">
     <div class="wrap">
-      <p>bddx is a working name. These docs cover the TypeScript version.</p>
+      <p>bddr is a working name. These docs cover the TypeScript version.</p>
       <nav aria-label="Footer">
         <a href="docs/getting-started.html">Getting started</a>
         <a href="docs/components.html">Docs theme</a>
-        <a href="https://github.com/afsarali273/SmartBDD">GitHub</a>
+        <a href="https://github.com/afsarali273/bddr">GitHub</a>
       </nav>
     </div>
   </footer>

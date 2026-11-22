@@ -4,9 +4,9 @@ desc: Combine browser and API steps in one scenario by installing two plugins an
 lede: A scenario can create data through the API and check it in the browser, or the other way round. Install both plugins and ask for the fixtures you need in each step.
 ---
 <h2>Set up both plugins</h2>
-<cb title="bddx.config.ts">import { defineConfig } from '@bddx/cli';
-import { axios } from '@bddx/axios';
-import { playwright } from '@bddx/playwright';
+<cb title="bddr.config.ts">import { defineConfig } from '@bddr/cli';
+import { axios } from '@bddr/axios';
+import { playwright } from '@bddr/playwright';
 
 export default defineConfig({
   features: 'features/**/*.feature',
@@ -24,7 +24,7 @@ export default defineConfig({
   And I add that title as a todo in TodoMVC
   Then TodoMVC lists that title</cb>
 <cb title="steps/mixed.steps.ts">import { strict as assert } from 'node:assert';
-import { When, Then } from '@bddx/runtime';
+import { When, Then } from '@bddr/runtime';
 
 When('I fetch the title of post {int} through the API', async ({ api, state }, id: number) => {
   const response = await api.get(`/posts/${id}`);

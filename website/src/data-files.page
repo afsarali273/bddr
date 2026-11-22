@@ -1,7 +1,7 @@
 title: Data files (CSV, JSON, Excel)
 section: Writing tests
 desc: Generate scenarios from CSV, TSV, JSON, YAML or Excel files with @data, filter rows, and use a different data folder per profile.
-lede: Put test data in a file, tag a scenario with @data, and bddx runs the scenario once per row. Each row gets its own id and its own line in the report.
+lede: Put test data in a file, tag a scenario with @data, and bddr runs the scenario once per row. Each row gets its own id and its own line in the report.
 ---
 <h2>A scenario from a CSV file</h2>
 <cb lang="text" title="data/prices.csv">product,qty,total
@@ -38,7 +38,7 @@ Scenario: <qty> x <product> costs <total>
 <p>Row numbers count before filtering, so a filter never changes the id of a row. A data error, such as a missing file, is reported as a parse error on the tag line and the run exits with code 2.</p>
 
 <h2>A different folder per profile</h2>
-<p>With a profile, bddx tries <code>&lt;dataDir&gt;/&lt;profile&gt;/file</code> first. In <code>examples/basic</code>, <code>npx bddx run -p qa</code> reads <code>data/qa/prices.csv</code> instead of <code>data/prices.csv</code>.</p>
+<p>With a profile, bddr tries <code>&lt;dataDir&gt;/&lt;profile&gt;/file</code> first. In <code>examples/basic</code>, <code>npx bddr run -p qa</code> reads <code>data/qa/prices.csv</code> instead of <code>data/prices.csv</code>.</p>
 
 <h2>Ids for data rows</h2>
 <p>A row's id is the scenario id followed by the file and the row number, such as <code>[prices.csv#2]</code>. Use it with <code>@dependsOn</code> like any other id.</p>
@@ -47,7 +47,7 @@ Scenario: <qty> x <product> costs <total>
   <div class="placeholder-frame"><p class="placeholder-what">The HTML report showing a data-driven scenario as one table with a row per scenario.</p></div>
   <figcaption>
     <p class="placeholder-how">Capture this yourself:</p>
-    <p>In <code>examples/basic</code> run <code>npx bddx run -t @data-driven</code>, open <code>reports/report.html</code>, go to the Results tab and expand the "Pricing from data files" feature. Capture the colour-coded table, light theme, about 1400 px wide.</p>
+    <p>In <code>examples/basic</code> run <code>npx bddr run -t @data-driven</code>, open <code>reports/report.html</code>, go to the Results tab and expand the "Pricing from data files" feature. Capture the colour-coded table, light theme, about 1400 px wide.</p>
     <p class="placeholder-file">Save as <code>assets/img/data-driven-report.png</code>.</p>
   </figcaption>
 </figure>

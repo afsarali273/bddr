@@ -1,19 +1,19 @@
 title: Tags and selection
 section: Running
-desc: Every tag bddx understands, how to select scenarios by tag, name, file and line, and how to govern custom tags.
-lede: Tags are how you choose what runs and how it runs. Your own tags, such as @smoke, select scenarios. bddx's tags, such as @retry:2, change behaviour.
+desc: Every tag bddr understands, how to select scenarios by tag, name, file and line, and how to govern custom tags.
+lede: Tags are how you choose what runs and how it runs. Your own tags, such as @smoke, select scenarios. bddr's tags, such as @retry:2, change behaviour.
 ---
 <h2>Select scenarios</h2>
 <div class="table-wrap"><table>
 <thead><tr><th>You want</th><th>Command</th></tr></thead>
 <tbody>
-<tr><td>A tag expression</td><td><code>npx bddx -t "@smoke and not @wip"</code>. Operators: <code>and</code>, <code>or</code>, <code>not</code>, parentheses.</td></tr>
-<tr><td>A name pattern</td><td><code>npx bddx --name "refund|cancel"</code>. A regular expression on the scenario name.</td></tr>
-<tr><td>A file, folder or glob</td><td><code>npx bddx features/checkout</code>, <code>npx bddx "features/**/*.feature"</code></td></tr>
-<tr><td>One scenario by line</td><td><code>npx bddx features/checkout.feature:12</code></td></tr>
-<tr><td>What failed last time</td><td><code>npx bddx --rerun-failed reports/events.ndjson</code></td></tr>
+<tr><td>A tag expression</td><td><code>npx bddr -t "@smoke and not @wip"</code>. Operators: <code>and</code>, <code>or</code>, <code>not</code>, parentheses.</td></tr>
+<tr><td>A name pattern</td><td><code>npx bddr --name "refund|cancel"</code>. A regular expression on the scenario name.</td></tr>
+<tr><td>A file, folder or glob</td><td><code>npx bddr features/checkout</code>, <code>npx bddr "features/**/*.feature"</code></td></tr>
+<tr><td>One scenario by line</td><td><code>npx bddr features/checkout.feature:12</code></td></tr>
+<tr><td>What failed last time</td><td><code>npx bddr --rerun-failed reports/events.ndjson</code></td></tr>
 </tbody></table></div>
-<p>The config <code>tags</code> are combined with <code>-t</code> using <strong>and</strong>. When you select a scenario, the scenarios it depends on are added automatically. Add <code>--no-deps</code> to turn that off. <code>npx bddx list</code> shows what a selection would run.</p>
+<p>The config <code>tags</code> are combined with <code>-t</code> using <strong>and</strong>. When you select a scenario, the scenarios it depends on are added automatically. Add <code>--no-deps</code> to turn that off. <code>npx bddr list</code> shows what a selection would run.</p>
 
 <h2>Tags that change how a scenario runs</h2>
 <div class="table-wrap"><table>
@@ -38,8 +38,8 @@ lede: Tags are how you choose what runs and how it runs. Your own tags, such as 
 <p>Any other tag is yours. <code>@smoke</code>, <code>@ui</code> and <code>@api</code> select. A <code>@key:value</code> tag becomes metadata: <code>@owner:payments</code> is <code>ctx.scenario.meta.owner</code>.</p>
 
 <h2>Keep tags tidy</h2>
-<p>Typos in tags are silent: <code>@smoek</code> selects nothing. List the keys your project allows, and <code>bddx validate</code> reports the rest.</p>
-<cb title="bddx.config.ts">validation: {
+<p>Typos in tags are silent: <code>@smoek</code> selects nothing. List the keys your project allows, and <code>bddr validate</code> reports the rest.</p>
+<cb title="bddr.config.ts">validation: {
   allowedTagKeys: ['smoke', 'ui', 'api', 'owner', 'wip'],
 },</cb>
 <p>The tags in the table above are always allowed.</p>

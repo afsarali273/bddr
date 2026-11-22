@@ -4,8 +4,8 @@ desc: Pause on a failing step, step through a scenario, attach the Node inspecto
 lede: When a scenario fails and the error is not enough, run it under the debugger. When you are writing steps, watch mode re-runs what you changed.
 ---
 <h2>Pause when a step fails</h2>
-<cb lang="bash">$ npx bddx features/checkout.feature:12 --debug</cb>
-<p>bddx runs one scenario at a time, with no retries and no timeouts, and stops after the first failing step. You get a prompt:</p>
+<cb lang="bash">$ npx bddr features/checkout.feature:12 --debug</cb>
+<p>bddr runs one scenario at a time, with no retries and no timeouts, and stops after the first failing step. You get a prompt:</p>
 <div class="table-wrap"><table>
 <thead><tr><th>Key</th><th>Does</th></tr></thead>
 <tbody>
@@ -27,27 +27,27 @@ lede: When a scenario fails and the error is not enough, run it under the debugg
 </figure>
 
 <h2>Use your editor's debugger</h2>
-<cb lang="bash">$ npx bddx features/checkout.feature:12 --inspect</cb>
+<cb lang="bash">$ npx bddr features/checkout.feature:12 --inspect</cb>
 <p><code>--inspect</code> opens the Node inspector on port 9229 and waits for a debugger to attach. Use <code>--inspect 9230</code> for another port. Attach VS Code with the "Attach" launch type, or open <code>chrome://inspect</code> in Chrome. Set breakpoints in your step files.</p>
 
 <h2>Watch mode</h2>
-<cb lang="bash">$ npx bddx --watch</cb>
+<cb lang="bash">$ npx bddr --watch</cb>
 <ul>
   <li>Each run starts in a new process, so changes to steps, page objects and the config are always picked up.</li>
   <li>Saving a <code>.feature</code> file re-runs just that file. Saving anything else re-runs your original selection.</li>
   <li>Changes during a run are collected into the next run.</li>
   <li>Keys: <kbd>Enter</kbd> or <kbd>a</kbd> runs all, <kbd>f</kbd> runs the failed ones, <kbd>q</kbd> quits.</li>
-  <li>It ignores <code>node_modules</code>, <code>.git</code>, <code>.bddx</code>, <code>dist</code> and <code>reports</code>.</li>
+  <li>It ignores <code>node_modules</code>, <code>.git</code>, <code>.bddr</code>, <code>dist</code> and <code>reports</code>.</li>
 </ul>
 <p><code>--watch</code> cannot be combined with <code>--debug</code> or <code>--dry-run</code>.</p>
 
 <h2>Turn up the logging</h2>
-<cb lang="bash">$ npx bddx --log-level debug</cb>
+<cb lang="bash">$ npx bddr --log-level debug</cb>
 <p>The console shows your <code>ctx.log</code> messages. At <code>debug</code> it also shows framework messages such as plugin start-up. Reports always contain every log line.</p>
 
 <h2>Other things to try first</h2>
 <ul>
-  <li><code>npx bddx validate</code> finds undefined steps and typos without running anything.</li>
-  <li><code>npx bddx plan --explain &lt;id&gt;</code> says why a scenario waits or was skipped.</li>
+  <li><code>npx bddr validate</code> finds undefined steps and typos without running anything.</li>
+  <li><code>npx bddr plan --explain &lt;id&gt;</code> says why a scenario waits or was skipped.</li>
   <li>With Playwright, set <code>trace: 'on'</code> and open the trace with <code>npx playwright show-trace</code>. With either browser plugin, run once with <code>-D headed=true --workers 1</code> to watch it.</li>
 </ul>

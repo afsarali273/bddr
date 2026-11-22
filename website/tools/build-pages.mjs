@@ -12,6 +12,7 @@
  *   ---
  *   <body html>  h2/h3 get ids automatically.
  *   <cb lang="ts" title="path">raw code, no escaping needed</cb>   -> code-block figure
+ *   <include src="diagrams/name.html"/>   -> inlines src/diagrams/name.html (made by tools/arch-diagrams.mjs)
  */
 import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -35,6 +36,7 @@ for (const file of files) {
   let body = rest.join('---\n');
   body = body.replace(/<cb(?: lang="([^"]*)")?(?: title="([^"]*)")?>\n?([\s\S]*?)\n?<\/cb>/g, (_, lang = 'ts', title, code) =>
     `<figure class="code-block"${title ? ` data-title="${esc(title)}"` : ''}><pre><code class="lang-${lang}">${esc(code)}</code></pre></figure>`);
+  body = body.replace(/<include src="([^"]+)"\s*\/>/g, (_, f) => readFileSync(join(root, 'src', f), 'utf8').trim());
   const used = new Set();
   body = body.replace(/<(h[23])(?![^>]*\sid=)([^>]*)>([\s\S]*?)<\/\1>/g, (_, tag, attrs, inner) => {
     let id = slugify(inner) || 'section'; let n = 2; const base = id;
@@ -43,7 +45,7 @@ for (const file of files) {
     return `<${tag} id="${id}"${attrs}>${inner}</${tag}>`;
   });
   const article = `<article class="doc-content">
-        <p class="breadcrumb"><a href="../index.html">bddx</a> / ${meta.section}</p>
+        <p class="breadcrumb"><a href="../index.html">bddr</a> / ${meta.section}</p>
         <h1>${meta.title}</h1>
         <p class="lede">${meta.lede}</p>
 
@@ -52,7 +54,7 @@ ${indent(body.trim())}
         <nav class="pager" aria-label="Previous and next page"></nav>
       </article>`;
   let html = template.replace(/<article class="doc-content">[\s\S]*<\/article>/, () => article);
-  html = html.replace('<title>Page title | bddx</title>', `<title>${meta.title} | bddx</title>`)
+  html = html.replace('<title>Page title | bddr</title>', `<title>${meta.title} | bddr</title>`)
     .replace('One sentence: what this page helps the reader do.', meta.desc.replace(/"/g, '&quot;'));
   writeFileSync(join(root, 'docs', `${slug}.html`), html);
   built.push(slug);

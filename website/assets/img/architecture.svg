@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1680" height="720" viewBox="0 0 1680 720" role="img" aria-labelledby="title desc">
+<title id="title">bddr runner architecture</title>
+<desc id="desc">Feature files and configuration feed the runner. Its planner, scheduler, and workers use browser and HTTP client fixtures to produce reports and events.</desc>
+<defs>
+  <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M1 1l8 4-8 4" fill="none" stroke="#171A33" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  <marker id="accent-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M1 1l8 4-8 4" fill="none" stroke="#0B7A86" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  <path id="page" d="M1 1h24l11 11v34H1zM25 1v11h11"/>
+  <g id="document"><use href="#page"/><path d="M9 23h18M9 30h18M9 37h12"/></g>
+</defs>
+<rect width="1680" height="720" fill="#fff"/>
+<g fill="none" stroke="#171A33" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M372 226H471" marker-end="url(#arrow)"/>
+  <path d="M372 356H471" marker-end="url(#arrow)"/>
+  <path d="M1185 291h73m0-138v276"/>
+  <path d="M1258 153h79" marker-end="url(#arrow)"/>
+  <path d="M1258 245h79" marker-end="url(#arrow)"/>
+  <path d="M1258 337h79" marker-end="url(#arrow)"/>
+  <path d="M1258 429h79" marker-end="url(#arrow)"/>
+  <rect x="472" y="70" width="713" height="442" rx="22"/>
+  <rect x="510" y="146" width="637" height="86" rx="10"/>
+  <rect x="510" y="261" width="637" height="86" rx="10"/>
+  <rect x="510" y="376" width="637" height="86" rx="10"/>
+  <path d="M828.5 232v28" marker-end="url(#arrow)"/><path d="M828.5 347v28" marker-end="url(#arrow)"/>
+  <use href="#document" x="78" y="203"/><use href="#document" x="78" y="333"/>
+  <g transform="translate(1362 130)"><use href="#page"/><path d="m13 22-6 6 6 6m10-12 6 6-6 6"/></g>
+  <g transform="translate(1362 222)"><use href="#page"/><path d="m13 23-6 5 6 5m10-10 6 5-6 5m-3-13-4 16"/></g>
+  <g transform="translate(1362 314)"><use href="#page"/><path d="M14 21h-3v6l-3 2 3 2v6h3m8-16h3v6l3 2-3 2v6h-3"/></g>
+  <g transform="translate(1362 406)"><use href="#page"/><path d="M9 23h18M9 30h18M9 37h18"/></g>
+</g>
+<g fill="none" stroke="#0B7A86" stroke-width="1.65">
+  <path d="M610 574v-61" stroke-dasharray="5 5" marker-end="url(#accent-arrow)"/>
+  <path d="M828.5 574v-61" stroke-dasharray="5 5" marker-end="url(#accent-arrow)"/>
+  <path d="M1047 574v-61" stroke-dasharray="5 5" marker-end="url(#accent-arrow)"/>
+  <rect x="510" y="574" width="200" height="49" rx="8"/>
+  <rect x="728.5" y="574" width="200" height="49" rx="8"/>
+  <rect x="947" y="574" width="200" height="49" rx="8"/>
+</g>
+<g font-family="'IBM Plex Sans', Arial, sans-serif" fill="#171A33" font-size="23">
+  <text x="135" y="234">Feature files (.feature)</text><text x="135" y="364">bddr.config.ts</text>
+  <text x="828.5" y="119" text-anchor="middle" fill="#0B7A86" font-weight="600" font-size="30">bddr runner</text>
+  <g text-anchor="middle">
+    <text x="828.5" y="197"><tspan font-weight="600">Planner</tspan> (groups, dependencies, tags)</text>
+    <text x="828.5" y="312"><tspan font-weight="600">Scheduler</tspan> (serial / parallel lanes, locks, retries)</text>
+    <text x="828.5" y="427"><tspan font-weight="600">Workers w1 … w4</tspan> (inline or separate processes)</text>
+    <g fill="#0B7A86" font-size="19" font-weight="600"><text x="610" y="605">@bddr/playwright</text><text x="828.5" y="605">@bddr/selenium</text><text x="1047" y="605">@bddr/axios</text></g>
+    <text x="828.5" y="665" font-size="20">plugins: browsers and HTTP clients as fixtures</text>
+  </g>
+  <text x="1417" y="161">HTML report</text><text x="1417" y="253">JUnit XML</text>
+  <text x="1417" y="345">Cucumber JSON</text><text x="1417" y="437">NDJSON events</text>
+</g>
+</svg>

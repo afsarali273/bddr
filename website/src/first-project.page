@@ -22,7 +22,7 @@ melon,3,9.00</cb>
   Scenario: <qty> x <product> costs <total>
     When I add <qty> "<product>"
     Then the basket total is <total></cb>
-<p>Tell bddx where data lives with <code>dataDir: 'data'</code> in the config. Each CSV row becomes a scenario. The steps are the ones you already have. More in <a href="data-files.html">Data files</a>.</p>
+<p>Tell bddr where data lives with <code>dataDir: 'data'</code> in the config. Each CSV row becomes a scenario. The steps are the ones you already have. More in <a href="data-files.html">Data files</a>.</p>
 
 <h2>2. A scenario that needs another</h2>
 <cb lang="gherkin" title="my-tests/features/orders.feature">@group:orders
@@ -38,7 +38,7 @@ Feature: Orders
     When I cancel the order placed earlier
     Then the order status is "cancelled"</cb>
 <cb title="my-tests/steps/orders.steps.ts">import { strict as assert } from 'node:assert';
-import { Then, When } from '@bddx/runtime';
+import { Then, When } from '@bddr/runtime';
 
 When('I place an order for {string}', (ctx, product: string) => {
   ctx.state.set('order', { id: 'ORD-1', product });
@@ -60,7 +60,7 @@ Then('the order status is {string}', (ctx, status: string) => {
 <p>"Cancel the order" waits for "Create an order" and reads the order number it exported. See <a href="dependencies.html">Dependencies</a>.</p>
 
 <h2>3. Run in parallel, keep the orders in order</h2>
-<cb title="my-tests/bddx.config.ts">import { defineConfig } from '@bddx/cli';
+<cb title="my-tests/bddr.config.ts">import { defineConfig } from '@bddr/cli';
 
 export default defineConfig({
   features: 'features/**/*.feature',
@@ -81,12 +81,12 @@ export default defineConfig({
   <li><code>workers: 4</code> runs up to four scenarios at a time.</li>
   <li>The <code>orders</code> group is serial, so its members run one after the other while the other scenarios run beside them.</li>
   <li><code>retry</code> gives a failed scenario one more attempt. A pass after a failure is reported as flaky.</li>
-  <li><code>history: true</code> records each run in <code>.bddx/history</code>.</li>
+  <li><code>history: true</code> records each run in <code>.bddr/history</code>.</li>
   <li>The <code>smoke</code> profile selects scenarios tagged <code>@smoke</code>.</li>
 </ul>
 
 <h2>4. Look at the plan, then run</h2>
-<cb lang="bash">$ npx bddx plan</cb>
+<cb lang="bash">$ npx bddr plan</cb>
 <cb lang="text">Plan: 7 scenario(s), 1 group(s), workers=4
   group orders: serial, 2 member(s)
 
@@ -99,19 +99,19 @@ export default defineConfig({
   features/pricing-data.feature::qty-x-product-costs-total[prices.csv#1]
   features/pricing-data.feature::qty-x-product-costs-total[prices.csv#2]</cb>
 <p>The arrow shows the dependency. To see why one scenario waits or runs when it does, ask:</p>
-<cb lang="bash">$ npx bddx plan --explain create-order</cb>
+<cb lang="bash">$ npx bddr plan --explain create-order</cb>
 <p>Then run, with a process per worker, and with only the smoke profile:</p>
-<cb lang="bash">$ npx bddx run --pool process
-$ npx bddx -p smoke
-$ npx bddx validate
-$ npx bddx history</cb>
+<cb lang="bash">$ npx bddr run --pool process
+$ npx bddr -p smoke
+$ npx bddr validate
+$ npx bddr history</cb>
 <p><code>validate</code> checks the specs and steps without running them. <code>history</code> becomes useful after a few runs: it lists the flakiest and slowest scenarios.</p>
 
 <figure class="placeholder" data-kind="screenshot" style="--ratio: 16 / 9">
   <div class="placeholder-frame"><p class="placeholder-what">The HTML report of this project, with the orders group and the CSV rows.</p></div>
   <figcaption>
     <p class="placeholder-how">Capture this yourself:</p>
-    <p>Follow this page, run <code>npx bddx</code>, open <code>reports/report.html</code> and capture the Results tab with the Orders and Pricing features expanded. Light theme, about 1400 px wide.</p>
+    <p>Follow this page, run <code>npx bddr</code>, open <code>reports/report.html</code> and capture the Results tab with the Orders and Pricing features expanded. Light theme, about 1400 px wide.</p>
     <p class="placeholder-file">Save as <code>assets/img/first-project-report.png</code>.</p>
   </figcaption>
 </figure>

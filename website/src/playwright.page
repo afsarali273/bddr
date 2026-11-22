@@ -1,28 +1,28 @@
 title: Playwright
 section: Plugins
-desc: Use Playwright from bddx steps: fixtures, options, assertions, extra contexts, remote browsers and one session for a whole feature.
-lede: bddx stays the runner, with groups, retries, shards and reports. The plugin hands you Playwright itself, so everything Playwright can do in a script is available in a step.
+desc: Use Playwright from bddr steps: fixtures, options, assertions, extra contexts, remote browsers and one session for a whole feature.
+lede: bddr stays the runner, with groups, retries, shards and reports. The plugin hands you Playwright itself, so everything Playwright can do in a script is available in a step.
 ---
 <h2>Install</h2>
 <div class="tabs" data-group="os">
   <section data-tab="macos" data-label="macOS">
-<cb lang="bash">$ npm i -D file:../SmartBDD/plugins/playwright playwright @playwright/test
+<cb lang="bash">$ npm i -D file:../bddr/plugins/playwright playwright @playwright/test
 $ npx playwright install chromium</cb>
   </section>
   <section data-tab="windows" data-label="Windows">
-<cb lang="powershell">PS> npm i -D file:../SmartBDD/plugins/playwright playwright @playwright/test
+<cb lang="powershell">PS> npm i -D file:../bddr/plugins/playwright playwright @playwright/test
 PS> npx playwright install chromium</cb>
   </section>
   <section data-tab="linux" data-label="Linux">
-<cb lang="bash">$ npm i -D file:../SmartBDD/plugins/playwright playwright @playwright/test
+<cb lang="bash">$ npm i -D file:../bddr/plugins/playwright playwright @playwright/test
 $ npx playwright install --with-deps chromium</cb>
   </section>
 </div>
 <p><code>@playwright/test</code> is optional. It is only needed for the <code>expect</code> fixture. Use the same version as <code>playwright</code>.</p>
 
 <h2>Configure</h2>
-<cb title="bddx.config.ts">import { defineConfig } from '@bddx/cli';
-import { playwright } from '@bddx/playwright';
+<cb title="bddr.config.ts">import { defineConfig } from '@bddr/cli';
+import { playwright } from '@bddr/playwright';
 
 export default defineConfig({
   features: 'features/**/*.feature',
@@ -38,10 +38,10 @@ export default defineConfig({
     }),
   ],
 });</cb>
-<p>Add <code>import '@bddx/playwright';</code> to one support file so <code>ctx.page</code>, <code>({ page })</code> and <code>inject('page')</code> are typed.</p>
+<p>Add <code>import '@bddr/playwright';</code> to one support file so <code>ctx.page</code>, <code>({ page })</code> and <code>inject('page')</code> are typed.</p>
 
 <h2>Use it in steps</h2>
-<cb title="steps/login.steps.ts">import { Given, When, Then } from '@bddx/runtime';
+<cb title="steps/login.steps.ts">import { Given, When, Then } from '@bddr/runtime';
 
 Given('I open {string}', ({ page }, path: string) => page.goto(path));
 
@@ -108,14 +108,14 @@ Feature: Checkout journey
 </ul>
 
 <h2>Run it</h2>
-<cb lang="bash">$ npx bddx run -D browser=firefox
-$ npx bddx run -D headed=true --workers 1
-$ npx bddx run --pool process --workers 4</cb>
+<cb lang="bash">$ npx bddr run -D browser=firefox
+$ npx bddr run -D headed=true --workers 1
+$ npx bddr run --pool process --workers 4</cb>
 <figure class="placeholder" data-kind="screenshot" style="--ratio: 16 / 9">
   <div class="placeholder-frame"><p class="placeholder-what">The HTML report of the Playwright showcase with a failed scenario and its attached screenshot.</p></div>
   <figcaption>
     <p class="placeholder-how">Capture this yourself:</p>
-    <p>In <code>examples/playwright-showcase</code> make one scenario fail on purpose (change an expected text), run <code>npx bddx run -t @saucedemo</code>, open the HTML report, expand the failed scenario so the error and the screenshot are visible. Light theme, about 1400 px wide.</p>
+    <p>In <code>examples/playwright-showcase</code> make one scenario fail on purpose (change an expected text), run <code>npx bddr run -t @saucedemo</code>, open the HTML report, expand the failed scenario so the error and the screenshot are visible. Light theme, about 1400 px wide.</p>
     <p class="placeholder-file">Save as <code>assets/img/playwright-failure-report.png</code>.</p>
   </figcaption>
 </figure>

@@ -1,11 +1,11 @@
 title: Configuration
 section: Running
-desc: The bddx.config.ts file: where specs and steps live, reporters, parameters, workers, groups, retries and plugins.
+desc: The bddr.config.ts file: where specs and steps live, reporters, parameters, workers, groups, retries and plugins.
 lede: The config file holds everything that stays the same between runs. Everything in it can be overridden for one run from the command line.
 ---
 <h2>The file</h2>
-<p>bddx looks for <code>bddx.config.ts</code> (or <code>.mts</code>, <code>.js</code>, <code>.mjs</code>, <code>.json</code>) in the folder you run it from. Use <code>-c path</code> to pick another. All paths and globs in it are relative to the config file's folder.</p>
-<cb title="bddx.config.ts">import { defineConfig } from '@bddx/cli';
+<p>bddr looks for <code>bddr.config.ts</code> (or <code>.mts</code>, <code>.js</code>, <code>.mjs</code>, <code>.json</code>) in the folder you run it from. Use <code>-c path</code> to pick another. All paths and globs in it are relative to the config file's folder.</p>
+<cb title="bddr.config.ts">import { defineConfig } from '@bddr/cli';
 
 export default defineConfig({
   features: 'features/**/*.feature',
@@ -57,4 +57,4 @@ export default defineConfig({
 <aside class="callout note"><p class="callout-title">Note</p><p>The name <code>params</code> is reserved. Do not use it as a fixture name.</p></aside>
 
 <h2>Check the result</h2>
-<p>To see what a run would use after profiles and overrides, run <code>npx bddx plan</code> or <code>npx bddx list</code> with the same options. Both read the same config.</p>
+<p>To see what a run would use after profiles and overrides, run <code>npx bddr plan</code> or <code>npx bddr list</code> with the same options. Both read the same config.</p>

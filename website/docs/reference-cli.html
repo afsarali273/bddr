@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CLI options | bddx</title>
-  <meta name="description" content="Every bddx command and option, with defaults and the config option each one overrides.">
+  <title>CLI options | bddr</title>
+  <meta name="description" content="Every bddr command and option, with defaults and the config option each one overrides.">
   <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../assets/css/theme.css">
-  <script>(function(){var t=null;try{t=localStorage.getItem('bddx-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
+  <script>(function(){var t=null;try{t=localStorage.getItem('bddr-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
 </head>
 <body data-root="../">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -16,14 +16,14 @@
     <button class="icon-button menu-button" type="button" aria-label="Show navigation" aria-expanded="false">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
-    <a class="brand" href="../index.html" aria-label="bddx home">
+    <a class="brand" href="../index.html" aria-label="bddr home">
       <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="6" width="14" height="5" rx="1.5" fill="var(--accent)"/><rect x="9" y="13.5" width="20" height="5" rx="1.5" fill="currentColor" opacity=".85"/><rect x="5" y="21" width="11" height="5" rx="1.5" fill="currentColor" opacity=".4"/><rect x="18" y="21" width="9" height="5" rx="1.5" fill="var(--accent)"/></svg>
-      <span>bddx</span>
+      <span>bddr</span>
     </a>
     <nav class="site-nav" aria-label="Main">
       <a href="getting-started.html">Docs</a>
       <a href="getting-started.html#plugins">Plugins</a>
-      <a href="https://github.com/afsarali273/SmartBDD">GitHub</a>
+      <a href="https://github.com/afsarali273/bddr">GitHub</a>
     </nav>
     <div class="header-tools">
       <button class="icon-button theme-toggle" type="button" aria-label="Use dark theme">
@@ -38,22 +38,22 @@
 
     <main class="doc" id="main">
       <article class="doc-content">
-        <p class="breadcrumb"><a href="../index.html">bddx</a> / Reference</p>
+        <p class="breadcrumb"><a href="../index.html">bddr</a> / Reference</p>
         <h1>CLI options</h1>
-        <p class="lede">The complete list, as printed by bddx --help for version 0.1.0. Options apply to every command that makes sense for them.</p>
+        <p class="lede">The complete list, as printed by bddr --help for version 0.1.0. Options apply to every command that makes sense for them.</p>
 
 <h2 id="commands">Commands</h2>
         <div class="table-wrap"><table>
         <thead><tr><th>Command</th><th>Purpose</th></tr></thead>
         <tbody>
-        <tr><td><code>bddx [run] [paths...]</code></td><td>Run scenarios. Paths are files, folders, globs or <code>file:line</code>.</td></tr>
-        <tr><td><code>bddx list [paths...]</code></td><td>List scenarios with ids and tags, without running.</td></tr>
-        <tr><td><code>bddx snippets [paths...]</code></td><td>Print code for every undefined step.</td></tr>
-        <tr><td><code>bddx validate [paths...]</code></td><td>Static checks on specs, plan, steps and hooks.</td></tr>
-        <tr><td><code>bddx plan [paths...]</code></td><td>Show groups, dependencies and locks. Options <code>--plan-format text|json|mermaid</code> and <code>--explain &lt;scenario id&gt;</code>.</td></tr>
-        <tr><td><code>bddx report &lt;events.ndjson...&gt;</code></td><td>Build reports from event files. Several files are merged and later runs win.</td></tr>
-        <tr><td><code>bddx history [--top n]</code></td><td>The flakiest and slowest scenarios. Needs <code>history: true</code>.</td></tr>
-        <tr><td><code>bddx docs [paths...]</code></td><td>Living documentation. Options <code>-o</code>, <code>--results</code> (repeatable), <code>--title</code>.</td></tr>
+        <tr><td><code>bddr [run] [paths...]</code></td><td>Run scenarios. Paths are files, folders, globs or <code>file:line</code>.</td></tr>
+        <tr><td><code>bddr list [paths...]</code></td><td>List scenarios with ids and tags, without running.</td></tr>
+        <tr><td><code>bddr snippets [paths...]</code></td><td>Print code for every undefined step.</td></tr>
+        <tr><td><code>bddr validate [paths...]</code></td><td>Static checks on specs, plan, steps and hooks.</td></tr>
+        <tr><td><code>bddr plan [paths...]</code></td><td>Show groups, dependencies and locks. Options <code>--plan-format text|json|mermaid</code> and <code>--explain &lt;scenario id&gt;</code>.</td></tr>
+        <tr><td><code>bddr report &lt;events.ndjson...&gt;</code></td><td>Build reports from event files. Several files are merged and later runs win.</td></tr>
+        <tr><td><code>bddr history [--top n]</code></td><td>The flakiest and slowest scenarios. Needs <code>history: true</code>.</td></tr>
+        <tr><td><code>bddr docs [paths...]</code></td><td>Living documentation. Options <code>-o</code>, <code>--results</code> (repeatable), <code>--title</code>.</td></tr>
         </tbody></table></div>
 
         <h2 id="selection">Selection</h2>
@@ -71,7 +71,7 @@
         <div class="table-wrap"><table>
         <thead><tr><th>Option</th><th>What it does</th></tr></thead>
         <tbody>
-        <tr><td><code>-c</code>, <code>--config &lt;file&gt;</code></td><td>Config file. Default: <code>bddx.config.{ts,mts,js,mjs,json}</code> in the current folder.</td></tr>
+        <tr><td><code>-c</code>, <code>--config &lt;file&gt;</code></td><td>Config file. Default: <code>bddr.config.{ts,mts,js,mjs,json}</code> in the current folder.</td></tr>
         <tr><td><code>-p</code>, <code>--profile &lt;name&gt;</code></td><td>Use a profile from the config.</td></tr>
         <tr><td><code>-s</code>, <code>--set &lt;path=value&gt;</code></td><td>Override any config value. Repeatable. See <a href="profiles.html">Profiles and --set</a>.</td></tr>
         <tr><td><code>-D</code>, <code>--define k=v</code></td><td>Set <code>ctx.params.k</code>. Repeatable.</td></tr>

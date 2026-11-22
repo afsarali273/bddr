@@ -8,7 +8,7 @@ lede: A step can take one table or one block of text after it. The step receives
   | product | price |
   | apple   | 0.50  |
   | pear    | 0.75  |</cb>
-<cb title="steps/basket.steps.ts">import { Given, type DataTable } from '@bddx/runtime';
+<cb title="steps/basket.steps.ts">import { Given, type DataTable } from '@bddr/runtime';
 
 Given('the catalogue:', (ctx, table: DataTable) => {
   const prices = Object.fromEntries(
@@ -32,7 +32,7 @@ Given('the catalogue:', (ctx, table: DataTable) => {
   """json
   { "product": "apple", "qty": 2 }
   """</cb>
-<cb>import { When, type DocString } from '@bddx/runtime';
+<cb>import { When, type DocString } from '@bddr/runtime';
 
 When('I post this order:', async (ctx, body: DocString) => {
   const order = JSON.parse(body.content);

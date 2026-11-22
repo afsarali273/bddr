@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Data files (CSV, JSON, Excel) | bddx</title>
+  <title>Data files (CSV, JSON, Excel) | bddr</title>
   <meta name="description" content="Generate scenarios from CSV, TSV, JSON, YAML or Excel files with @data, filter rows, and use a different data folder per profile.">
   <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../assets/css/theme.css">
-  <script>(function(){var t=null;try{t=localStorage.getItem('bddx-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
+  <script>(function(){var t=null;try{t=localStorage.getItem('bddr-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
 </head>
 <body data-root="../">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -16,14 +16,14 @@
     <button class="icon-button menu-button" type="button" aria-label="Show navigation" aria-expanded="false">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
-    <a class="brand" href="../index.html" aria-label="bddx home">
+    <a class="brand" href="../index.html" aria-label="bddr home">
       <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="6" width="14" height="5" rx="1.5" fill="var(--accent)"/><rect x="9" y="13.5" width="20" height="5" rx="1.5" fill="currentColor" opacity=".85"/><rect x="5" y="21" width="11" height="5" rx="1.5" fill="currentColor" opacity=".4"/><rect x="18" y="21" width="9" height="5" rx="1.5" fill="var(--accent)"/></svg>
-      <span>bddx</span>
+      <span>bddr</span>
     </a>
     <nav class="site-nav" aria-label="Main">
       <a href="getting-started.html">Docs</a>
       <a href="getting-started.html#plugins">Plugins</a>
-      <a href="https://github.com/afsarali273/SmartBDD">GitHub</a>
+      <a href="https://github.com/afsarali273/bddr">GitHub</a>
     </nav>
     <div class="header-tools">
       <button class="icon-button theme-toggle" type="button" aria-label="Use dark theme">
@@ -38,9 +38,9 @@
 
     <main class="doc" id="main">
       <article class="doc-content">
-        <p class="breadcrumb"><a href="../index.html">bddx</a> / Writing tests</p>
+        <p class="breadcrumb"><a href="../index.html">bddr</a> / Writing tests</p>
         <h1>Data files (CSV, JSON, Excel)</h1>
-        <p class="lede">Put test data in a file, tag a scenario with @data, and bddx runs the scenario once per row. Each row gets its own id and its own line in the report.</p>
+        <p class="lede">Put test data in a file, tag a scenario with @data, and bddr runs the scenario once per row. Each row gets its own id and its own line in the report.</p>
 
 <h2 id="a-scenario-from-a-csv-file">A scenario from a CSV file</h2>
         <figure class="code-block" data-title="data/prices.csv"><pre><code class="lang-text">product,qty,total
@@ -77,7 +77,7 @@ Scenario: &lt;qty&gt; x &lt;product&gt; costs &lt;total&gt;
         <p>Row numbers count before filtering, so a filter never changes the id of a row. A data error, such as a missing file, is reported as a parse error on the tag line and the run exits with code 2.</p>
 
         <h2 id="a-different-folder-per-profile">A different folder per profile</h2>
-        <p>With a profile, bddx tries <code>&lt;dataDir&gt;/&lt;profile&gt;/file</code> first. In <code>examples/basic</code>, <code>npx bddx run -p qa</code> reads <code>data/qa/prices.csv</code> instead of <code>data/prices.csv</code>.</p>
+        <p>With a profile, bddr tries <code>&lt;dataDir&gt;/&lt;profile&gt;/file</code> first. In <code>examples/basic</code>, <code>npx bddr run -p qa</code> reads <code>data/qa/prices.csv</code> instead of <code>data/prices.csv</code>.</p>
 
         <h2 id="ids-for-data-rows">Ids for data rows</h2>
         <p>A row's id is the scenario id followed by the file and the row number, such as <code>[prices.csv#2]</code>. Use it with <code>@dependsOn</code> like any other id.</p>
@@ -86,7 +86,7 @@ Scenario: &lt;qty&gt; x &lt;product&gt; costs &lt;total&gt;
           <div class="placeholder-frame"><p class="placeholder-what">The HTML report showing a data-driven scenario as one table with a row per scenario.</p></div>
           <figcaption>
             <p class="placeholder-how">Capture this yourself:</p>
-            <p>In <code>examples/basic</code> run <code>npx bddx run -t @data-driven</code>, open <code>reports/report.html</code>, go to the Results tab and expand the "Pricing from data files" feature. Capture the colour-coded table, light theme, about 1400 px wide.</p>
+            <p>In <code>examples/basic</code> run <code>npx bddr run -t @data-driven</code>, open <code>reports/report.html</code>, go to the Results tab and expand the "Pricing from data files" feature. Capture the colour-coded table, light theme, about 1400 px wide.</p>
             <p class="placeholder-file">Save as <code>assets/img/data-driven-report.png</code>.</p>
           </figcaption>
         </figure>

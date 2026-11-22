@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>HTML report | bddx</title>
+  <title>HTML report | bddr</title>
   <meta name="description" content="A tour of the self-contained HTML report: overview, results, timeline, dependency graph and history.">
   <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../assets/css/theme.css">
-  <script>(function(){var t=null;try{t=localStorage.getItem('bddx-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
+  <script>(function(){var t=null;try{t=localStorage.getItem('bddr-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
 </head>
 <body data-root="../">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -16,14 +16,14 @@
     <button class="icon-button menu-button" type="button" aria-label="Show navigation" aria-expanded="false">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
-    <a class="brand" href="../index.html" aria-label="bddx home">
+    <a class="brand" href="../index.html" aria-label="bddr home">
       <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="6" width="14" height="5" rx="1.5" fill="var(--accent)"/><rect x="9" y="13.5" width="20" height="5" rx="1.5" fill="currentColor" opacity=".85"/><rect x="5" y="21" width="11" height="5" rx="1.5" fill="currentColor" opacity=".4"/><rect x="18" y="21" width="9" height="5" rx="1.5" fill="var(--accent)"/></svg>
-      <span>bddx</span>
+      <span>bddr</span>
     </a>
     <nav class="site-nav" aria-label="Main">
       <a href="getting-started.html">Docs</a>
       <a href="getting-started.html#plugins">Plugins</a>
-      <a href="https://github.com/afsarali273/SmartBDD">GitHub</a>
+      <a href="https://github.com/afsarali273/bddr">GitHub</a>
     </nav>
     <div class="header-tools">
       <button class="icon-button theme-toggle" type="button" aria-label="Use dark theme">
@@ -38,19 +38,19 @@
 
     <main class="doc" id="main">
       <article class="doc-content">
-        <p class="breadcrumb"><a href="../index.html">bddx</a> / Reports</p>
+        <p class="breadcrumb"><a href="../index.html">bddr</a> / Reports</p>
         <h1>HTML report</h1>
         <p class="lede">One file, no server, works offline. Send it by email or attach it to a CI run.</p>
 
 <h2 id="create-it">Create it</h2>
-        <figure class="code-block"><pre><code class="lang-bash">$ npx bddx -f html:reports/report.html
+        <figure class="code-block"><pre><code class="lang-bash">$ npx bddr -f html:reports/report.html
 $ open reports/report.html           # macOS
 $ start reports\report.html          # Windows</code></pre></figure>
         <figure class="placeholder" data-kind="screenshot" style="--ratio: 16 / 9">
           <div class="placeholder-frame"><p class="placeholder-what">The Overview tab: KPI cards, status donut, duration histogram and failures by cause.</p></div>
           <figcaption>
             <p class="placeholder-how">Capture this yourself:</p>
-            <p>Run <code>npx bddx</code> in <code>examples/orchestration</code> or <code>examples/resilience</code> with <code>history: true</code> a few times, open <code>reports/report.html</code> and capture the Overview tab, light theme, about 1400 px wide.</p>
+            <p>Run <code>npx bddr</code> in <code>examples/orchestration</code> or <code>examples/resilience</code> with <code>history: true</code> a few times, open <code>reports/report.html</code> and capture the Overview tab, light theme, about 1400 px wide.</p>
             <p class="placeholder-file">Save as <code>assets/img/report-overview.png</code>.</p>
           </figcaption>
         </figure>
@@ -78,7 +78,7 @@ $ start reports\report.html          # Windows</code></pre></figure>
           <div class="placeholder-frame"><p class="placeholder-what">The Execution tab: the worker timeline and the dependency graph.</p></div>
           <figcaption>
             <p class="placeholder-how">Capture this yourself:</p>
-            <p>Run <code>npx bddx --workers 4</code> in <code>examples/orchestration</code>, open the Execution tab of the report and capture the timeline and graph together. Light theme, about 1400 px wide.</p>
+            <p>Run <code>npx bddr --workers 4</code> in <code>examples/orchestration</code>, open the Execution tab of the report and capture the timeline and graph together. Light theme, about 1400 px wide.</p>
             <p class="placeholder-file">Save as <code>assets/img/report-execution.png</code>.</p>
           </figcaption>
         </figure>

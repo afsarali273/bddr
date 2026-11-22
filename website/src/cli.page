@@ -1,50 +1,50 @@
 title: Command line
 section: Running
-desc: The bddx commands: run, list, plan, validate, snippets, report, history and docs, with the options you use every day.
-lede: bddx is a single command with a few sub-commands. <code>run</code> is the default, so <code>npx bddx</code> alone runs your suite.
+desc: The bddr commands: run, list, plan, validate, snippets, report, history and docs, with the options you use every day.
+lede: bddr is a single command with a few sub-commands. <code>run</code> is the default, so <code>npx bddr</code> alone runs your suite.
 ---
 <h2>Commands</h2>
 <div class="table-wrap"><table>
 <thead><tr><th>Command</th><th>What it does</th></tr></thead>
 <tbody>
-<tr><td><code>bddx [run] [paths...]</code></td><td>Run scenarios. Paths can be files, folders, globs or <code>file:line</code>.</td></tr>
-<tr><td><code>bddx list [paths...]</code></td><td>List the selected scenarios with their ids and tags, without running.</td></tr>
-<tr><td><code>bddx plan [paths...]</code></td><td>Show the execution plan: groups, dependencies, locks. Runs nothing. See <a href="groups.html">Groups</a>.</td></tr>
-<tr><td><code>bddx validate [paths...]</code></td><td>Static checks: parse errors, duplicate ids, undefined and ambiguous steps, unused step definitions and unmatched hooks.</td></tr>
-<tr><td><code>bddx snippets [paths...]</code></td><td>Print ready-to-paste code for every undefined step.</td></tr>
-<tr><td><code>bddx report events.ndjson...</code></td><td>Build reports from event files. Several files are merged and later runs win.</td></tr>
-<tr><td><code>bddx history [--top n]</code></td><td>The flakiest and slowest scenarios from the recorded history.</td></tr>
-<tr><td><code>bddx docs [paths...]</code></td><td>Build the living documentation page. See <a href="living-docs.html">Living documentation</a>.</td></tr>
+<tr><td><code>bddr [run] [paths...]</code></td><td>Run scenarios. Paths can be files, folders, globs or <code>file:line</code>.</td></tr>
+<tr><td><code>bddr list [paths...]</code></td><td>List the selected scenarios with their ids and tags, without running.</td></tr>
+<tr><td><code>bddr plan [paths...]</code></td><td>Show the execution plan: groups, dependencies, locks. Runs nothing. See <a href="groups.html">Groups</a>.</td></tr>
+<tr><td><code>bddr validate [paths...]</code></td><td>Static checks: parse errors, duplicate ids, undefined and ambiguous steps, unused step definitions and unmatched hooks.</td></tr>
+<tr><td><code>bddr snippets [paths...]</code></td><td>Print ready-to-paste code for every undefined step.</td></tr>
+<tr><td><code>bddr report events.ndjson...</code></td><td>Build reports from event files. Several files are merged and later runs win.</td></tr>
+<tr><td><code>bddr history [--top n]</code></td><td>The flakiest and slowest scenarios from the recorded history.</td></tr>
+<tr><td><code>bddr docs [paths...]</code></td><td>Build the living documentation page. See <a href="living-docs.html">Living documentation</a>.</td></tr>
 </tbody></table></div>
-<p>In a project that uses bddx, run them with <code>npx bddx</code>. The full option list is in <a href="reference-cli.html">CLI options</a>.</p>
+<p>In a project that uses bddr, run them with <code>npx bddr</code>. The full option list is in <a href="reference-cli.html">CLI options</a>.</p>
 
 <h2>Everyday runs</h2>
 <cb lang="bash"># everything
-$ npx bddx
+$ npx bddr
 
 # one file, or one scenario by its line
-$ npx bddx features/checkout.feature
-$ npx bddx features/checkout.feature:12
+$ npx bddr features/checkout.feature
+$ npx bddr features/checkout.feature:12
 
 # by tag or name
-$ npx bddx -t "@smoke and not @wip"
-$ npx bddx --name "refund"
+$ npx bddr -t "@smoke and not @wip"
+$ npx bddr --name "refund"
 
 # in parallel
-$ npx bddx --workers 4 --pool process
+$ npx bddr --workers 4 --pool process
 
 # with a profile and a parameter
-$ npx bddx -p ci -D baseURL=https://staging.example.com</cb>
+$ npx bddr -p ci -D baseURL=https://staging.example.com</cb>
 
 <h2>Check before you run</h2>
-<cb lang="bash">$ npx bddx validate                  # specs, steps and hooks, without running anything
-$ npx bddx run --dry-run             # match every step, report undefined ones, run nothing
-$ npx bddx list -t @smoke            # which scenarios would run
-$ npx bddx plan                      # in what order, with what waits</cb>
+<cb lang="bash">$ npx bddr validate                  # specs, steps and hooks, without running anything
+$ npx bddr run --dry-run             # match every step, report undefined ones, run nothing
+$ npx bddr list -t @smoke            # which scenarios would run
+$ npx bddr plan                      # in what order, with what waits</cb>
 <p><code>list</code> does not load your step code, so it cannot find undefined steps. Use <code>--dry-run</code> or <code>validate</code> for that. Add <code>--fail-on-warnings</code> to <code>validate</code> to fail a CI job on warnings.</p>
 
 <h2>Choose reporters</h2>
-<cb lang="bash">$ npx bddx -f html:reports/report.html -f junit:reports/junit.xml -f ndjson:reports/events.ndjson</cb>
+<cb lang="bash">$ npx bddr -f html:reports/report.html -f junit:reports/junit.xml -f ndjson:reports/events.ndjson</cb>
 <p>Each <code>-f</code> adds a reporter. See <a href="reporters.html">Reporters</a>.</p>
 
 <h2>Exit codes</h2>
@@ -59,4 +59,4 @@ $ npx bddx plan                      # in what order, with what waits</cb>
 
 <h2>Paths on Windows</h2>
 <p>Use the same commands in PowerShell. Quote tag expressions with double quotes, as above. In <code>cmd.exe</code> use double quotes for everything.</p>
-<aside class="callout tip"><p class="callout-title">Tip</p><p>Add scripts to <code>package.json</code> so the team types less: <code>"test": "bddx"</code>, <code>"test:smoke": "bddx -t @smoke"</code>, <code>"test:ci": "bddx -p ci"</code>.</p></aside>
+<aside class="callout tip"><p class="callout-title">Tip</p><p>Add scripts to <code>package.json</code> so the team types less: <code>"test": "bddr"</code>, <code>"test:smoke": "bddr -t @smoke"</code>, <code>"test:ci": "bddr -p ci"</code>.</p></aside>

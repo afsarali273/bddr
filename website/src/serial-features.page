@@ -51,4 +51,4 @@ Feature: Checkout journey</cb>
 <aside class="callout warning"><p class="callout-title">Warning</p><p>A retried scenario continues on the shared page, not on a fresh one. Start each scenario from a known URL.</p></aside>
 
 <h2>See the chain in the plan</h2>
-<p><code>npx bddx plan</code> shows each chained scenario with <code>&lt;- previous (feature runs in file order)</code>.</p>
+<p><code>npx bddr plan</code> shows each chained scenario with <code>&lt;- previous (feature runs in file order)</code>.</p>

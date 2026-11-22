@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Feature files | bddx</title>
-  <meta name="description" content="The Gherkin you can use in bddx feature files: scenarios, outlines, rules, backgrounds, tags and ids.">
+  <title>Feature files | bddr</title>
+  <meta name="description" content="The Gherkin you can use in bddr feature files: scenarios, outlines, rules, backgrounds, tags and ids.">
   <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../assets/css/theme.css">
-  <script>(function(){var t=null;try{t=localStorage.getItem('bddx-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
+  <script>(function(){var t=null;try{t=localStorage.getItem('bddr-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
 </head>
 <body data-root="../">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -16,14 +16,14 @@
     <button class="icon-button menu-button" type="button" aria-label="Show navigation" aria-expanded="false">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
-    <a class="brand" href="../index.html" aria-label="bddx home">
+    <a class="brand" href="../index.html" aria-label="bddr home">
       <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="6" width="14" height="5" rx="1.5" fill="var(--accent)"/><rect x="9" y="13.5" width="20" height="5" rx="1.5" fill="currentColor" opacity=".85"/><rect x="5" y="21" width="11" height="5" rx="1.5" fill="currentColor" opacity=".4"/><rect x="18" y="21" width="9" height="5" rx="1.5" fill="var(--accent)"/></svg>
-      <span>bddx</span>
+      <span>bddr</span>
     </a>
     <nav class="site-nav" aria-label="Main">
       <a href="getting-started.html">Docs</a>
       <a href="getting-started.html#plugins">Plugins</a>
-      <a href="https://github.com/afsarali273/SmartBDD">GitHub</a>
+      <a href="https://github.com/afsarali273/bddr">GitHub</a>
     </nav>
     <div class="header-tools">
       <button class="icon-button theme-toggle" type="button" aria-label="Use dark theme">
@@ -38,9 +38,9 @@
 
     <main class="doc" id="main">
       <article class="doc-content">
-        <p class="breadcrumb"><a href="../index.html">bddx</a> / Writing tests</p>
+        <p class="breadcrumb"><a href="../index.html">bddr</a> / Writing tests</p>
         <h1>Feature files</h1>
-        <p class="lede">A feature file describes behaviour in plain language. Each scenario becomes one test. bddx reads standard Gherkin, so existing files work.</p>
+        <p class="lede">A feature file describes behaviour in plain language. Each scenario becomes one test. bddr reads standard Gherkin, so existing files work.</p>
 
 <h2 id="the-shape-of-a-file">The shape of a file</h2>
         <figure class="code-block" data-title="features/basket.feature"><pre><code class="lang-gherkin">@shop
@@ -76,8 +76,8 @@ Feature: Shopping basket
         <figure class="code-block"><pre><code class="lang-gherkin">@owner:payments @smoke
 Scenario: Pay by card</code></pre></figure>
         <p>A step can read it as <code>ctx.scenario.meta.owner</code>. Select scenarios with a tag expression:</p>
-        <figure class="code-block"><pre><code class="lang-bash">$ npx bddx run -t "@smoke and not @wip"</code></pre></figure>
-        <p>See <a href="tags.html">Tags and selection</a> for the list of tags bddx understands.</p>
+        <figure class="code-block"><pre><code class="lang-bash">$ npx bddr run -t "@smoke and not @wip"</code></pre></figure>
+        <p>See <a href="tags.html">Tags and selection</a> for the list of tags bddr understands.</p>
 
         <h2 id="scenario-ids">Scenario ids</h2>
         <p>Every scenario gets a stable id. Dependencies, reruns and merged reports use it.</p>
@@ -86,13 +86,13 @@ Scenario: Pay by card</code></pre></figure>
           <li>Without it the id is the file and the scenario name, such as <code>features/basket.feature::add-a-single-product</code>.</li>
           <li>Outline rows add the row number: <code>add-single[1]</code>.</li>
         </ul>
-        <p>Outline ids use the name before the placeholders are filled in, so changing the example values does not change the ids. List ids with <code>npx bddx list</code>.</p>
+        <p>Outline ids use the name before the placeholders are filled in, so changing the example values does not change the ids. List ids with <code>npx bddr list</code>.</p>
 
         <h2 id="data-tables-and-doc-strings">Data tables and doc strings</h2>
         <p>Steps can take a table or a block of text. See <a href="data-tables.html">Data tables and doc strings</a>.</p>
 
         <h2 id="check-your-files">Check your files</h2>
-        <figure class="code-block"><pre><code class="lang-bash">$ npx bddx validate</code></pre></figure>
+        <figure class="code-block"><pre><code class="lang-bash">$ npx bddr validate</code></pre></figure>
         <p>This parses every spec and reports syntax errors, duplicate ids, undefined or ambiguous steps and unused step definitions, without running anything.</p>
 
         <nav class="pager" aria-label="Previous and next page"></nav>

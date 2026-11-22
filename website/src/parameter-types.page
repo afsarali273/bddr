@@ -4,7 +4,7 @@ desc: Turn text in a step into your own types, such as money or dates, with defi
 lede: A parameter type gives a name to a pattern and converts the matched text into a value. The step then receives a number, a date or an object, not a string.
 ---
 <h2>Define one</h2>
-<cb title="steps/basket.steps.ts">import { defineParameterType, Then } from '@bddx/runtime';
+<cb title="steps/basket.steps.ts">import { defineParameterType, Then } from '@bddr/runtime';
 
 // {money} matches "1.00" and gives the step a number of cents.
 defineParameterType({
@@ -42,4 +42,4 @@ Given('I am signed in as {role}', async ({ page }, role: Role) => {
   // role is 'admin' or 'viewer'; any other word does not match this step
 });</cb>
 <aside class="callout tip"><p class="callout-title">Tip</p><p>A step that does not match gets reported as undefined with the text of the step, which tells you at once when a value is not in your type.</p></aside>
-<aside class="callout note"><p class="callout-title">Validate</p><p><code>npx bddx validate</code> checks steps without running parameter transformers, so it does not run your conversion code.</p></aside>
+<aside class="callout note"><p class="callout-title">Validate</p><p><code>npx bddr validate</code> checks steps without running parameter transformers, so it does not run your conversion code.</p></aside>

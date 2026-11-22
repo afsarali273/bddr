@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sharding in CI | bddx</title>
+  <title>Sharding in CI | bddr</title>
   <meta name="description" content="Split one run across several CI machines with --shard, keep dependent tests together, and merge the results.">
   <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../assets/css/theme.css">
-  <script>(function(){var t=null;try{t=localStorage.getItem('bddx-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
+  <script>(function(){var t=null;try{t=localStorage.getItem('bddr-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
 </head>
 <body data-root="../">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -16,14 +16,14 @@
     <button class="icon-button menu-button" type="button" aria-label="Show navigation" aria-expanded="false">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
-    <a class="brand" href="../index.html" aria-label="bddx home">
+    <a class="brand" href="../index.html" aria-label="bddr home">
       <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="6" width="14" height="5" rx="1.5" fill="var(--accent)"/><rect x="9" y="13.5" width="20" height="5" rx="1.5" fill="currentColor" opacity=".85"/><rect x="5" y="21" width="11" height="5" rx="1.5" fill="currentColor" opacity=".4"/><rect x="18" y="21" width="9" height="5" rx="1.5" fill="var(--accent)"/></svg>
-      <span>bddx</span>
+      <span>bddr</span>
     </a>
     <nav class="site-nav" aria-label="Main">
       <a href="getting-started.html">Docs</a>
       <a href="getting-started.html#plugins">Plugins</a>
-      <a href="https://github.com/afsarali273/SmartBDD">GitHub</a>
+      <a href="https://github.com/afsarali273/bddr">GitHub</a>
     </nav>
     <div class="header-tools">
       <button class="icon-button theme-toggle" type="button" aria-label="Use dark theme">
@@ -38,13 +38,13 @@
 
     <main class="doc" id="main">
       <article class="doc-content">
-        <p class="breadcrumb"><a href="../index.html">bddx</a> / Orchestration</p>
+        <p class="breadcrumb"><a href="../index.html">bddr</a> / Orchestration</p>
         <h1>Sharding in CI</h1>
-        <p class="lede">Sharding lets four CI machines each run a quarter of the suite. bddx splits the work so that scenarios that belong together stay on the same machine.</p>
+        <p class="lede">Sharding lets four CI machines each run a quarter of the suite. bddr splits the work so that scenarios that belong together stay on the same machine.</p>
 
 <h2 id="run-one-shard">Run one shard</h2>
-        <figure class="code-block"><pre><code class="lang-bash">$ npx bddx run --shard 1/4 -f ndjson:reports/events-1.ndjson</code></pre></figure>
-        <p>Every machine uses the same command with its own number, from <code>1/4</code> to <code>4/4</code>. The split is deterministic, so all machines agree without talking to each other. <code>bddx plan --shard 1/4</code> shows what a shard would run.</p>
+        <figure class="code-block"><pre><code class="lang-bash">$ npx bddr run --shard 1/4 -f ndjson:reports/events-1.ndjson</code></pre></figure>
+        <p>Every machine uses the same command with its own number, from <code>1/4</code> to <code>4/4</code>. The split is deterministic, so all machines agree without talking to each other. <code>bddr plan --shard 1/4</code> shows what a shard would run.</p>
 
         <h2 id="what-stays-together">What stays together</h2>
         <p>Scenarios are never split across shards when they are linked by:</p>
@@ -55,17 +55,17 @@
           <li>a <code>@serial</code> feature.</li>
         </ul>
         <p>Each linked set is one unit. Units are packed onto shards, largest first, by their average duration from the run history. Without history every scenario weighs the same. A shard with nothing to run exits with 0.</p>
-        <aside class="callout warning"><p class="callout-title">Big units</p><p>If one unit holds most of the suite, one shard ends up with most of the work. bddx warns about this. Use more locks, fewer dependencies or smaller groups to break it up.</p></aside>
+        <aside class="callout warning"><p class="callout-title">Big units</p><p>If one unit holds most of the suite, one shard ends up with most of the work. bddr warns about this. Use more locks, fewer dependencies or smaller groups to break it up.</p></aside>
 
         <h2 id="better-balance-with-history">Better balance with history</h2>
         <p>Turn on history and keep the folder between CI runs:</p>
-        <figure class="code-block" data-title="bddx.config.ts"><pre><code class="lang-ts">export default defineConfig({
-  history: true, // writes .bddx/history, keeps the last 50 runs
+        <figure class="code-block" data-title="bddr.config.ts"><pre><code class="lang-ts">export default defineConfig({
+  history: true, // writes .bddr/history, keeps the last 50 runs
 });</code></pre></figure>
-        <p>Restore and save <code>.bddx/history</code> as a CI cache, so the next run knows how long each scenario takes.</p>
+        <p>Restore and save <code>.bddr/history</code> as a CI cache, so the next run knows how long each scenario takes.</p>
 
         <h2 id="merge-the-results">Merge the results</h2>
-        <figure class="code-block"><pre><code class="lang-bash">$ npx bddx report reports/events-*.ndjson -f html:reports/report.html -f junit:reports/junit.xml</code></pre></figure>
+        <figure class="code-block"><pre><code class="lang-bash">$ npx bddr report reports/events-*.ndjson -f html:reports/report.html -f junit:reports/junit.xml</code></pre></figure>
         <p>The merged report looks like one run.</p>
 
         <h2 id="example-github-actions">Example: GitHub Actions</h2>
@@ -84,11 +84,11 @@ jobs:
         with: { node-version: 22 }
       - uses: actions/cache@v4
         with:
-          path: .bddx/history
-          key: bddx-history-${{ github.run_id }}
-          restore-keys: bddx-history-
+          path: .bddr/history
+          key: bddr-history-${{ github.run_id }}
+          restore-keys: bddr-history-
       - run: npm ci
-      - run: npx bddx run --shard ${{ matrix.shard }}/4 --pool process --workers 2 -f ndjson:reports/events-${{ matrix.shard }}.ndjson
+      - run: npx bddr run --shard ${{ matrix.shard }}/4 --pool process --workers 2 -f ndjson:reports/events-${{ matrix.shard }}.ndjson
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -105,10 +105,10 @@ jobs:
       - run: npm ci
       - uses: actions/download-artifact@v4
         with: { pattern: events-*, path: reports, merge-multiple: true }
-      - run: npx bddx report reports/events-*.ndjson -f html:reports/report.html
+      - run: npx bddr report reports/events-*.ndjson -f html:reports/report.html
       - uses: actions/upload-artifact@v4
         with: { name: report, path: reports/report.html }</code></pre></figure>
-        <aside class="callout note"><p class="callout-title">Note</p><p>bddx is not on npm yet, so <code>npm ci</code> needs your project to reach the built packages, for example through a private registry or a checked-in tarball. This workflow has not been run against a real repository yet.</p></aside>
+        <aside class="callout note"><p class="callout-title">Note</p><p>bddr is not on npm yet, so <code>npm ci</code> needs your project to reach the built packages, for example through a private registry or a checked-in tarball. This workflow has not been run against a real repository yet.</p></aside>
 
         <nav class="pager" aria-label="Previous and next page"></nav>
       </article>

@@ -18,7 +18,7 @@ Feature: Checkout
 <p>Scenarios in no group run with <code>defaultMode</code>.</p>
 
 <h2>Describe the groups in the config</h2>
-<cb title="bddx.config.ts">import { defineConfig } from '@bddx/cli';
+<cb title="bddr.config.ts">import { defineConfig } from '@bddr/cli';
 
 export default defineConfig({
   features: 'features/**/*.feature',
@@ -31,7 +31,7 @@ export default defineConfig({
     reports:  { dependsOn: ['checkout', 'payments'], onDependencyFailure: 'run' },
   },
 });</cb>
-<p>This is the config of <code>examples/orchestration</code>. Run <code>npx bddx plan</code> in that folder to see the schedule it produces.</p>
+<p>This is the config of <code>examples/orchestration</code>. Run <code>npx bddr plan</code> in that folder to see the schedule it produces.</p>
 
 <h2>Group options</h2>
 <div class="table-wrap"><table>
@@ -49,20 +49,20 @@ export default defineConfig({
 </tbody></table></div>
 
 <h2>See the plan before you run</h2>
-<cb lang="bash">$ npx bddx plan
-$ npx bddx plan --plan-format mermaid
-$ npx bddx plan --explain features/checkout.feature::buy-an-apple</cb>
+<cb lang="bash">$ npx bddr plan
+$ npx bddr plan --plan-format mermaid
+$ npx bddr plan --explain features/checkout.feature::buy-an-apple</cb>
 <p><code>--explain</code> takes a scenario id and says why it runs when it does: which group it is in, what it waits for and which locks it holds.</p>
 <figure class="placeholder" data-kind="screenshot" style="--ratio: 16 / 9">
-  <div class="placeholder-frame"><p class="placeholder-what">Terminal output of <code>npx bddx plan</code> for the orchestration example.</p></div>
+  <div class="placeholder-frame"><p class="placeholder-what">Terminal output of <code>npx bddr plan</code> for the orchestration example.</p></div>
   <figcaption>
     <p class="placeholder-how">Capture this yourself:</p>
-    <p>In <code>examples/orchestration</code> run <code>npx bddx plan</code>. Capture the whole output in a terminal with a light theme, about 100 columns wide.</p>
+    <p>In <code>examples/orchestration</code> run <code>npx bddr plan</code>. Capture the whole output in a terminal with a light theme, about 100 columns wide.</p>
     <p class="placeholder-file">Save as <code>assets/img/groups-plan.png</code>.</p>
   </figcaption>
 </figure>
 
 <h2>Change a group from the command line</h2>
 <p>Any group option can be overridden for one run with <code>--set</code>. See <a href="profiles.html">Profiles and --set</a>.</p>
-<cb lang="bash">$ npx bddx run --set groups.checkout.mode=serial</cb>
+<cb lang="bash">$ npx bddr run --set groups.checkout.mode=serial</cb>
 <aside class="callout tip"><p class="callout-title">Tip</p><p>A scenario's own tags win over its group, and a group wins over a command-line flag. For example, <code>@retry:3</code> on a scenario beats <code>--retry 1</code>.</p></aside>

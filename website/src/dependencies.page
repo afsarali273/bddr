@@ -38,13 +38,13 @@ Scenario: Browse the catalogue</cb>
 </tbody></table></div>
 
 <h2>Run one scenario and what it needs</h2>
-<p>When you select a scenario with <code>-t</code>, a name, or <code>file:line</code>, bddx adds the scenarios it depends on, even from other files. Add <code>--no-deps</code> to run only what you selected.</p>
-<cb lang="bash">$ npx bddx run features/orders.feature:9
-$ npx bddx run features/orders.feature:9 --no-deps</cb>
+<p>When you select a scenario with <code>-t</code>, a name, or <code>file:line</code>, bddr adds the scenarios it depends on, even from other files. Add <code>--no-deps</code> to run only what you selected.</p>
+<cb lang="bash">$ npx bddr run features/orders.feature:9
+$ npx bddr run features/orders.feature:9 --no-deps</cb>
 
 <h2>Pass data to a later scenario</h2>
 <p>A scenario can export a value, and a scenario that depends on it can read it. The value is copied, and it works across worker processes.</p>
-<cb title="steps/orders.steps.ts">import { When, Given } from '@bddx/runtime';
+<cb title="steps/orders.steps.ts">import { When, Given } from '@bddr/runtime';
 
 When('I create an order for {string}', async (ctx, product: string) => {
   const orderId = await createOrder(product);
@@ -58,4 +58,4 @@ Given('the order created earlier', (ctx) => {
 <aside class="callout warning"><p class="callout-title">Add the dependency</p><p><code>ctx.from(id)</code> throws if that scenario has not finished. If you see that error, add <code>@dependsOn:</code> for it.</p></aside>
 
 <h2>Check the plan</h2>
-<p>bddx reports unknown ids, unknown groups and cycles such as <code>a -&gt; c -&gt; b -&gt; a</code> before anything runs, and exits with code 2. <code>npx bddx plan --plan-format mermaid</code> prints the dependency graph as a Mermaid diagram you can paste into a wiki. The HTML report shows the same graph after a run.</p>
+<p>bddr reports unknown ids, unknown groups and cycles such as <code>a -&gt; c -&gt; b -&gt; a</code> before anything runs, and exits with code 2. <code>npx bddr plan --plan-format mermaid</code> prints the dependency graph as a Mermaid diagram you can paste into a wiki. The HTML report shows the same graph after a run.</p>

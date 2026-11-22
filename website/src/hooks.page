@@ -1,7 +1,7 @@
 title: Hooks
 section: Writing tests
 desc: Run code before and after the run, a worker, a group, a feature, a rule, a scenario or a step.
-lede: Hooks run setup and cleanup code around your tests. bddx has the same levels as TestNG, from the whole run down to a single step.
+lede: Hooks run setup and cleanup code around your tests. bddr has the same levels as TestNG, from the whole run down to a single step.
 ---
 <h2>The levels</h2>
 <div class="table-wrap"><table>
@@ -17,7 +17,7 @@ lede: Hooks run setup and cleanup code around your tests. bddx has the same leve
 </tbody></table></div>
 
 <h2>Write a hook</h2>
-<cb title="steps/hooks.ts">import { BeforeAll, AfterAll, Before, After } from '@bddx/runtime';
+<cb title="steps/hooks.ts">import { BeforeAll, AfterAll, Before, After } from '@bddr/runtime';
 
 BeforeAll(async (ctx) => {
   ctx.run.set('baseUrl', String(ctx.params['baseUrl'] ?? 'https://example.test'));

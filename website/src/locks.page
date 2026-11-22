@@ -13,7 +13,7 @@ Scenario: Refund an order
 Scenario: Close the day
   ...</cb>
 <p>To lock a whole group, list the lock in the config. Every member holds it.</p>
-<cb title="bddx.config.ts">groups: {
+<cb title="bddr.config.ts">groups: {
   payments: { mode: 'serial', locks: ['payments-db'] },
 },</cb>
 <aside class="callout tip"><p class="callout-title">Tip</p><p>Name locks after the thing they protect, such as <code>payments-db</code> or <code>admin-user</code>, not after the test.</p></aside>
@@ -25,7 +25,7 @@ Scenario: Restart the API gateway
   ...</cb>
 
 <h2>Priority</h2>
-<p>When more scenarios are ready than workers are free, bddx starts the one with the lowest priority number first. The default is 0.</p>
+<p>When more scenarios are ready than workers are free, bddr starts the one with the lowest priority number first. The default is 0.</p>
 <cb lang="gherkin">@priority:-5
 Scenario: Smoke test the home page</cb>
 <ul>

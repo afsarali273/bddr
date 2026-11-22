@@ -4,7 +4,7 @@ desc: Write steps as decorated classes, inject page objects and fixtures, and sh
 lede: If you prefer classes over functions, mark a class with @Steps() and decorate its methods. Page objects are plain classes that ask for what they need with inject().
 ---
 <h2>A step class</h2>
-<cb title="steps/login.steps.ts">import { Steps, Given, Then, inject, CONTEXT } from '@bddx/runtime';
+<cb title="steps/login.steps.ts">import { Steps, Given, Then, inject, CONTEXT } from '@bddr/runtime';
 import { LoginPage } from '../pages/login-page';
 
 @Steps()
@@ -30,7 +30,7 @@ export class LoginSteps {
 </ul>
 
 <h2>Page objects</h2>
-<cb title="pages/login-page.ts">import { inject } from '@bddx/runtime';
+<cb title="pages/login-page.ts">import { inject } from '@bddr/runtime';
 
 export class LoginPage {
   private readonly page = inject('page');
@@ -41,8 +41,8 @@ export class LoginPage {
     await this.page.getByRole('button', { name: 'Sign in' }).click();
   }
 }</cb>
-<p>A class you inject is created once per scenario, and every step class that injects it gets the same instance. If it has a <code>dispose()</code> method, bddx calls it when the scenario ends.</p>
-<aside class="callout note"><p class="callout-title">Constructors</p><p>When a class asks for an asynchronous fixture that is not ready yet, bddx creates the fixture and constructs the class again. Keep constructors to setting up fields, which is normal anyway.</p></aside>
+<p>A class you inject is created once per scenario, and every step class that injects it gets the same instance. If it has a <code>dispose()</code> method, bddr calls it when the scenario ends.</p>
+<aside class="callout note"><p class="callout-title">Constructors</p><p>When a class asks for an asynchronous fixture that is not ready yet, bddr creates the fixture and constructs the class again. Keep constructors to setting up fields, which is normal anyway.</p></aside>
 
 <h2>Hooks in classes</h2>
 <p>Decorators also work for hooks: on static methods for every level, and on instance methods for <code>Before</code>, <code>After</code>, <code>BeforeStep</code> and <code>AfterStep</code>.</p>

@@ -1,7 +1,7 @@
 title: Worker processes
 section: Orchestration
 desc: Choose between the inline pool and one Node.js process per worker, and know what is shared between them.
-lede: By default bddx runs scenarios as concurrent async tasks in one process. Switch to the process pool when you want real CPU parallelism or isolation from crashes.
+lede: By default bddr runs scenarios as concurrent async tasks in one process. Switch to the process pool when you want real CPU parallelism or isolation from crashes.
 ---
 <h2>Two pools</h2>
 <div class="table-wrap"><table>
@@ -12,8 +12,8 @@ lede: By default bddx runs scenarios as concurrent async tasks in one process. S
 <tr><td>Worker hooks</td><td>Once per run.</td><td>Once in every worker process.</td></tr>
 <tr><td>Memory and globals</td><td>Shared by all scenarios.</td><td>Separate per process.</td></tr>
 </tbody></table></div>
-<cb lang="bash">$ npx bddx run --workers 4 --pool process</cb>
-<cb title="bddx.config.ts">export default defineConfig({
+<cb lang="bash">$ npx bddr run --workers 4 --pool process</cb>
+<cb title="bddr.config.ts">export default defineConfig({
   workers: 4,
   pool: 'process',
 });</cb>
@@ -21,17 +21,13 @@ lede: By default bddx runs scenarios as concurrent async tasks in one process. S
 <h2>What the parent and the workers do</h2>
 <ul>
   <li>The parent process owns the plan, the scheduling, the reports and the <code>BeforeAll</code> and <code>AfterAll</code> hooks.</li>
-  <li>Each worker loads your step files and rebuilds the same plan. bddx compares a fingerprint of the plan, so a worker that loaded different files stops the run instead of running the wrong thing.</li>
+  <li>Each worker loads your step files and rebuilds the same plan. bddr compares a fingerprint of the plan, so a worker that loaded different files stops the run instead of running the wrong thing.</li>
   <li>The values you set in <code>BeforeAll</code> on <code>ctx.run</code> are copied to every worker.</li>
-  <li>Each worker gets the environment variables <code>BDDX_WORKER_ID</code> and <code>BDDX_WORKER_INDEX</code>. Use the index to pick a port or a test account per worker.</li>
+  <li>Each worker gets the environment variables <code>BDDR_WORKER_ID</code> and <code>BDDR_WORKER_INDEX</code>. Use the index to pick a port or a test account per worker.</li>
 </ul>
-<figure class="placeholder" data-kind="ai" style="--ratio: 16 / 9">
-  <div class="placeholder-frame"><p class="placeholder-what">Diagram: a parent process sending scenarios to three worker processes and collecting events.</p></div>
-  <figcaption>
-    <p class="placeholder-how">Generate with an AI diagram or image tool. Prompt:</p>
-    <pre class="prompt">Flat technical diagram on white, font IBM Plex Sans, thin navy (#171A33) lines. Left: one box "Parent process" containing three small labels "plan and scheduler", "BeforeAll / AfterAll", "reporters". Right: three stacked boxes "Worker 1", "Worker 2", "Worker 3", each containing "step files", "BeforeWorker", "browser plugin". Arrows from parent to each worker labelled "run scenario" in deep cyan (#0B7A86), and arrows from each worker back to the parent labelled "events" in slate (#5B6385). Below the workers a dashed note "each worker is a separate Node.js process". No gradients or shadows.</pre>
-    <p class="placeholder-file">Save as <code>assets/img/process-pool.png</code>.</p>
-  </figcaption>
+<figure class="diagram">
+  <div class="diagram-frame"><img src="../assets/img/process-pool.svg" alt="A parent process holding the plan, scheduler, BeforeAll and AfterAll hooks and reporters sends run-scenario messages to three worker processes. Each worker holds the step files, BeforeWorker hook and browser plugin, and sends events back." width="1680" height="720" style="display:block;width:100%;height:auto"></div>
+  <figcaption>The parent sends scenarios out and gets events back.</figcaption>
 </figure>
 
 <h2>Crashes</h2>

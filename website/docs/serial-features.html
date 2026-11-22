@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Serial features | bddx</title>
+  <title>Serial features | bddr</title>
   <meta name="description" content="Run the scenarios of one feature in order while the rest of the suite stays parallel, and share one browser session across them.">
   <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../assets/css/theme.css">
-  <script>(function(){var t=null;try{t=localStorage.getItem('bddx-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
+  <script>(function(){var t=null;try{t=localStorage.getItem('bddr-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
 </head>
 <body data-root="../">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -16,14 +16,14 @@
     <button class="icon-button menu-button" type="button" aria-label="Show navigation" aria-expanded="false">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
-    <a class="brand" href="../index.html" aria-label="bddx home">
+    <a class="brand" href="../index.html" aria-label="bddr home">
       <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="6" width="14" height="5" rx="1.5" fill="var(--accent)"/><rect x="9" y="13.5" width="20" height="5" rx="1.5" fill="currentColor" opacity=".85"/><rect x="5" y="21" width="11" height="5" rx="1.5" fill="currentColor" opacity=".4"/><rect x="18" y="21" width="9" height="5" rx="1.5" fill="var(--accent)"/></svg>
-      <span>bddx</span>
+      <span>bddr</span>
     </a>
     <nav class="site-nav" aria-label="Main">
       <a href="getting-started.html">Docs</a>
       <a href="getting-started.html#plugins">Plugins</a>
-      <a href="https://github.com/afsarali273/SmartBDD">GitHub</a>
+      <a href="https://github.com/afsarali273/bddr">GitHub</a>
     </nav>
     <div class="header-tools">
       <button class="icon-button theme-toggle" type="button" aria-label="Use dark theme">
@@ -38,7 +38,7 @@
 
     <main class="doc" id="main">
       <article class="doc-content">
-        <p class="breadcrumb"><a href="../index.html">bddx</a> / Orchestration</p>
+        <p class="breadcrumb"><a href="../index.html">bddr</a> / Orchestration</p>
         <h1>Serial features</h1>
         <p class="lede">Mark a feature @serial when its scenarios form a journey. They run one after another in file order, while other features keep running beside it.</p>
 
@@ -90,7 +90,7 @@ Feature: Checkout journey</code></pre></figure>
         <aside class="callout warning"><p class="callout-title">Warning</p><p>A retried scenario continues on the shared page, not on a fresh one. Start each scenario from a known URL.</p></aside>
 
         <h2 id="see-the-chain-in-the-plan">See the chain in the plan</h2>
-        <p><code>npx bddx plan</code> shows each chained scenario with <code>&lt;- previous (feature runs in file order)</code>.</p>
+        <p><code>npx bddr plan</code> shows each chained scenario with <code>&lt;- previous (feature runs in file order)</code>.</p>
 
         <nav class="pager" aria-label="Previous and next page"></nav>
       </article>

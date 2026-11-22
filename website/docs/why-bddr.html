@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Why bddx | bddx</title>
-  <meta name="description" content="What bddx is, who it is for, and what it adds to Gherkin specs: orchestration, resilience, plugins and reports.">
+  <title>Why bddr | bddr</title>
+  <meta name="description" content="What bddr is, who it is for, and what it adds to Gherkin specs: orchestration, resilience, plugins and reports.">
   <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../assets/css/theme.css">
-  <script>(function(){var t=null;try{t=localStorage.getItem('bddx-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
+  <script>(function(){var t=null;try{t=localStorage.getItem('bddr-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
 </head>
 <body data-root="../">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -16,14 +16,14 @@
     <button class="icon-button menu-button" type="button" aria-label="Show navigation" aria-expanded="false">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
-    <a class="brand" href="../index.html" aria-label="bddx home">
+    <a class="brand" href="../index.html" aria-label="bddr home">
       <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="6" width="14" height="5" rx="1.5" fill="var(--accent)"/><rect x="9" y="13.5" width="20" height="5" rx="1.5" fill="currentColor" opacity=".85"/><rect x="5" y="21" width="11" height="5" rx="1.5" fill="currentColor" opacity=".4"/><rect x="18" y="21" width="9" height="5" rx="1.5" fill="var(--accent)"/></svg>
-      <span>bddx</span>
+      <span>bddr</span>
     </a>
     <nav class="site-nav" aria-label="Main">
       <a href="getting-started.html">Docs</a>
       <a href="getting-started.html#plugins">Plugins</a>
-      <a href="https://github.com/afsarali273/SmartBDD">GitHub</a>
+      <a href="https://github.com/afsarali273/bddr">GitHub</a>
     </nav>
     <div class="header-tools">
       <button class="icon-button theme-toggle" type="button" aria-label="Use dark theme">
@@ -38,18 +38,18 @@
 
     <main class="doc" id="main">
       <article class="doc-content">
-        <p class="breadcrumb"><a href="../index.html">bddx</a> / Introduction</p>
-        <h1>Why bddx</h1>
-        <p class="lede">bddx is a test runner for automation suites written as Gherkin specs. It keeps the readable feature files and adds the control that large UI and API suites need: what runs in parallel, what must run in order, and what to do when a test fails.</p>
+        <p class="breadcrumb"><a href="../index.html">bddr</a> / Introduction</p>
+        <h1>Why bddr</h1>
+        <p class="lede">bddr is a test runner for automation suites written as Gherkin specs. It keeps the readable feature files and adds the control that large UI and API suites need: what runs in parallel, what must run in order, and what to do when a test fails.</p>
 
-<h2 id="what-bddx-is">What bddx is</h2>
-        <p>You write scenarios in <code>.feature</code> files and the steps behind them in TypeScript. bddx finds the scenarios, builds a schedule, runs them on workers, retries what should be retried and writes the reports.</p>
+<h2 id="what-bddr-is">What bddr is</h2>
+        <p>You write scenarios in <code>.feature</code> files and the steps behind them in TypeScript. bddr finds the scenarios, builds a schedule, runs them on workers, retries what should be retried and writes the reports.</p>
         <p>It is an automation framework with BDD-style specs, not a methodology. Use the specs to share what a test does with people who do not read code. Use the runner to get a fast, stable suite.</p>
-        <aside class="callout note"><p class="callout-title">Not tied to a browser library</p><p>bddx core depends on no browser or HTTP library. Playwright, Selenium and axios are plugins that your project installs. See <a href="plugins.html">How plugins work</a>.</p></aside>
+        <aside class="callout note"><p class="callout-title">Not tied to a browser library</p><p>bddr core depends on no browser or HTTP library. Playwright, Selenium and axios are plugins that your project installs. See <a href="plugins.html">How plugins work</a>.</p></aside>
 
         <h2 id="what-you-get">What you get</h2>
         <div class="table-wrap"><table>
-        <thead><tr><th>You need to</th><th>bddx gives you</th><th>Read</th></tr></thead>
+        <thead><tr><th>You need to</th><th>bddr gives you</th><th>Read</th></tr></thead>
         <tbody>
         <tr><td>Run independent tests side by side</td><td><code>workers</code> and an optional process pool: one Node.js process per worker.</td><td><a href="process-pool.html">Worker processes</a></td></tr>
         <tr><td>Keep a journey in order inside a parallel run</td><td><code>@serial</code> on a feature. Other features keep running.</td><td><a href="serial-features.html">Serial features</a></td></tr>
@@ -63,7 +63,7 @@
         </tbody></table></div>
 
         <h2 id="one-run-parallel-and-serial-together">One run, parallel and serial together</h2>
-        <p>Most suites mix work that can run side by side with work that cannot. A login test and a catalogue test are independent. A checkout journey is not: add to basket, pay, see the receipt. bddx plans both in one run, so you do not split the suite into separate jobs.</p>
+        <p>Most suites mix work that can run side by side with work that cannot. A login test and a catalogue test are independent. A checkout journey is not: add to basket, pay, see the receipt. bddr plans both in one run, so you do not split the suite into separate jobs.</p>
         <figure class="placeholder" data-kind="ai" style="--ratio: 16 / 9">
           <div class="placeholder-frame"><p class="placeholder-what">A run schedule: four worker lanes, a setup group first, then parallel and serial groups, then reports last.</p></div>
           <figcaption>
@@ -72,6 +72,9 @@
             <p class="placeholder-file">Save as <code>assets/img/why-schedule.png</code>.</p>
           </figcaption>
         </figure>
+
+        <h2 id="how-it-is-built">How it is built</h2>
+        <p>Four small packages, a plan that is plain data, and plugins for browsers and API clients. <a href="architecture.html">Architecture</a> shows how they fit together.</p>
 
         <h2 id="who-it-is-for">Who it is for</h2>
         <ul>
@@ -84,7 +87,7 @@
         <ul>
           <li>You write unit tests. Use your language's unit test runner.</li>
           <li>You only need a handful of browser tests and nobody reads the specs. A plain Playwright Test project is simpler.</li>
-          <li>You need a stable 1.0 today. bddx is at version 0.1 and is not on npm yet. You build it from the repository. See <a href="getting-started.html">Getting started</a>.</li>
+          <li>You need a stable 1.0 today. bddr is at version 0.1 and is not on npm yet. You build it from the repository. See <a href="getting-started.html">Getting started</a>.</li>
         </ul>
 
         <h2 id="current-state">Current state</h2>

@@ -1,7 +1,7 @@
-/* bddx documentation theme
+/* bddr documentation theme
  *
  * One stylesheet for every page. Tokens first, then base type, then layout (header, landing, docs), then components.
- * Light is the default; dark follows the OS, and the header toggle stores a choice in localStorage ("bddx-theme").
+ * Light is the default; dark follows the OS, and the header toggle stores a choice in localStorage ("bddr-theme").
  * The look comes from the subject: a test runner's schedule. Worker lanes, group colours and pass/fail states are
  * the only decoration; everything else stays quiet.
  */
@@ -710,3 +710,31 @@ td code { white-space: nowrap; }
 }
 .placeholder .prompt .copy { position: absolute; top: 8px; right: 8px; }
 .placeholder-file { margin: 0; font-size: 0.85rem; }
+
+/* ---- architecture diagrams (inline SVG made by tools/arch-diagrams.mjs) ---- */
+.diagram { margin: 1.6em 0; }
+.diagram-frame { border: 1px solid var(--line); border-radius: var(--radius-m); background: var(--surface); padding: 14px 10px 10px; overflow-x: auto; }
+.diagram-svg { display: block; width: 100%; min-width: 640px; height: auto; font-family: var(--font-body); }
+.diagram figcaption { font-size: var(--step--1); color: var(--ink-2); margin-top: 10px; max-width: var(--measure); }
+.d-box { fill: var(--surface); stroke: var(--line-strong); stroke-width: 1.5; }
+.d-box.soft { fill: var(--sunken); stroke: var(--line); }
+.d-box.pkg { fill: var(--surface); stroke: var(--ink-3); }
+.d-box.core { stroke: var(--ink); }
+.d-box.run { stroke: var(--accent); }
+.d-box.plug { fill: var(--accent-wash); stroke: var(--accent); }
+.d-box.bar { fill: var(--accent-wash); stroke: var(--accent); }
+.d-box.scope.w { fill: var(--sunken); stroke: var(--line-strong); }
+.d-box.scope.f { fill: var(--surface); stroke: var(--g3); }
+.d-box.scope.s { fill: var(--accent-wash); stroke: var(--accent); }
+.d-t, .d-h, .d-s, .d-m { fill: var(--ink); font-size: 15px; }
+.d-h { font-weight: 600; font-size: 16px; }
+.d-s { fill: var(--ink-2); font-size: 13.5px; }
+.d-s.ink, .d-m.ink { fill: var(--ink); }
+.d-m, .d-s.mono { font-family: var(--font-mono); font-size: 13.5px; }
+.d-s.mono { fill: var(--ink-3); }
+.d-t.accent, .d-h.accent, .d-m.accent, .d-s.accent { fill: var(--accent); }
+.d-line { fill: none; stroke: var(--ink-3); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.d-line.accent { stroke: var(--accent); }
+.d-line.dash { stroke-dasharray: 5 5; }
+.d-head { fill: none; stroke: var(--ink-3); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.d-head.accent { stroke: var(--accent); }

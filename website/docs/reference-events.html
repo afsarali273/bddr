@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Event stream (NDJSON) | bddx</title>
+  <title>Event stream (NDJSON) | bddr</title>
   <meta name="description" content="The versioned stream of events a run produces, which every report is built from: types, fields and an example.">
   <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../assets/css/theme.css">
-  <script>(function(){var t=null;try{t=localStorage.getItem('bddx-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
+  <script>(function(){var t=null;try{t=localStorage.getItem('bddr-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
 </head>
 <body data-root="../">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -16,14 +16,14 @@
     <button class="icon-button menu-button" type="button" aria-label="Show navigation" aria-expanded="false">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
-    <a class="brand" href="../index.html" aria-label="bddx home">
+    <a class="brand" href="../index.html" aria-label="bddr home">
       <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="6" width="14" height="5" rx="1.5" fill="var(--accent)"/><rect x="9" y="13.5" width="20" height="5" rx="1.5" fill="currentColor" opacity=".85"/><rect x="5" y="21" width="11" height="5" rx="1.5" fill="currentColor" opacity=".4"/><rect x="18" y="21" width="9" height="5" rx="1.5" fill="var(--accent)"/></svg>
-      <span>bddx</span>
+      <span>bddr</span>
     </a>
     <nav class="site-nav" aria-label="Main">
       <a href="getting-started.html">Docs</a>
       <a href="getting-started.html#plugins">Plugins</a>
-      <a href="https://github.com/afsarali273/SmartBDD">GitHub</a>
+      <a href="https://github.com/afsarali273/bddr">GitHub</a>
     </nav>
     <div class="header-tools">
       <button class="icon-button theme-toggle" type="button" aria-label="Use dark theme">
@@ -38,16 +38,16 @@
 
     <main class="doc" id="main">
       <article class="doc-content">
-        <p class="breadcrumb"><a href="../index.html">bddx</a> / Reference</p>
+        <p class="breadcrumb"><a href="../index.html">bddr</a> / Reference</p>
         <h1>Event stream (NDJSON)</h1>
         <p class="lede">Everything that happens in a run is an event. The NDJSON reporter writes them one JSON object per line. All other reporters, the debugger and the history tooling read only this stream.</p>
 
 <h2 id="write-it">Write it</h2>
-        <figure class="code-block"><pre><code class="lang-bash">$ npx bddx -f ndjson:reports/events.ndjson</code></pre></figure>
+        <figure class="code-block"><pre><code class="lang-bash">$ npx bddr -f ndjson:reports/events.ndjson</code></pre></figure>
         <p>Each line has a <code>ts</code> (milliseconds since the epoch) and a <code>type</code>. The stream is at schema version 1. Adding an optional field is not a breaking change. Renaming or removing a field or an event type bumps the version.</p>
 
         <h2 id="an-example">An example</h2>
-        <figure class="code-block" data-title="reports/events.ndjson (shortened)"><pre><code class="lang-json">{"ts":1794727537708,"type":"runStarted","runId":"2a6e4947-...","schemaVersion":1,"framework":{"name":"bddx","version":"0.1.0"},"runtime":{"name":"node","version":"v22.23.4"},"dryRun":false}
+        <figure class="code-block" data-title="reports/events.ndjson (shortened)"><pre><code class="lang-json">{"ts":1794727537708,"type":"runStarted","runId":"2a6e4947-...","schemaVersion":1,"framework":{"name":"bddr","version":"0.1.0"},"runtime":{"name":"node","version":"v22.23.4"},"dryRun":false}
 {"ts":1794727537708,"type":"specParsed","uri":"features/checkout.feature","featureName":"Checkout","scenarioCount":4,"errors":[]}
 {"ts":1794727537936,"type":"scenarioFinished","scenarioId":"create-user","attempt":1,"status":"passed","durationMs":27}</code></pre></figure>
 
@@ -68,7 +68,7 @@
         <tr><td><code>stepFinished</code></td><td><code>scenarioId</code>, <code>stepId</code>, <code>status</code>, <code>durationMs</code>, <code>error</code>, <code>definition</code> (pattern, location), <code>snippet</code> for undefined steps, <code>mode</code> and <code>attempts</code> for repeated or retried steps</td></tr>
         <tr><td><code>stepAttemptFinished</code></td><td><code>scenarioId</code>, <code>stepId</code>, <code>attempt</code>, <code>of</code>, <code>mode</code>, <code>status</code>, <code>durationMs</code></td></tr>
         <tr><td><code>attachment</code></td><td><code>scenarioId</code>, <code>stepId</code>, <code>name</code>, <code>mediaType</code>, <code>encoding</code> (<code>identity</code> or <code>base64</code>), <code>body</code></td></tr>
-        <tr><td><code>log</code></td><td><code>scenarioId</code>, <code>message</code>, <code>level</code>, <code>source</code> (<code>user</code> or <code>bddx</code>), <code>data</code>, <code>attempt</code>, <code>attachment</code></td></tr>
+        <tr><td><code>log</code></td><td><code>scenarioId</code>, <code>message</code>, <code>level</code>, <code>source</code> (<code>user</code> or <code>bddr</code>), <code>data</code>, <code>attempt</code>, <code>attachment</code></td></tr>
         <tr><td><code>scenarioFinished</code></td><td><code>scenarioId</code>, <code>attempt</code>, <code>status</code>, <code>durationMs</code>, <code>error</code>, <code>reason</code>, <code>willRetry</code>, <code>flaky</code>, <code>quarantined</code></td></tr>
         <tr><td><code>runFinished</code></td><td><code>success</code>, <code>summary</code> (scenario and step counts per status, <code>durationMs</code>, <code>flaky</code>, <code>quarantined</code>, <code>retried</code>), <code>error</code></td></tr>
         </tbody></table></div>
@@ -76,9 +76,9 @@
 
         <h2 id="use-it">Use it</h2>
         <ul>
-          <li><strong>Re-run what failed:</strong> <code>npx bddx --rerun-failed reports/events.ndjson</code>.</li>
-          <li><strong>Merge runs:</strong> <code>npx bddx report a.ndjson b.ndjson -f html:reports/merged.html</code>. Later runs win.</li>
-          <li><strong>Colour the living documentation:</strong> <code>npx bddx docs --results reports/events.ndjson</code>.</li>
+          <li><strong>Re-run what failed:</strong> <code>npx bddr --rerun-failed reports/events.ndjson</code>.</li>
+          <li><strong>Merge runs:</strong> <code>npx bddr report a.ndjson b.ndjson -f html:reports/merged.html</code>. Later runs win.</li>
+          <li><strong>Colour the living documentation:</strong> <code>npx bddr docs --results reports/events.ndjson</code>.</li>
           <li><strong>Read it yourself:</strong> one line per event, so <code>jq</code> or a few lines of Node.js will do. For example, to list failed scenarios:</li>
         </ul>
         <figure class="code-block"><pre><code class="lang-bash">$ jq -r 'select(.type=="scenarioFinished" and .status=="failed") | .scenarioId' reports/events.ndjson</code></pre></figure>

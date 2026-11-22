@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Profiles and --set | bddx</title>
+  <title>Profiles and --set | bddr</title>
   <meta name="description" content="Name a set of overrides as a profile, and change any option for a single run with --set and -D.">
   <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../assets/css/theme.css">
-  <script>(function(){var t=null;try{t=localStorage.getItem('bddx-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
+  <script>(function(){var t=null;try{t=localStorage.getItem('bddr-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
 </head>
 <body data-root="../">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -16,14 +16,14 @@
     <button class="icon-button menu-button" type="button" aria-label="Show navigation" aria-expanded="false">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
-    <a class="brand" href="../index.html" aria-label="bddx home">
+    <a class="brand" href="../index.html" aria-label="bddr home">
       <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="6" width="14" height="5" rx="1.5" fill="var(--accent)"/><rect x="9" y="13.5" width="20" height="5" rx="1.5" fill="currentColor" opacity=".85"/><rect x="5" y="21" width="11" height="5" rx="1.5" fill="currentColor" opacity=".4"/><rect x="18" y="21" width="9" height="5" rx="1.5" fill="var(--accent)"/></svg>
-      <span>bddx</span>
+      <span>bddr</span>
     </a>
     <nav class="site-nav" aria-label="Main">
       <a href="getting-started.html">Docs</a>
       <a href="getting-started.html#plugins">Plugins</a>
-      <a href="https://github.com/afsarali273/SmartBDD">GitHub</a>
+      <a href="https://github.com/afsarali273/bddr">GitHub</a>
     </nav>
     <div class="header-tools">
       <button class="icon-button theme-toggle" type="button" aria-label="Use dark theme">
@@ -38,12 +38,12 @@
 
     <main class="doc" id="main">
       <article class="doc-content">
-        <p class="breadcrumb"><a href="../index.html">bddx</a> / Running</p>
+        <p class="breadcrumb"><a href="../index.html">bddr</a> / Running</p>
         <h1>Profiles and --set</h1>
         <p class="lede">A profile is a named set of options, such as ci or smoke. For one-off changes, --set overrides any option without editing the config file.</p>
 
 <h2 id="profiles">Profiles</h2>
-        <figure class="code-block" data-title="bddx.config.ts"><pre><code class="lang-ts">export default defineConfig({
+        <figure class="code-block" data-title="bddr.config.ts"><pre><code class="lang-ts">export default defineConfig({
   tags: 'not @wip',
   reporters: ['console'],
   profiles: {
@@ -52,8 +52,8 @@
     qa:    { params: { baseURL: 'https://qa.example.com' } },
   },
 });</code></pre></figure>
-        <figure class="code-block"><pre><code class="lang-bash">$ npx bddx -p ci
-$ npx bddx -p smoke</code></pre></figure>
+        <figure class="code-block"><pre><code class="lang-bash">$ npx bddr -p ci
+$ npx bddr -p smoke</code></pre></figure>
         <p>A profile is merged over the base config. Later wins, with these exceptions:</p>
         <ul>
           <li><code>tags</code> are combined with <strong>and</strong>. The profile above runs <code>(not @wip) and (@smoke)</code>.</li>
@@ -63,11 +63,11 @@ $ npx bddx -p smoke</code></pre></figure>
         <p>A profile also picks the data folder: <code>-p qa</code> reads <code>data/qa/file</code> first. See <a href="data-files.html">Data files</a>. An unknown profile is a usage error that lists the profiles that exist.</p>
 
         <h2 id="set-override-anything-for-one-run">--set: override anything for one run</h2>
-        <figure class="code-block"><pre><code class="lang-bash">$ npx bddx --set workers=6
-$ npx bddx --set groups.checkout.mode=serial
-$ npx bddx --set 'groups.api.dependsOn=["setup"]'
-$ npx bddx --set params.baseURL=https://qa.example.com
-$ npx bddx --set retry.scenario=2 --set retry.delay=500</code></pre></figure>
+        <figure class="code-block"><pre><code class="lang-bash">$ npx bddr --set workers=6
+$ npx bddr --set groups.checkout.mode=serial
+$ npx bddr --set 'groups.api.dependsOn=["setup"]'
+$ npx bddr --set params.baseURL=https://qa.example.com
+$ npx bddr --set retry.scenario=2 --set retry.delay=500</code></pre></figure>
         <ul>
           <li>The part before <code>=</code> is a path into the config. Dots go deeper.</li>
           <li>The value is read as JSON when it can be: numbers, <code>true</code>, <code>false</code>, arrays, objects. Anything else is text.</li>
@@ -78,7 +78,7 @@ $ npx bddx --set retry.scenario=2 --set retry.delay=500</code></pre></figure>
         <aside class="callout warning"><p class="callout-title">Quoting</p><p>Quote values that contain <code>[</code>, <code>]</code>, <code>{</code>, <code>}</code> or quotes. On macOS and Linux use single quotes around the whole argument. In PowerShell use double quotes and escape inner ones: <code>--set "groups.api.dependsOn=[\"setup\"]"</code>.</p></aside>
 
         <h2 id="d-parameters-for-steps">-D: parameters for steps</h2>
-        <figure class="code-block"><pre><code class="lang-bash">$ npx bddx -D baseURL=https://staging.example.com -D browser=firefox</code></pre></figure>
+        <figure class="code-block"><pre><code class="lang-bash">$ npx bddr -D baseURL=https://staging.example.com -D browser=firefox</code></pre></figure>
         <p>Each <code>-D key=value</code> sets <code>ctx.params.key</code>. The plugins read their own overrides from here, such as <code>browser</code>, <code>headed</code>, <code>baseURL</code> and <code>token</code>.</p>
 
         <h2 id="which-wins">Which wins</h2>

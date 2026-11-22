@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Hooks | bddx</title>
+  <title>Hooks | bddr</title>
   <meta name="description" content="Run code before and after the run, a worker, a group, a feature, a rule, a scenario or a step.">
   <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../assets/css/theme.css">
-  <script>(function(){var t=null;try{t=localStorage.getItem('bddx-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
+  <script>(function(){var t=null;try{t=localStorage.getItem('bddr-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
 </head>
 <body data-root="../">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -16,14 +16,14 @@
     <button class="icon-button menu-button" type="button" aria-label="Show navigation" aria-expanded="false">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
-    <a class="brand" href="../index.html" aria-label="bddx home">
+    <a class="brand" href="../index.html" aria-label="bddr home">
       <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="6" width="14" height="5" rx="1.5" fill="var(--accent)"/><rect x="9" y="13.5" width="20" height="5" rx="1.5" fill="currentColor" opacity=".85"/><rect x="5" y="21" width="11" height="5" rx="1.5" fill="currentColor" opacity=".4"/><rect x="18" y="21" width="9" height="5" rx="1.5" fill="var(--accent)"/></svg>
-      <span>bddx</span>
+      <span>bddr</span>
     </a>
     <nav class="site-nav" aria-label="Main">
       <a href="getting-started.html">Docs</a>
       <a href="getting-started.html#plugins">Plugins</a>
-      <a href="https://github.com/afsarali273/SmartBDD">GitHub</a>
+      <a href="https://github.com/afsarali273/bddr">GitHub</a>
     </nav>
     <div class="header-tools">
       <button class="icon-button theme-toggle" type="button" aria-label="Use dark theme">
@@ -38,9 +38,9 @@
 
     <main class="doc" id="main">
       <article class="doc-content">
-        <p class="breadcrumb"><a href="../index.html">bddx</a> / Writing tests</p>
+        <p class="breadcrumb"><a href="../index.html">bddr</a> / Writing tests</p>
         <h1>Hooks</h1>
-        <p class="lede">Hooks run setup and cleanup code around your tests. bddx has the same levels as TestNG, from the whole run down to a single step.</p>
+        <p class="lede">Hooks run setup and cleanup code around your tests. bddr has the same levels as TestNG, from the whole run down to a single step.</p>
 
 <h2 id="the-levels">The levels</h2>
         <div class="table-wrap"><table>
@@ -56,7 +56,7 @@
         </tbody></table></div>
 
         <h2 id="write-a-hook">Write a hook</h2>
-        <figure class="code-block" data-title="steps/hooks.ts"><pre><code class="lang-ts">import { BeforeAll, AfterAll, Before, After } from '@bddx/runtime';
+        <figure class="code-block" data-title="steps/hooks.ts"><pre><code class="lang-ts">import { BeforeAll, AfterAll, Before, After } from '@bddr/runtime';
 
 BeforeAll(async (ctx) =&gt; {
   ctx.run.set('baseUrl', String(ctx.params['baseUrl'] ?? 'https://example.test'));

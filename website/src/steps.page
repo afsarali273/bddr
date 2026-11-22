@@ -5,7 +5,7 @@ lede: A step definition connects a line of a scenario to code. Given, When and T
 ---
 <h2>Your first step</h2>
 <cb title="steps/basket.steps.ts">import { strict as assert } from 'node:assert';
-import { Given, When, Then } from '@bddx/runtime';
+import { Given, When, Then } from '@bddr/runtime';
 
 Given('an empty basket', (ctx) => {
   ctx.state.set('lines', []);
@@ -71,8 +71,8 @@ When('I click {string}', { concurrent: false }, async ({ page }, label: string) 
 
 <h2>Pending and undefined steps</h2>
 <p>A step with no definition is <em>undefined</em>. By default that fails the run. Print code to paste for every undefined step:</p>
-<cb lang="bash">$ npx bddx snippets</cb>
-<p>Use <code>--no-strict</code> if pending and undefined steps should not fail the run. If two definitions match one step, bddx reports an ambiguity instead of picking one.</p>
+<cb lang="bash">$ npx bddr snippets</cb>
+<p>Use <code>--no-strict</code> if pending and undefined steps should not fail the run. If two definitions match one step, bddr reports an ambiguity instead of picking one.</p>
 
 <h2>Repeat and retry from the feature file</h2>
 <p>Tags at the end of a step line repeat or retry just that step: <code>@repeat:N</code>, <code>@retry:N</code>, <code>@delay:2s</code>, <code>@backoff:2</code>, <code>@timeout:10s</code> and <code>@concurrency:N</code>. See <a href="retries.html">Retries and flaky tests</a>.</p>

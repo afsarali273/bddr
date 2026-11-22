@@ -1,11 +1,11 @@
 title: Sharding in CI
 section: Orchestration
 desc: Split one run across several CI machines with --shard, keep dependent tests together, and merge the results.
-lede: Sharding lets four CI machines each run a quarter of the suite. bddx splits the work so that scenarios that belong together stay on the same machine.
+lede: Sharding lets four CI machines each run a quarter of the suite. bddr splits the work so that scenarios that belong together stay on the same machine.
 ---
 <h2>Run one shard</h2>
-<cb lang="bash">$ npx bddx run --shard 1/4 -f ndjson:reports/events-1.ndjson</cb>
-<p>Every machine uses the same command with its own number, from <code>1/4</code> to <code>4/4</code>. The split is deterministic, so all machines agree without talking to each other. <code>bddx plan --shard 1/4</code> shows what a shard would run.</p>
+<cb lang="bash">$ npx bddr run --shard 1/4 -f ndjson:reports/events-1.ndjson</cb>
+<p>Every machine uses the same command with its own number, from <code>1/4</code> to <code>4/4</code>. The split is deterministic, so all machines agree without talking to each other. <code>bddr plan --shard 1/4</code> shows what a shard would run.</p>
 
 <h2>What stays together</h2>
 <p>Scenarios are never split across shards when they are linked by:</p>
@@ -16,17 +16,17 @@ lede: Sharding lets four CI machines each run a quarter of the suite. bddx split
   <li>a <code>@serial</code> feature.</li>
 </ul>
 <p>Each linked set is one unit. Units are packed onto shards, largest first, by their average duration from the run history. Without history every scenario weighs the same. A shard with nothing to run exits with 0.</p>
-<aside class="callout warning"><p class="callout-title">Big units</p><p>If one unit holds most of the suite, one shard ends up with most of the work. bddx warns about this. Use more locks, fewer dependencies or smaller groups to break it up.</p></aside>
+<aside class="callout warning"><p class="callout-title">Big units</p><p>If one unit holds most of the suite, one shard ends up with most of the work. bddr warns about this. Use more locks, fewer dependencies or smaller groups to break it up.</p></aside>
 
 <h2>Better balance with history</h2>
 <p>Turn on history and keep the folder between CI runs:</p>
-<cb title="bddx.config.ts">export default defineConfig({
-  history: true, // writes .bddx/history, keeps the last 50 runs
+<cb title="bddr.config.ts">export default defineConfig({
+  history: true, // writes .bddr/history, keeps the last 50 runs
 });</cb>
-<p>Restore and save <code>.bddx/history</code> as a CI cache, so the next run knows how long each scenario takes.</p>
+<p>Restore and save <code>.bddr/history</code> as a CI cache, so the next run knows how long each scenario takes.</p>
 
 <h2>Merge the results</h2>
-<cb lang="bash">$ npx bddx report reports/events-*.ndjson -f html:reports/report.html -f junit:reports/junit.xml</cb>
+<cb lang="bash">$ npx bddr report reports/events-*.ndjson -f html:reports/report.html -f junit:reports/junit.xml</cb>
 <p>The merged report looks like one run.</p>
 
 <h2>Example: GitHub Actions</h2>
@@ -45,11 +45,11 @@ jobs:
         with: { node-version: 22 }
       - uses: actions/cache@v4
         with:
-          path: .bddx/history
-          key: bddx-history-${{ github.run_id }}
-          restore-keys: bddx-history-
+          path: .bddr/history
+          key: bddr-history-${{ github.run_id }}
+          restore-keys: bddr-history-
       - run: npm ci
-      - run: npx bddx run --shard ${{ matrix.shard }}/4 --pool process --workers 2 -f ndjson:reports/events-${{ matrix.shard }}.ndjson
+      - run: npx bddr run --shard ${{ matrix.shard }}/4 --pool process --workers 2 -f ndjson:reports/events-${{ matrix.shard }}.ndjson
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -66,7 +66,7 @@ jobs:
       - run: npm ci
       - uses: actions/download-artifact@v4
         with: { pattern: events-*, path: reports, merge-multiple: true }
-      - run: npx bddx report reports/events-*.ndjson -f html:reports/report.html
+      - run: npx bddr report reports/events-*.ndjson -f html:reports/report.html
       - uses: actions/upload-artifact@v4
         with: { name: report, path: reports/report.html }</cb>
-<aside class="callout note"><p class="callout-title">Note</p><p>bddx is not on npm yet, so <code>npm ci</code> needs your project to reach the built packages, for example through a private registry or a checked-in tarball. This workflow has not been run against a real repository yet.</p></aside>
+<aside class="callout note"><p class="callout-title">Note</p><p>bddr is not on npm yet, so <code>npm ci</code> needs your project to reach the built packages, for example through a private registry or a checked-in tarball. This workflow has not been run against a real repository yet.</p></aside>

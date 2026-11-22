@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>How plugins work | bddx</title>
-  <meta name="description" content="What a bddx plugin is, how to add one to your project, and which plugins ship with bddx.">
+  <title>How plugins work | bddr</title>
+  <meta name="description" content="What a bddr plugin is, how to add one to your project, and which plugins ship with bddr.">
   <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../assets/css/theme.css">
-  <script>(function(){var t=null;try{t=localStorage.getItem('bddx-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
+  <script>(function(){var t=null;try{t=localStorage.getItem('bddr-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
 </head>
 <body data-root="../">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -16,14 +16,14 @@
     <button class="icon-button menu-button" type="button" aria-label="Show navigation" aria-expanded="false">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
-    <a class="brand" href="../index.html" aria-label="bddx home">
+    <a class="brand" href="../index.html" aria-label="bddr home">
       <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="6" width="14" height="5" rx="1.5" fill="var(--accent)"/><rect x="9" y="13.5" width="20" height="5" rx="1.5" fill="currentColor" opacity=".85"/><rect x="5" y="21" width="11" height="5" rx="1.5" fill="currentColor" opacity=".4"/><rect x="18" y="21" width="9" height="5" rx="1.5" fill="var(--accent)"/></svg>
-      <span>bddx</span>
+      <span>bddr</span>
     </a>
     <nav class="site-nav" aria-label="Main">
       <a href="getting-started.html">Docs</a>
       <a href="getting-started.html#plugins">Plugins</a>
-      <a href="https://github.com/afsarali273/SmartBDD">GitHub</a>
+      <a href="https://github.com/afsarali273/bddr">GitHub</a>
     </nav>
     <div class="header-tools">
       <button class="icon-button theme-toggle" type="button" aria-label="Use dark theme">
@@ -38,35 +38,35 @@
 
     <main class="doc" id="main">
       <article class="doc-content">
-        <p class="breadcrumb"><a href="../index.html">bddx</a> / Plugins</p>
+        <p class="breadcrumb"><a href="../index.html">bddr</a> / Plugins</p>
         <h1>How plugins work</h1>
-        <p class="lede">A plugin bundles fixtures, hooks, steps and parameter types. bddx core depends on no browser or HTTP library. The plugin and the library it wraps are dependencies of your project.</p>
+        <p class="lede">A plugin bundles fixtures, hooks, steps and parameter types. bddr core depends on no browser or HTTP library. The plugin and the library it wraps are dependencies of your project.</p>
 
-<h2 id="the-plugins-that-ship-with-bddx">The plugins that ship with bddx</h2>
+<h2 id="the-plugins-that-ship-with-bddr">The plugins that ship with bddr</h2>
         <div class="table-wrap"><table>
         <thead><tr><th>Plugin</th><th>Wraps</th><th>Fixtures</th><th>Page</th></tr></thead>
         <tbody>
-        <tr><td><code>@bddx/playwright</code></td><td>Playwright</td><td><code>browser</code>, <code>context</code>, <code>page</code>, <code>request</code>, <code>expect</code>, <code>newContext</code>, <code>playwright</code></td><td><a href="playwright.html">Playwright</a></td></tr>
-        <tr><td><code>@bddx/selenium</code></td><td>selenium-webdriver</td><td><code>driver</code>, <code>open</code>, <code>wait</code>, <code>newDriver</code>, <code>selenium</code></td><td><a href="selenium.html">Selenium</a></td></tr>
-        <tr><td><code>@bddx/axios</code></td><td>axios</td><td><code>api</code>, <code>newApi</code>, <code>axios</code></td><td><a href="axios.html">axios</a></td></tr>
+        <tr><td><code>@bddr/playwright</code></td><td>Playwright</td><td><code>browser</code>, <code>context</code>, <code>page</code>, <code>request</code>, <code>expect</code>, <code>newContext</code>, <code>playwright</code></td><td><a href="playwright.html">Playwright</a></td></tr>
+        <tr><td><code>@bddr/selenium</code></td><td>selenium-webdriver</td><td><code>driver</code>, <code>open</code>, <code>wait</code>, <code>newDriver</code>, <code>selenium</code></td><td><a href="selenium.html">Selenium</a></td></tr>
+        <tr><td><code>@bddr/axios</code></td><td>axios</td><td><code>api</code>, <code>newApi</code>, <code>axios</code></td><td><a href="axios.html">axios</a></td></tr>
         </tbody></table></div>
-        <p>They live in <code>plugins/</code> in the repository. Each is a separate package, not part of the bddx workspace, so the bddx packages never depend on Playwright or Selenium.</p>
+        <p>They live in <code>plugins/</code> in the repository. Each is a separate package, not part of the bddr workspace, so the bddr packages never depend on Playwright or Selenium.</p>
 
         <h2 id="add-one-to-your-project">Add one to your project</h2>
         <ol class="steps">
           <li><h4>Install the plugin and the library</h4>
-            <p>Until bddx is published, install the plugin from your clone. The command for each plugin is on its page and in <a href="getting-started.html">Getting started</a>.</p>
-            <figure class="code-block"><pre><code class="lang-bash">$ npm i -D file:../SmartBDD/plugins/axios axios</code></pre></figure></li>
+            <p>Until bddr is published, install the plugin from your clone. The command for each plugin is on its page and in <a href="getting-started.html">Getting started</a>.</p>
+            <figure class="code-block"><pre><code class="lang-bash">$ npm i -D file:../bddr/plugins/axios axios</code></pre></figure></li>
           <li><h4>List it in the config</h4>
-        <figure class="code-block" data-title="bddx.config.ts"><pre><code class="lang-ts">import { defineConfig } from '@bddx/cli';
-import { axios } from '@bddx/axios';
+        <figure class="code-block" data-title="bddr.config.ts"><pre><code class="lang-ts">import { defineConfig } from '@bddr/cli';
+import { axios } from '@bddr/axios';
 
 export default defineConfig({
   plugins: [axios({ baseURL: 'https://api.example.com' })],
 });</code></pre></figure>
-            <p>Without TypeScript types you can write the plugin by name: <code>plugins: [['@bddx/axios', { baseURL: '...' }]]</code>.</p></li>
+            <p>Without TypeScript types you can write the plugin by name: <code>plugins: [['@bddr/axios', { baseURL: '...' }]]</code>.</p></li>
           <li><h4>Import it once for types</h4>
-        <figure class="code-block" data-title="steps/support/types.ts"><pre><code class="lang-ts">import '@bddx/axios';</code></pre></figure>
+        <figure class="code-block" data-title="steps/support/types.ts"><pre><code class="lang-ts">import '@bddr/axios';</code></pre></figure>
             <p>This types <code>ctx.api</code>, <code>({ api })</code> and <code>inject('api')</code> in your step files.</p></li>
           <li><h4>Use the fixture</h4>
         <figure class="code-block" data-title="steps/products.steps.ts"><pre><code class="lang-ts">When('I list the products', async ({ api, state }) =&gt; {

@@ -4,14 +4,15 @@
  *   ready: false = planned; shown greyed out, not linked, and skipped by Previous/Next
  * Order here is the reading order used by the Previous/Next links.
  */
-window.BDDX_NAV = [
+window.BDDR_NAV = [
   {
     title: 'Introduction',
     items: [
-      { title: 'Why bddx', href: 'docs/why-bddx.html', ready: true },
+      { title: 'Why bddr', href: 'docs/why-bddr.html', ready: true },
       { title: 'Getting started', href: 'docs/getting-started.html', ready: true },
       { title: 'Your first project', href: 'docs/first-project.html', ready: true },
       { title: 'Coming from Cucumber.js', href: 'docs/from-cucumber.html', ready: true },
+      { title: 'Architecture', href: 'docs/architecture.html', ready: true },
     ],
   },
   {

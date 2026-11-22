@@ -1,6 +1,6 @@
 title: Config options
 section: Reference
-desc: Every option of bddx.config.ts with its type, default and a link to where it is explained.
+desc: Every option of bddr.config.ts with its type, default and a link to where it is explained.
 lede: All options go at the top level of defineConfig, and every one except profiles can be changed for one run with --set.
 ---
 <h2>Specs and steps</h2>
@@ -80,8 +80,8 @@ lede: All options go at the top level of defineConfig, and every one except prof
 <tbody>
 <tr><td><code>reporters</code></td><td>array</td><td></td><td>See <a href="reporters.html">Reporters</a>.</td></tr>
 <tr><td><code>logLevel</code></td><td><code>'debug'</code>, <code>'info'</code>, <code>'warn'</code>, <code>'error'</code>, <code>'silent'</code></td><td><code>'info'</code></td><td>Console log level. Events always contain every log.</td></tr>
-<tr><td><code>history</code></td><td>boolean or <code>{ dir, keep }</code></td><td></td><td><code>true</code> keeps the last 50 runs in <code>.bddx/history</code>. Dry runs are never recorded.</td></tr>
-<tr><td><code>validation</code></td><td>object</td><td></td><td><code>{ allowedTagKeys: string[] }</code> for tag checks in <code>bddx validate</code>.</td></tr>
+<tr><td><code>history</code></td><td>boolean or <code>{ dir, keep }</code></td><td></td><td><code>true</code> keeps the last 50 runs in <code>.bddr/history</code>. Dry runs are never recorded.</td></tr>
+<tr><td><code>validation</code></td><td>object</td><td></td><td><code>{ allowedTagKeys: string[] }</code> for tag checks in <code>bddr validate</code>.</td></tr>
 </tbody></table></div>
 
 <h2>profiles</h2>

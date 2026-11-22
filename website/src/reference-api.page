@@ -1,7 +1,7 @@
 title: Runtime API
 section: Reference
-desc: The functions and context members that @bddx/runtime exports for step files, hooks, fixtures and plugins.
-lede: Everything you import from @bddx/runtime in step files. The config helper defineConfig comes from @bddx/cli.
+desc: The functions and context members that @bddr/runtime exports for step files, hooks, fixtures and plugins.
+lede: Everything you import from @bddr/runtime in step files. The config helper defineConfig comes from @bddr/cli.
 ---
 <h2>Steps</h2>
 <div class="signature">
@@ -95,4 +95,4 @@ lede: Everything you import from @bddx/runtime in step files. The config helper 
 <p><code>DataTable</code>: <code>raw()</code>, <code>header()</code>, <code>rows()</code>, <code>hashes()</code>, <code>rowsHash()</code>, <code>transpose()</code>. <code>DocString</code>: a string with <code>content</code> and <code>mediaType</code>. See <a href="data-tables.html">Data tables and doc strings</a>.</p>
 
 <h2>Programmatic use</h2>
-<p>The CLI is a thin shell around <code>runBddx()</code> from <code>@bddx/cli</code>, so you can start a run from your own script. See <code>packages/cli/src/run.ts</code> in the repository.</p>
+<p>The CLI is a thin shell around <code>runBddr()</code> from <code>@bddr/cli</code>, so you can start a run from your own script. See <code>packages/cli/src/run.ts</code> in the repository.</p>

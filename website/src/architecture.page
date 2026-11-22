@@ -1,0 +1,64 @@
+title: Architecture
+section: Introduction
+desc: How bddr is built: the four packages, the life of a run from feature file to report, worker processes, and how plugins supply browsers and API clients.
+lede: bddr is four small packages and a set of plugins. A run is a short pipeline: parse, select, plan, schedule, run. Everything it does is reported as events, and the reporters only read those events.
+---
+<h2>The big picture</h2>
+<p>You give bddr feature files and a config. The runner plans the run, schedules it on workers and writes reports. Browsers and HTTP clients come from plugins, not from the runner.</p>
+<figure class="diagram">
+  <div class="diagram-frame"><img src="../assets/img/architecture.svg" alt="Feature files and bddr.config.ts go into the bddr runner, which contains a planner, a scheduler and workers. Plugins for Playwright, Selenium and axios supply fixtures. The runner produces an HTML report, JUnit XML, Cucumber JSON and NDJSON events." width="1680" height="720" style="display:block;width:100%;height:auto"></div>
+  <figcaption>Inputs on the left, reports on the right, plugins underneath.</figcaption>
+</figure>
+
+<h2>Packages</h2>
+<p>The runner is split so that each part has one job and the dependencies point one way: down.</p>
+<figure class="diagram">
+  <div class="diagram-frame"><include src="diagrams/packages.html"/></div>
+  <figcaption>The CLI uses the runtime and the reporters. Both use core. Plugins register fixtures with the runtime.</figcaption>
+</figure>
+<div class="table-wrap"><table>
+<thead><tr><th>Package</th><th>Owns</th><th>Depends on</th></tr></thead>
+<tbody>
+<tr><td><code>@bddr/core</code></td><td>The spec model, stable scenario ids, tags, selection, the plan, data file loading, run history and the event schema.</td><td>Only the Cucumber parsing libraries, behind adapters.</td></tr>
+<tr><td><code>@bddr/runtime</code></td><td>Steps, hooks, fixtures, the context, the scheduler, the inline and process pools, retries and the plugin API.</td><td><code>@bddr/core</code> and the Cucumber expressions library.</td></tr>
+<tr><td><code>@bddr/reporters</code></td><td>Console, HTML, JUnit, Cucumber JSON, Messages, NDJSON and living docs.</td><td><code>@bddr/core</code>. Reporters read events and never call the runtime.</td></tr>
+<tr><td><code>@bddr/cli</code></td><td>The <code>bddr</code> command, config loading, watch and debug modes, and the worker entry point.</td><td>The three packages above.</td></tr>
+</tbody></table></div>
+<aside class="callout note"><p class="callout-title">Why the Cucumber libraries are replaceable</p><p>bddr uses Cucumber's libraries only to parse Gherkin, tag expressions and step expressions. Each one sits behind an interface in an <code>adapters</code> folder, so the runner does not depend on how they work. This also lets other spec formats be added later as extra parsers.</p></aside>
+
+<h2>The life of a run</h2>
+<p>Every <code>bddr run</code> goes through the same stages. The first three only deal with data, so they are fast and easy to test.</p>
+<figure class="diagram">
+  <div class="diagram-frame"><include src="diagrams/run-pipeline.html"/></div>
+  <figcaption>The plan is plain data. <code>bddr plan</code> prints it, and <code>--shard</code> splits it, before anything runs.</figcaption>
+</figure>
+<ol class="steps">
+  <li><h4>Parse</h4><p>Feature files become scenarios. Each scenario gets a stable id that does not change when you edit other parts of the file. See <a href="feature-files.html">Feature files</a>.</p></li>
+  <li><h4>Select</h4><p>Paths, tags, names and ids choose what to run. Scenarios that a selected scenario depends on are added automatically. See <a href="tags.html">Tags and selection</a>.</p></li>
+  <li><h4>Plan</h4><p>Groups, dependencies, locks and priorities become one plan. You can read it first with <code>bddr plan</code>. See <a href="groups.html">Groups</a> and <a href="dependencies.html">Dependencies</a>.</p></li>
+  <li><h4>Schedule</h4><p>The scheduler gives ready scenarios to free workers, holds locks, and applies retries. See <a href="locks.html">Locks and priority</a> and <a href="retries.html">Retries and flaky tests</a>.</p></li>
+  <li><h4>Run</h4><p>A worker runs the hooks and steps for one scenario, creating fixtures when a step asks for them. Every stage reports what happened as events, and the reporters turn those events into files. See <a href="reporters.html">Reporters</a> and <a href="reference-events.html">Event reference</a>.</p></li>
+</ol>
+
+<h2>Workers</h2>
+<p>By default the workers are concurrent async tasks in one Node.js process. With <code>pool: 'process'</code> each worker is its own process. The plan and the scheduler stay in the parent in both cases, so groups, locks and dependencies behave the same.</p>
+<figure class="diagram">
+  <div class="diagram-frame"><img src="../assets/img/process-pool.svg" alt="A parent process holding the plan, scheduler, BeforeAll and AfterAll hooks and reporters sends run-scenario messages to three worker processes. Each worker holds the step files, BeforeWorker hook and browser plugin, and sends events back." width="1680" height="720" style="display:block;width:100%;height:auto"></div>
+  <figcaption>With the process pool the parent sends scenarios out and gets events back. See <a href="process-pool.html">Worker processes</a>.</figcaption>
+</figure>
+
+<h2>Plugins and fixtures</h2>
+<p>A plugin registers fixtures when bddr starts. A fixture is created when a step first asks for it and closed when its scope ends, so a browser only starts if some scenario needs one.</p>
+<figure class="diagram">
+  <div class="diagram-frame"><include src="diagrams/fixture-scopes.html"/></div>
+  <figcaption>In this example the browser lives for the worker and each scenario gets its own page.</figcaption>
+</figure>
+<p>Because a plugin only registers fixtures, one scenario can use several of them, for example a browser and an API client. See <a href="plugins.html">How plugins work</a>, <a href="fixtures.html">Fixtures and inject()</a> and <a href="mixed.html">UI and API in one scenario</a>.</p>
+
+<h2>Why it is built this way</h2>
+<ul>
+  <li><strong>The plan is data.</strong> You can print it, test it and split it across CI machines before a single browser opens.</li>
+  <li><strong>Reporters read events.</strong> A new report format does not need changes to the runner.</li>
+  <li><strong>Core has no browser or HTTP library.</strong> The plugin and the library it wraps are dependencies of your project, so you choose the versions.</li>
+  <li><strong>One configuration and one event schema.</strong> A planned Java port will use the same ones, so the same specs and reports work on both.</li>
+</ul>

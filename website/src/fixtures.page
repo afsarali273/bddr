@@ -1,10 +1,10 @@
 title: Fixtures and inject()
 section: Writing tests
-desc: Define named resources such as a browser page, request them in steps, choose their lifetime, and know how bddx finds them.
-lede: A fixture is a named value that bddx creates when a step first asks for it and cleans up afterwards. Browser pages, API clients and page objects all work this way.
+desc: Define named resources such as a browser page, request them in steps, choose their lifetime, and know how bddr finds them.
+lede: A fixture is a named value that bddr creates when a step first asks for it and cleans up afterwards. Browser pages, API clients and page objects all work this way.
 ---
 <h2>Define a fixture</h2>
-<cb title="steps/support/fixtures.ts">import { defineFixture } from '@bddx/runtime';
+<cb title="steps/support/fixtures.ts">import { defineFixture } from '@bddr/runtime';
 import { chromium, type Browser, type Page } from 'playwright';
 
 defineFixture('browser', () => chromium.launch(), {
@@ -19,7 +19,7 @@ defineFixture('page', async ({ browser }) => browser.newPage(), {
   },
 });
 
-declare module '@bddx/runtime' {
+declare module '@bddr/runtime' {
   interface Fixtures {
     browser: Browser;
     page: Page;
@@ -49,8 +49,8 @@ const page = await ctx.fixture('page');
 class LoginSteps {
   private page = inject('page');
 }</cb>
-<p>bddx reads the first parameter of a step, a hook or a fixture setup and creates the fixtures you name there before the code runs. This is the same idea as Playwright Test.</p>
-<aside class="callout warning"><p class="callout-title">Warning</p><p>A helper function that reads <code>ctx.page</code> inside its body is invisible to bddx. If the page was not created yet you get the error "Fixture 'page' is asynchronous and was not requested before use". Destructure the fixture in the step that calls the helper, or use <code>await ctx.fixture('page')</code> inside it.</p></aside>
+<p>bddr reads the first parameter of a step, a hook or a fixture setup and creates the fixtures you name there before the code runs. This is the same idea as Playwright Test.</p>
+<aside class="callout warning"><p class="callout-title">Warning</p><p>A helper function that reads <code>ctx.page</code> inside its body is invisible to bddr. If the page was not created yet you get the error "Fixture 'page' is asynchronous and was not requested before use". Destructure the fixture in the step that calls the helper, or use <code>await ctx.fixture('page')</code> inside it.</p></aside>
 
 <h2>Order of cleanup</h2>
 <p>Fixtures are cleaned up in reverse creation order, after the steps, the <code>After</code> hooks and <code>ctx.defer</code> callbacks. Cleanup receives the scenario's final <code>status</code> and <code>error</code>. If a cleanup throws, the scenario fails, with a hook named "fixture teardown".</p>

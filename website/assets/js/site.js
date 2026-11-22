@@ -1,5 +1,5 @@
 /*
- * bddx docs: behaviour shared by every page. No dependencies, works from file:// and any static host.
+ * bddr docs: behaviour shared by every page. No dependencies, works from file:// and any static host.
  *   - theme toggle (light / dark, remembered)
  *   - sidebar from nav.js, mobile menu, Previous / Next links
  *   - "On this page" table of contents with the current section marked, heading anchors
@@ -45,7 +45,7 @@
       ['com', /(?<=^|\s)#[^\n]*/],
       ['str', /'[^'\n]*'|"(?:\\.|[^"\\\n])*"/],
       ['kw2', /\$[A-Za-z_]\w*|\$env:\w+|\$\{[^}]+\}/],
-      ['fn', /(?<=^(?:\$ |PS> )?)(?:npx|npm|node|git|cd|brew|winget|choco|nvm|fnm|mkdir|cp|ls|cat|export|set|safaridriver|corepack|bddx)(?= |$)/],
+      ['fn', /(?<=^(?:\$ |PS> )?)(?:npx|npm|node|git|cd|brew|winget|choco|nvm|fnm|mkdir|cp|ls|cat|export|set|safaridriver|corepack|bddr)(?= |$)/],
       ['tag', /(?<=\s)--?[A-Za-z][\w-]*/],
       ['num', /\b\d+(?:\.\d+)*\b/],
     ],
@@ -77,7 +77,7 @@
     toggle.addEventListener('click', function () {
       var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', next);
-      store.set('bddx-theme', next);
+      store.set('bddr-theme', next);
       sync();
     });
   }
@@ -86,9 +86,9 @@
   var sidebar = document.querySelector('.sidebar');
   var flat = [];
   var current = -1;
-  if (sidebar && window.BDDX_NAV) {
+  if (sidebar && window.BDDR_NAV) {
     var html = '';
-    window.BDDX_NAV.forEach(function (section) {
+    window.BDDR_NAV.forEach(function (section) {
       html += '<section><h2>' + esc(section.title) + '</h2><ul>';
       section.items.forEach(function (item) {
         if (!item.ready) {
@@ -222,14 +222,14 @@
       list.appendChild(b);
     });
     box.prepend(list);
-    var saved = group && store.get('bddx-tab-' + group);
+    var saved = group && store.get('bddr-tab-' + group);
     var start = saved && box.querySelector(':scope > [data-tab="' + saved + '"]') ? saved : guess(group, panels);
     show(box, start);
   });
 
   function select(group, value, box) {
     if (!group) return show(box, value);
-    store.set('bddx-tab-' + group, value);
+    store.set('bddr-tab-' + group, value);
     document.querySelectorAll('.tabs[data-group="' + group + '"]').forEach(function (b) {
       if (b.querySelector(':scope > [data-tab="' + value + '"]')) show(b, value);
     });

@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Step definitions | bddx</title>
+  <title>Step definitions | bddr</title>
   <meta name="description" content="Write step definitions with Cucumber Expressions or regular expressions, use the context, and set timeouts and retries.">
   <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../assets/css/theme.css">
-  <script>(function(){var t=null;try{t=localStorage.getItem('bddx-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
+  <script>(function(){var t=null;try{t=localStorage.getItem('bddr-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
 </head>
 <body data-root="../">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -16,14 +16,14 @@
     <button class="icon-button menu-button" type="button" aria-label="Show navigation" aria-expanded="false">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
-    <a class="brand" href="../index.html" aria-label="bddx home">
+    <a class="brand" href="../index.html" aria-label="bddr home">
       <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="6" width="14" height="5" rx="1.5" fill="var(--accent)"/><rect x="9" y="13.5" width="20" height="5" rx="1.5" fill="currentColor" opacity=".85"/><rect x="5" y="21" width="11" height="5" rx="1.5" fill="currentColor" opacity=".4"/><rect x="18" y="21" width="9" height="5" rx="1.5" fill="var(--accent)"/></svg>
-      <span>bddx</span>
+      <span>bddr</span>
     </a>
     <nav class="site-nav" aria-label="Main">
       <a href="getting-started.html">Docs</a>
       <a href="getting-started.html#plugins">Plugins</a>
-      <a href="https://github.com/afsarali273/SmartBDD">GitHub</a>
+      <a href="https://github.com/afsarali273/bddr">GitHub</a>
     </nav>
     <div class="header-tools">
       <button class="icon-button theme-toggle" type="button" aria-label="Use dark theme">
@@ -38,13 +38,13 @@
 
     <main class="doc" id="main">
       <article class="doc-content">
-        <p class="breadcrumb"><a href="../index.html">bddx</a> / Writing tests</p>
+        <p class="breadcrumb"><a href="../index.html">bddr</a> / Writing tests</p>
         <h1>Step definitions</h1>
         <p class="lede">A step definition connects a line of a scenario to code. Given, When and Then are interchangeable for matching, so use whichever reads best.</p>
 
 <h2 id="your-first-step">Your first step</h2>
         <figure class="code-block" data-title="steps/basket.steps.ts"><pre><code class="lang-ts">import { strict as assert } from 'node:assert';
-import { Given, When, Then } from '@bddx/runtime';
+import { Given, When, Then } from '@bddr/runtime';
 
 Given('an empty basket', (ctx) =&gt; {
   ctx.state.set('lines', []);
@@ -110,8 +110,8 @@ When('I click {string}', { concurrent: false }, async ({ page }, label: string) 
 
         <h2 id="pending-and-undefined-steps">Pending and undefined steps</h2>
         <p>A step with no definition is <em>undefined</em>. By default that fails the run. Print code to paste for every undefined step:</p>
-        <figure class="code-block"><pre><code class="lang-bash">$ npx bddx snippets</code></pre></figure>
-        <p>Use <code>--no-strict</code> if pending and undefined steps should not fail the run. If two definitions match one step, bddx reports an ambiguity instead of picking one.</p>
+        <figure class="code-block"><pre><code class="lang-bash">$ npx bddr snippets</code></pre></figure>
+        <p>Use <code>--no-strict</code> if pending and undefined steps should not fail the run. If two definitions match one step, bddr reports an ambiguity instead of picking one.</p>
 
         <h2 id="repeat-and-retry-from-the-feature-file">Repeat and retry from the feature file</h2>
         <p>Tags at the end of a step line repeat or retry just that step: <code>@repeat:N</code>, <code>@retry:N</code>, <code>@delay:2s</code>, <code>@backoff:2</code>, <code>@timeout:10s</code> and <code>@concurrency:N</code>. See <a href="retries.html">Retries and flaky tests</a>.</p>

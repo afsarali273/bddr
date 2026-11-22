@@ -1,13 +1,13 @@
 title: Writing your own plugin
 section: Plugins
-desc: Build a bddx plugin that adds fixtures, hooks, steps or parameter types, and use it from a config file.
+desc: Build a bddr plugin that adds fixtures, hooks, steps or parameter types, and use it from a config file.
 lede: A plugin is a function that registers things when the process starts. Start with a file inside your project. Move it to a package when other projects need it.
 ---
 <h2>The smallest plugin</h2>
-<cb title="support/db.plugin.ts">import { defineFixture, definePlugin } from '@bddx/runtime';
+<cb title="support/db.plugin.ts">import { defineFixture, definePlugin } from '@bddr/runtime';
 import { Client } from 'pg';
 
-declare module '@bddx/runtime' {
+declare module '@bddr/runtime' {
   interface Fixtures {
     db: Client;
   }
@@ -23,7 +23,7 @@ export default definePlugin<{ url: string }>({
     }, { scope: 'worker', teardown: (client) => client.end() });
   },
 });</cb>
-<cb title="bddx.config.ts">export default defineConfig({
+<cb title="bddr.config.ts">export default defineConfig({
   plugins: [['./support/db.plugin.ts', { url: 'postgres://localhost/test' }]],
 });</cb>
 <p>Steps now ask for it: <code>Given('a user exists', async ({ db }) => { /* ... */ })</code>.</p>
@@ -41,7 +41,7 @@ export default definePlugin<{ url: string }>({
 <div class="table-wrap"><table>
 <thead><tr><th>In <code>plugins</code></th><th>Resolved as</th></tr></thead>
 <tbody>
-<tr><td><code>'@acme/bddx-db'</code></td><td>A package, looked up from the config folder.</td></tr>
+<tr><td><code>'@acme/bddr-db'</code></td><td>A package, looked up from the config folder.</td></tr>
 <tr><td><code>'./support/db.plugin.ts'</code></td><td>A file, relative to the config.</td></tr>
 <tr><td><code>['name', { options }]</code></td><td>The same, with options passed to <code>setup</code>.</td></tr>
 <tr><td><code>myPlugin({ options })</code></td><td>A plugin object, as the shipped plugins export.</td></tr>

@@ -4,11 +4,11 @@ desc: The versioned stream of events a run produces, which every report is built
 lede: Everything that happens in a run is an event. The NDJSON reporter writes them one JSON object per line. All other reporters, the debugger and the history tooling read only this stream.
 ---
 <h2>Write it</h2>
-<cb lang="bash">$ npx bddx -f ndjson:reports/events.ndjson</cb>
+<cb lang="bash">$ npx bddr -f ndjson:reports/events.ndjson</cb>
 <p>Each line has a <code>ts</code> (milliseconds since the epoch) and a <code>type</code>. The stream is at schema version 1. Adding an optional field is not a breaking change. Renaming or removing a field or an event type bumps the version.</p>
 
 <h2>An example</h2>
-<cb lang="json" title="reports/events.ndjson (shortened)">{"ts":1794727537708,"type":"runStarted","runId":"2a6e4947-...","schemaVersion":1,"framework":{"name":"bddx","version":"0.1.0"},"runtime":{"name":"node","version":"v22.23.4"},"dryRun":false}
+<cb lang="json" title="reports/events.ndjson (shortened)">{"ts":1794727537708,"type":"runStarted","runId":"2a6e4947-...","schemaVersion":1,"framework":{"name":"bddr","version":"0.1.0"},"runtime":{"name":"node","version":"v22.23.4"},"dryRun":false}
 {"ts":1794727537708,"type":"specParsed","uri":"features/checkout.feature","featureName":"Checkout","scenarioCount":4,"errors":[]}
 {"ts":1794727537936,"type":"scenarioFinished","scenarioId":"create-user","attempt":1,"status":"passed","durationMs":27}</cb>
 
@@ -29,7 +29,7 @@ lede: Everything that happens in a run is an event. The NDJSON reporter writes t
 <tr><td><code>stepFinished</code></td><td><code>scenarioId</code>, <code>stepId</code>, <code>status</code>, <code>durationMs</code>, <code>error</code>, <code>definition</code> (pattern, location), <code>snippet</code> for undefined steps, <code>mode</code> and <code>attempts</code> for repeated or retried steps</td></tr>
 <tr><td><code>stepAttemptFinished</code></td><td><code>scenarioId</code>, <code>stepId</code>, <code>attempt</code>, <code>of</code>, <code>mode</code>, <code>status</code>, <code>durationMs</code></td></tr>
 <tr><td><code>attachment</code></td><td><code>scenarioId</code>, <code>stepId</code>, <code>name</code>, <code>mediaType</code>, <code>encoding</code> (<code>identity</code> or <code>base64</code>), <code>body</code></td></tr>
-<tr><td><code>log</code></td><td><code>scenarioId</code>, <code>message</code>, <code>level</code>, <code>source</code> (<code>user</code> or <code>bddx</code>), <code>data</code>, <code>attempt</code>, <code>attachment</code></td></tr>
+<tr><td><code>log</code></td><td><code>scenarioId</code>, <code>message</code>, <code>level</code>, <code>source</code> (<code>user</code> or <code>bddr</code>), <code>data</code>, <code>attempt</code>, <code>attachment</code></td></tr>
 <tr><td><code>scenarioFinished</code></td><td><code>scenarioId</code>, <code>attempt</code>, <code>status</code>, <code>durationMs</code>, <code>error</code>, <code>reason</code>, <code>willRetry</code>, <code>flaky</code>, <code>quarantined</code></td></tr>
 <tr><td><code>runFinished</code></td><td><code>success</code>, <code>summary</code> (scenario and step counts per status, <code>durationMs</code>, <code>flaky</code>, <code>quarantined</code>, <code>retried</code>), <code>error</code></td></tr>
 </tbody></table></div>
@@ -37,9 +37,9 @@ lede: Everything that happens in a run is an event. The NDJSON reporter writes t
 
 <h2>Use it</h2>
 <ul>
-  <li><strong>Re-run what failed:</strong> <code>npx bddx --rerun-failed reports/events.ndjson</code>.</li>
-  <li><strong>Merge runs:</strong> <code>npx bddx report a.ndjson b.ndjson -f html:reports/merged.html</code>. Later runs win.</li>
-  <li><strong>Colour the living documentation:</strong> <code>npx bddx docs --results reports/events.ndjson</code>.</li>
+  <li><strong>Re-run what failed:</strong> <code>npx bddr --rerun-failed reports/events.ndjson</code>.</li>
+  <li><strong>Merge runs:</strong> <code>npx bddr report a.ndjson b.ndjson -f html:reports/merged.html</code>. Later runs win.</li>
+  <li><strong>Colour the living documentation:</strong> <code>npx bddr docs --results reports/events.ndjson</code>.</li>
   <li><strong>Read it yourself:</strong> one line per event, so <code>jq</code> or a few lines of Node.js will do. For example, to list failed scenarios:</li>
 </ul>
 <cb lang="bash">$ jq -r 'select(.type=="scenarioFinished" and .status=="failed") | .scenarioId' reports/events.ndjson</cb>

@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Selenium | bddx</title>
-  <meta name="description" content="Use Selenium WebDriver from bddx steps: fixtures, options, waits, remote grids and one browser session for a whole feature.">
+  <title>Selenium | bddr</title>
+  <meta name="description" content="Use Selenium WebDriver from bddr steps: fixtures, options, waits, remote grids and one browser session for a whole feature.">
   <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../assets/css/theme.css">
-  <script>(function(){var t=null;try{t=localStorage.getItem('bddx-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
+  <script>(function(){var t=null;try{t=localStorage.getItem('bddr-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
 </head>
 <body data-root="../">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -16,14 +16,14 @@
     <button class="icon-button menu-button" type="button" aria-label="Show navigation" aria-expanded="false">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
-    <a class="brand" href="../index.html" aria-label="bddx home">
+    <a class="brand" href="../index.html" aria-label="bddr home">
       <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="6" width="14" height="5" rx="1.5" fill="var(--accent)"/><rect x="9" y="13.5" width="20" height="5" rx="1.5" fill="currentColor" opacity=".85"/><rect x="5" y="21" width="11" height="5" rx="1.5" fill="currentColor" opacity=".4"/><rect x="18" y="21" width="9" height="5" rx="1.5" fill="var(--accent)"/></svg>
-      <span>bddx</span>
+      <span>bddr</span>
     </a>
     <nav class="site-nav" aria-label="Main">
       <a href="getting-started.html">Docs</a>
       <a href="getting-started.html#plugins">Plugins</a>
-      <a href="https://github.com/afsarali273/SmartBDD">GitHub</a>
+      <a href="https://github.com/afsarali273/bddr">GitHub</a>
     </nav>
     <div class="header-tools">
       <button class="icon-button theme-toggle" type="button" aria-label="Use dark theme">
@@ -38,27 +38,27 @@
 
     <main class="doc" id="main">
       <article class="doc-content">
-        <p class="breadcrumb"><a href="../index.html">bddx</a> / Plugins</p>
+        <p class="breadcrumb"><a href="../index.html">bddr</a> / Plugins</p>
         <h1>Selenium</h1>
-        <p class="lede">The Selenium plugin works the same way as the Playwright plugin. Steps ask for a driver, and bddx starts a fresh browser session for each scenario and quits it afterwards.</p>
+        <p class="lede">The Selenium plugin works the same way as the Playwright plugin. Steps ask for a driver, and bddr starts a fresh browser session for each scenario and quits it afterwards.</p>
 
 <h2 id="install">Install</h2>
         <div class="tabs" data-group="os">
           <section data-tab="macos" data-label="macOS">
-        <figure class="code-block"><pre><code class="lang-bash">$ npm i -D file:../SmartBDD/plugins/selenium selenium-webdriver</code></pre></figure>
+        <figure class="code-block"><pre><code class="lang-bash">$ npm i -D file:../bddr/plugins/selenium selenium-webdriver</code></pre></figure>
           </section>
           <section data-tab="windows" data-label="Windows">
-        <figure class="code-block"><pre><code class="lang-powershell">PS&gt; npm i -D file:../SmartBDD/plugins/selenium selenium-webdriver</code></pre></figure>
+        <figure class="code-block"><pre><code class="lang-powershell">PS&gt; npm i -D file:../bddr/plugins/selenium selenium-webdriver</code></pre></figure>
           </section>
           <section data-tab="linux" data-label="Linux">
-        <figure class="code-block"><pre><code class="lang-bash">$ npm i -D file:../SmartBDD/plugins/selenium selenium-webdriver</code></pre></figure>
+        <figure class="code-block"><pre><code class="lang-bash">$ npm i -D file:../bddr/plugins/selenium selenium-webdriver</code></pre></figure>
           </section>
         </div>
         <p>Selenium Manager comes with <code>selenium-webdriver</code> and finds or downloads the driver for Chrome, Firefox and Edge. You need the browser itself installed. <code>selenium-webdriver</code> 4.x needs a recent Node.js: use Node 22 or 24.</p>
 
         <h2 id="configure">Configure</h2>
-        <figure class="code-block" data-title="bddx.config.ts"><pre><code class="lang-ts">import { defineConfig } from '@bddx/cli';
-import { selenium } from '@bddx/selenium';
+        <figure class="code-block" data-title="bddr.config.ts"><pre><code class="lang-ts">import { defineConfig } from '@bddr/cli';
+import { selenium } from '@bddr/selenium';
 
 export default defineConfig({
   features: 'features/**/*.feature',
@@ -69,10 +69,10 @@ export default defineConfig({
     selenium({ browser: 'chrome', baseURL: 'https://shop.example.com', screenshot: 'only-on-failure' }),
   ],
 });</code></pre></figure>
-        <p>Add <code>import '@bddx/selenium';</code> to one support file so <code>ctx.driver</code>, <code>({ driver })</code> and <code>inject('driver')</code> are typed.</p>
+        <p>Add <code>import '@bddr/selenium';</code> to one support file so <code>ctx.driver</code>, <code>({ driver })</code> and <code>inject('driver')</code> are typed.</p>
 
         <h2 id="use-it-in-steps">Use it in steps</h2>
-        <figure class="code-block" data-title="steps/login.steps.ts"><pre><code class="lang-ts">import { Given, When, Then } from '@bddx/runtime';
+        <figure class="code-block" data-title="steps/login.steps.ts"><pre><code class="lang-ts">import { Given, When, Then } from '@bddr/runtime';
 
 Given('I open {string}', ({ open }, path: string) =&gt; open(path));
 
@@ -84,7 +84,7 @@ When('I log in as {string}', async ({ driver, selenium: { By } }, user: string) 
 Then('I see the heading', async ({ wait, selenium: { By, until } }) =&gt; {
   await wait(until.elementLocated(By.css('h1')));
 });</code></pre></figure>
-        <aside class="callout warning"><p class="callout-title">Warning</p><p>A helper that reads <code>ctx.selenium</code> or <code>ctx.driver</code> inside its body is not seen by bddx. Destructure the fixture in the step and pass it on, or use <code>await ctx.fixture('selenium')</code>.</p></aside>
+        <aside class="callout warning"><p class="callout-title">Warning</p><p>A helper that reads <code>ctx.selenium</code> or <code>ctx.driver</code> inside its body is not seen by bddr. Destructure the fixture in the step and pass it on, or use <code>await ctx.fixture('selenium')</code>.</p></aside>
 
         <h2 id="fixtures">Fixtures</h2>
         <div class="table-wrap"><table>
@@ -125,9 +125,9 @@ Feature: Checkout journey
         <p><code>@reuseSession</code> needs <code>@serial</code> on the feature. <code>@freshSession</code> on a scenario opts out. The browser quits when the feature ends.</p>
 
         <h2 id="run-it">Run it</h2>
-        <figure class="code-block"><pre><code class="lang-bash">$ npx bddx run -D browser=firefox
-$ npx bddx run -D headed=true --workers 1
-$ npx bddx run -D server=http://grid:4444 --pool process --workers 4</code></pre></figure>
+        <figure class="code-block"><pre><code class="lang-bash">$ npx bddr run -D browser=firefox
+$ npx bddr run -D headed=true --workers 1
+$ npx bddr run -D server=http://grid:4444 --pool process --workers 4</code></pre></figure>
         <aside class="callout note"><p class="callout-title">What has been verified</p><p>The showcase's 33 scenarios pass on Firefox. Chrome, Edge, Safari and a remote Grid have not been run yet.</p></aside>
         <p>See <code>plugins/selenium/example</code> for an offline project and <code>examples/selenium-showcase</code> for 33 scenarios against public sites.</p>
 

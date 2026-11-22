@@ -1,7 +1,7 @@
 title: Feature files
 section: Writing tests
-desc: The Gherkin you can use in bddx feature files: scenarios, outlines, rules, backgrounds, tags and ids.
-lede: A feature file describes behaviour in plain language. Each scenario becomes one test. bddx reads standard Gherkin, so existing files work.
+desc: The Gherkin you can use in bddr feature files: scenarios, outlines, rules, backgrounds, tags and ids.
+lede: A feature file describes behaviour in plain language. Each scenario becomes one test. bddr reads standard Gherkin, so existing files work.
 ---
 <h2>The shape of a file</h2>
 <cb lang="gherkin" title="features/basket.feature">@shop
@@ -37,8 +37,8 @@ Feature: Shopping basket
 <cb lang="gherkin">@owner:payments @smoke
 Scenario: Pay by card</cb>
 <p>A step can read it as <code>ctx.scenario.meta.owner</code>. Select scenarios with a tag expression:</p>
-<cb lang="bash">$ npx bddx run -t "@smoke and not @wip"</cb>
-<p>See <a href="tags.html">Tags and selection</a> for the list of tags bddx understands.</p>
+<cb lang="bash">$ npx bddr run -t "@smoke and not @wip"</cb>
+<p>See <a href="tags.html">Tags and selection</a> for the list of tags bddr understands.</p>
 
 <h2>Scenario ids</h2>
 <p>Every scenario gets a stable id. Dependencies, reruns and merged reports use it.</p>
@@ -47,11 +47,11 @@ Scenario: Pay by card</cb>
   <li>Without it the id is the file and the scenario name, such as <code>features/basket.feature::add-a-single-product</code>.</li>
   <li>Outline rows add the row number: <code>add-single[1]</code>.</li>
 </ul>
-<p>Outline ids use the name before the placeholders are filled in, so changing the example values does not change the ids. List ids with <code>npx bddx list</code>.</p>
+<p>Outline ids use the name before the placeholders are filled in, so changing the example values does not change the ids. List ids with <code>npx bddr list</code>.</p>
 
 <h2>Data tables and doc strings</h2>
 <p>Steps can take a table or a block of text. See <a href="data-tables.html">Data tables and doc strings</a>.</p>
 
 <h2>Check your files</h2>
-<cb lang="bash">$ npx bddx validate</cb>
+<cb lang="bash">$ npx bddr validate</cb>
 <p>This parses every spec and reports syntax errors, duplicate ids, undefined or ambiguous steps and unused step definitions, without running anything.</p>

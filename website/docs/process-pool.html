@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Worker processes | bddx</title>
+  <title>Worker processes | bddr</title>
   <meta name="description" content="Choose between the inline pool and one Node.js process per worker, and know what is shared between them.">
   <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../assets/css/theme.css">
-  <script>(function(){var t=null;try{t=localStorage.getItem('bddx-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
+  <script>(function(){var t=null;try{t=localStorage.getItem('bddr-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
 </head>
 <body data-root="../">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -16,14 +16,14 @@
     <button class="icon-button menu-button" type="button" aria-label="Show navigation" aria-expanded="false">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
-    <a class="brand" href="../index.html" aria-label="bddx home">
+    <a class="brand" href="../index.html" aria-label="bddr home">
       <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="6" width="14" height="5" rx="1.5" fill="var(--accent)"/><rect x="9" y="13.5" width="20" height="5" rx="1.5" fill="currentColor" opacity=".85"/><rect x="5" y="21" width="11" height="5" rx="1.5" fill="currentColor" opacity=".4"/><rect x="18" y="21" width="9" height="5" rx="1.5" fill="var(--accent)"/></svg>
-      <span>bddx</span>
+      <span>bddr</span>
     </a>
     <nav class="site-nav" aria-label="Main">
       <a href="getting-started.html">Docs</a>
       <a href="getting-started.html#plugins">Plugins</a>
-      <a href="https://github.com/afsarali273/SmartBDD">GitHub</a>
+      <a href="https://github.com/afsarali273/bddr">GitHub</a>
     </nav>
     <div class="header-tools">
       <button class="icon-button theme-toggle" type="button" aria-label="Use dark theme">
@@ -38,9 +38,9 @@
 
     <main class="doc" id="main">
       <article class="doc-content">
-        <p class="breadcrumb"><a href="../index.html">bddx</a> / Orchestration</p>
+        <p class="breadcrumb"><a href="../index.html">bddr</a> / Orchestration</p>
         <h1>Worker processes</h1>
-        <p class="lede">By default bddx runs scenarios as concurrent async tasks in one process. Switch to the process pool when you want real CPU parallelism or isolation from crashes.</p>
+        <p class="lede">By default bddr runs scenarios as concurrent async tasks in one process. Switch to the process pool when you want real CPU parallelism or isolation from crashes.</p>
 
 <h2 id="two-pools">Two pools</h2>
         <div class="table-wrap"><table>
@@ -51,8 +51,8 @@
         <tr><td>Worker hooks</td><td>Once per run.</td><td>Once in every worker process.</td></tr>
         <tr><td>Memory and globals</td><td>Shared by all scenarios.</td><td>Separate per process.</td></tr>
         </tbody></table></div>
-        <figure class="code-block"><pre><code class="lang-bash">$ npx bddx run --workers 4 --pool process</code></pre></figure>
-        <figure class="code-block" data-title="bddx.config.ts"><pre><code class="lang-ts">export default defineConfig({
+        <figure class="code-block"><pre><code class="lang-bash">$ npx bddr run --workers 4 --pool process</code></pre></figure>
+        <figure class="code-block" data-title="bddr.config.ts"><pre><code class="lang-ts">export default defineConfig({
   workers: 4,
   pool: 'process',
 });</code></pre></figure>
@@ -60,17 +60,13 @@
         <h2 id="what-the-parent-and-the-workers-do">What the parent and the workers do</h2>
         <ul>
           <li>The parent process owns the plan, the scheduling, the reports and the <code>BeforeAll</code> and <code>AfterAll</code> hooks.</li>
-          <li>Each worker loads your step files and rebuilds the same plan. bddx compares a fingerprint of the plan, so a worker that loaded different files stops the run instead of running the wrong thing.</li>
+          <li>Each worker loads your step files and rebuilds the same plan. bddr compares a fingerprint of the plan, so a worker that loaded different files stops the run instead of running the wrong thing.</li>
           <li>The values you set in <code>BeforeAll</code> on <code>ctx.run</code> are copied to every worker.</li>
-          <li>Each worker gets the environment variables <code>BDDX_WORKER_ID</code> and <code>BDDX_WORKER_INDEX</code>. Use the index to pick a port or a test account per worker.</li>
+          <li>Each worker gets the environment variables <code>BDDR_WORKER_ID</code> and <code>BDDR_WORKER_INDEX</code>. Use the index to pick a port or a test account per worker.</li>
         </ul>
-        <figure class="placeholder" data-kind="ai" style="--ratio: 16 / 9">
-          <div class="placeholder-frame"><p class="placeholder-what">Diagram: a parent process sending scenarios to three worker processes and collecting events.</p></div>
-          <figcaption>
-            <p class="placeholder-how">Generate with an AI diagram or image tool. Prompt:</p>
-            <pre class="prompt">Flat technical diagram on white, font IBM Plex Sans, thin navy (#171A33) lines. Left: one box "Parent process" containing three small labels "plan and scheduler", "BeforeAll / AfterAll", "reporters". Right: three stacked boxes "Worker 1", "Worker 2", "Worker 3", each containing "step files", "BeforeWorker", "browser plugin". Arrows from parent to each worker labelled "run scenario" in deep cyan (#0B7A86), and arrows from each worker back to the parent labelled "events" in slate (#5B6385). Below the workers a dashed note "each worker is a separate Node.js process". No gradients or shadows.</pre>
-            <p class="placeholder-file">Save as <code>assets/img/process-pool.png</code>.</p>
-          </figcaption>
+        <figure class="diagram">
+          <div class="diagram-frame"><img src="../assets/img/process-pool.svg" alt="A parent process holding the plan, scheduler, BeforeAll and AfterAll hooks and reporters sends run-scenario messages to three worker processes. Each worker holds the step files, BeforeWorker hook and browser plugin, and sends events back." width="1680" height="720" style="display:block;width:100%;height:auto"></div>
+          <figcaption>The parent sends scenarios out and gets events back.</figcaption>
         </figure>
 
         <h2 id="crashes">Crashes</h2>

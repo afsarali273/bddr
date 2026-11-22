@@ -1,11 +1,11 @@
 title: Coming from Cucumber.js
 section: Introduction
-desc: What stays the same and what changes when you move a Cucumber.js suite to bddx: feature files, steps, hooks, world, and running.
-lede: Your feature files do not change. The step code changes shape a little: bddx passes a context instead of using this, and hooks have more levels.
+desc: What stays the same and what changes when you move a Cucumber.js suite to bddr: feature files, steps, hooks, world, and running.
+lede: Your feature files do not change. The step code changes shape a little: bddr passes a context instead of using this, and hooks have more levels.
 ---
 <h2>What stays the same</h2>
 <ul>
-  <li><strong>Feature files.</strong> Gherkin, Background, Scenario Outline, Rule, tags, data tables and doc strings work as before. bddx parses with the Cucumber Gherkin parser.</li>
+  <li><strong>Feature files.</strong> Gherkin, Background, Scenario Outline, Rule, tags, data tables and doc strings work as before. bddr parses with the Cucumber Gherkin parser.</li>
   <li><strong>Step patterns.</strong> Cucumber Expressions and regular expressions, with <code>{int}</code>, <code>{string}</code> and custom parameter types.</li>
   <li><strong>Tag expressions.</strong> <code>-t "@smoke and not @wip"</code>.</li>
   <li><strong>Reports.</strong> Cucumber JSON and Cucumber Messages are available as reporters, next to JUnit XML and HTML.</li>
@@ -13,14 +13,14 @@ lede: Your feature files do not change. The step code changes shape a little: bd
 
 <h2>What changes</h2>
 <div class="table-wrap"><table>
-<thead><tr><th>Cucumber.js</th><th>bddx</th></tr></thead>
+<thead><tr><th>Cucumber.js</th><th>bddr</th></tr></thead>
 <tbody>
 <tr><td><code>this</code> in a step is the World</td><td>The first argument is the context: <code>(ctx, ...args)</code>. Use <code>ctx.state</code> for scenario data.</td></tr>
 <tr><td><code>setWorldConstructor</code> and a World class</td><td>Fixtures: <code>defineFixture('page', ...)</code>. See <a href="fixtures.html">Fixtures and inject()</a>.</td></tr>
 <tr><td><code>Before</code>, <code>After</code>, <code>BeforeAll</code>, <code>AfterAll</code></td><td>The same names, plus worker, group, feature, rule and step levels. See <a href="hooks.html">Hooks</a>.</td></tr>
 <tr><td><code>BeforeStep</code>, <code>AfterStep</code></td><td>The same names.</td></tr>
 <tr><td><code>defineParameterType</code></td><td>The same name and options: <code>name</code>, <code>regexp</code>, <code>transformer</code>.</td></tr>
-<tr><td><code>cucumber.js</code> profiles file</td><td><code>bddx.config.ts</code> with <code>profiles</code>. See <a href="configuration.html">Configuration</a>.</td></tr>
+<tr><td><code>cucumber.js</code> profiles file</td><td><code>bddr.config.ts</code> with <code>profiles</code>. See <a href="configuration.html">Configuration</a>.</td></tr>
 <tr><td><code>--parallel 4</code></td><td><code>--workers 4</code>, with an optional <code>--pool process</code>.</td></tr>
 <tr><td><code>--retry 2</code></td><td><code>--retry 2</code>, and also per scenario with <code>@retry:2</code>, per group, and per step.</td></tr>
 <tr><td><code>--name</code>, <code>--tags</code></td><td>The same, as <code>--name</code> and <code>-t</code>.</td></tr>
@@ -41,8 +41,8 @@ When('I sign in as {string}', async function (user: string) {
   this.lastUser = user;
 });</cb>
   </section>
-  <section data-tab="bddx" data-label="bddx">
-<cb title="steps/login.steps.ts">import { Given, When } from '@bddx/runtime';
+  <section data-tab="bddr" data-label="bddr">
+<cb title="steps/login.steps.ts">import { Given, When } from '@bddr/runtime';
 
 Given('I am on the login page', ({ page }) => page.goto('/login'));
 
@@ -56,11 +56,11 @@ When('I sign in as {string}', async ({ page, state }, user: string) => {
 
 <h2>Move in four steps</h2>
 <ol class="steps">
-  <li><h4>Keep the feature files</h4><p>Point <code>features</code> in the config at them. Run <code>npx bddx validate</code> to see what needs attention.</p></li>
-  <li><h4>Change the import</h4><p>Replace <code>@cucumber/cucumber</code> with <code>@bddx/runtime</code>. Hooks and <code>defineParameterType</code> keep their names.</p></li>
+  <li><h4>Keep the feature files</h4><p>Point <code>features</code> in the config at them. Run <code>npx bddr validate</code> to see what needs attention.</p></li>
+  <li><h4>Change the import</h4><p>Replace <code>@cucumber/cucumber</code> with <code>@bddr/runtime</code>. Hooks and <code>defineParameterType</code> keep their names.</p></li>
   <li><h4>Replace <code>this</code></h4><p>Take <code>ctx</code> or destructured fixtures as the first parameter. Move World properties to <code>ctx.state</code> or to fixtures.</p></li>
   <li><h4>Add the plugin for your browser or API library</h4><p>See <a href="playwright.html">Playwright</a>, <a href="selenium.html">Selenium</a> and <a href="axios.html">axios</a>.</p></li></ol>
-<aside class="callout note"><p class="callout-title">No codemod yet</p><p>A tool that rewrites <code>this</code> into context calls is on the list but does not exist. Plan to edit step files by hand. Arrow functions work in bddx, which makes the edit mostly mechanical.</p></aside>
+<aside class="callout note"><p class="callout-title">No codemod yet</p><p>A tool that rewrites <code>this</code> into context calls is on the list but does not exist. Plan to edit step files by hand. Arrow functions work in bddr, which makes the edit mostly mechanical.</p></aside>
 
 <h2>What you gain</h2>
-<p>Groups, dependencies, locks, serial features, retries and quarantine, sharding and the process pool. See <a href="why-bddx.html">Why bddx</a>.</p>
+<p>Groups, dependencies, locks, serial features, retries and quarantine, sharding and the process pool. See <a href="why-bddr.html">Why bddr</a>.</p>

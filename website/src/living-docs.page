@@ -1,13 +1,13 @@
 title: Living documentation
 section: Reports
-desc: Turn your feature folders into one browsable page, coloured by the latest results, with bddx docs.
+desc: Turn your feature folders into one browsable page, coloured by the latest results, with bddr docs.
 lede: Your feature files already describe what the product does. The docs command presents them as a readable page, so people who do not run tests can browse them.
 ---
 <h2>Build it</h2>
-<cb lang="bash">$ npx bddx docs -o reports/living-docs.html
-$ npx bddx docs features --results reports/events.ndjson --title "Shop behaviour"</cb>
+<cb lang="bash">$ npx bddr docs -o reports/living-docs.html
+$ npx bddr docs features --results reports/events.ndjson --title "Shop behaviour"</cb>
 <div class="signature">
-  <code>bddx docs [paths...] [options]</code>
+  <code>bddr docs [paths...] [options]</code>
   <p>Writes one offline HTML page.</p>
   <dl class="params">
     <dt>-o file</dt><dd>Where to write it. Default <code>reports/living-docs.html</code>.</dd>
@@ -28,7 +28,7 @@ $ npx bddx docs features --results reports/events.ndjson --title "Shop behaviour
   <div class="placeholder-frame"><p class="placeholder-what">The living documentation page with the folder tree, a feature and coloured scenarios.</p></div>
   <figcaption>
     <p class="placeholder-how">Capture this yourself:</p>
-    <p>In <code>examples/basic</code> run <code>npx bddx -f ndjson:reports/events.ndjson</code> then <code>npx bddx docs --results reports/events.ndjson</code>, open the page, select the Shopping basket feature and capture it. Light theme, about 1400 px wide.</p>
+    <p>In <code>examples/basic</code> run <code>npx bddr -f ndjson:reports/events.ndjson</code> then <code>npx bddr docs --results reports/events.ndjson</code>, open the page, select the Shopping basket feature and capture it. Light theme, about 1400 px wide.</p>
     <p class="placeholder-file">Save as <code>assets/img/living-docs.png</code>.</p>
   </figcaption>
 </figure>

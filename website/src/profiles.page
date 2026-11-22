@@ -4,7 +4,7 @@ desc: Name a set of overrides as a profile, and change any option for a single r
 lede: A profile is a named set of options, such as ci or smoke. For one-off changes, --set overrides any option without editing the config file.
 ---
 <h2>Profiles</h2>
-<cb title="bddx.config.ts">export default defineConfig({
+<cb title="bddr.config.ts">export default defineConfig({
   tags: 'not @wip',
   reporters: ['console'],
   profiles: {
@@ -13,8 +13,8 @@ lede: A profile is a named set of options, such as ci or smoke. For one-off chan
     qa:    { params: { baseURL: 'https://qa.example.com' } },
   },
 });</cb>
-<cb lang="bash">$ npx bddx -p ci
-$ npx bddx -p smoke</cb>
+<cb lang="bash">$ npx bddr -p ci
+$ npx bddr -p smoke</cb>
 <p>A profile is merged over the base config. Later wins, with these exceptions:</p>
 <ul>
   <li><code>tags</code> are combined with <strong>and</strong>. The profile above runs <code>(not @wip) and (@smoke)</code>.</li>
@@ -24,11 +24,11 @@ $ npx bddx -p smoke</cb>
 <p>A profile also picks the data folder: <code>-p qa</code> reads <code>data/qa/file</code> first. See <a href="data-files.html">Data files</a>. An unknown profile is a usage error that lists the profiles that exist.</p>
 
 <h2>--set: override anything for one run</h2>
-<cb lang="bash">$ npx bddx --set workers=6
-$ npx bddx --set groups.checkout.mode=serial
-$ npx bddx --set 'groups.api.dependsOn=["setup"]'
-$ npx bddx --set params.baseURL=https://qa.example.com
-$ npx bddx --set retry.scenario=2 --set retry.delay=500</cb>
+<cb lang="bash">$ npx bddr --set workers=6
+$ npx bddr --set groups.checkout.mode=serial
+$ npx bddr --set 'groups.api.dependsOn=["setup"]'
+$ npx bddr --set params.baseURL=https://qa.example.com
+$ npx bddr --set retry.scenario=2 --set retry.delay=500</cb>
 <ul>
   <li>The part before <code>=</code> is a path into the config. Dots go deeper.</li>
   <li>The value is read as JSON when it can be: numbers, <code>true</code>, <code>false</code>, arrays, objects. Anything else is text.</li>
@@ -39,7 +39,7 @@ $ npx bddx --set retry.scenario=2 --set retry.delay=500</cb>
 <aside class="callout warning"><p class="callout-title">Quoting</p><p>Quote values that contain <code>[</code>, <code>]</code>, <code>{</code>, <code>}</code> or quotes. On macOS and Linux use single quotes around the whole argument. In PowerShell use double quotes and escape inner ones: <code>--set "groups.api.dependsOn=[\"setup\"]"</code>.</p></aside>
 
 <h2>-D: parameters for steps</h2>
-<cb lang="bash">$ npx bddx -D baseURL=https://staging.example.com -D browser=firefox</cb>
+<cb lang="bash">$ npx bddr -D baseURL=https://staging.example.com -D browser=firefox</cb>
 <p>Each <code>-D key=value</code> sets <code>ctx.params.key</code>. The plugins read their own overrides from here, such as <code>browser</code>, <code>headed</code>, <code>baseURL</code> and <code>token</code>.</p>
 
 <h2>Which wins</h2>
