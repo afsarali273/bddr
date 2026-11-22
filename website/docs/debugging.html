@@ -56,14 +56,7 @@
         <tr><td><code>q</code></td><td>Quit.</td></tr>
         </tbody></table></div>
         <p><code>--debug-step</code> pauses before every step, not only after a failure. The debugger needs a terminal. Without one it exits with code 2.</p>
-        <figure class="placeholder" data-kind="screenshot" style="--ratio: 16 / 9">
-          <div class="placeholder-frame"><p class="placeholder-what">A terminal paused at a failing step with the debug prompt.</p></div>
-          <figcaption>
-            <p class="placeholder-how">Capture this yourself:</p>
-            <p>In any example project make a step fail on purpose, run it with <code>--debug</code>, type <code>s</code> at the prompt, and capture the terminal showing the failure and the state. Light theme, about 100 columns.</p>
-            <p class="placeholder-file">Save as <code>assets/img/debug-prompt.png</code>.</p>
-          </figcaption>
-        </figure>
+        <figure class="shot"><img src="../assets/img/debug-prompt.png" alt="A terminal paused at a failing step with the debug prompt." width="1166" height="362" loading="lazy"></figure>
 
         <h2 id="use-your-editor-s-debugger">Use your editor's debugger</h2>
         <figure class="code-block"><pre><code class="lang-bash">$ npx bddr features/checkout.feature:12 --inspect</code></pre></figure>

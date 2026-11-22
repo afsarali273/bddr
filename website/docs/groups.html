@@ -92,14 +92,7 @@ export default defineConfig({
 $ npx bddr plan --plan-format mermaid
 $ npx bddr plan --explain features/checkout.feature::buy-an-apple</code></pre></figure>
         <p><code>--explain</code> takes a scenario id and says why it runs when it does: which group it is in, what it waits for and which locks it holds.</p>
-        <figure class="placeholder" data-kind="screenshot" style="--ratio: 16 / 9">
-          <div class="placeholder-frame"><p class="placeholder-what">Terminal output of <code>npx bddr plan</code> for the orchestration example.</p></div>
-          <figcaption>
-            <p class="placeholder-how">Capture this yourself:</p>
-            <p>In <code>examples/orchestration</code> run <code>npx bddr plan</code>. Capture the whole output in a terminal with a light theme, about 100 columns wide.</p>
-            <p class="placeholder-file">Save as <code>assets/img/groups-plan.png</code>.</p>
-          </figcaption>
-        </figure>
+        <figure class="shot"><img src="../assets/img/groups-plan.png" alt="Terminal output of bddr plan for the orchestration example." width="856" height="622" loading="lazy"></figure>
 
         <h2 id="change-a-group-from-the-command-line">Change a group from the command line</h2>
         <p>Any group option can be overridden for one run with <code>--set</code>. See <a href="profiles.html">Profiles and --set</a>.</p>
