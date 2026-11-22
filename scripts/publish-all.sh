@@ -26,12 +26,19 @@ npm ci
 npm run build
 npm run verify
 
-for d in packages/core packages/runtime packages/reporters packages/cli packages/bddr; do
+publish_one() { # folder [pre-publish command]; skips a version that is already on npm
+  local name version
+  name=$(node -p "require('./$1/package.json').name"); version=$(node -p "require('./$1/package.json').version")
+  if npm view "$name@$version" version >/dev/null 2>&1; then echo "skip: $name@$version is already published"; return; fi
+  (cd "$1" && eval "${2:-true}" && npm publish --access public $DRY)
+}
+
+for d in packages/core packages/runtime packages/reporters packages/cli; do
   echo "=== $d"
-  (cd "$d" && npm publish --access public $DRY)
+  publish_one "$d"
 done
 for d in plugins/playwright plugins/selenium plugins/axios; do
   echo "=== $d"
-  (cd "$d" && npm ci && npm run build && npm publish --access public $DRY)
+  publish_one "$d" "npm ci && npm run build"
 done
 echo "Done. Next: add a Trusted Publisher on each package (repo afsarali273/bddr, workflow release.yml), then revoke the token."

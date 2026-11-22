@@ -14,3 +14,5 @@ Add a plugin when you need one: `@bddr/playwright`, `@bddr/selenium` or `@bddr/a
 Documentation: https://afsarali273.github.io/bddr/ · Source: https://github.com/afsarali273/bddr
 
 License: MIT
+
+> Not published: npm rejects the name "bddr" as too similar to existing packages. Install `@bddr/cli` instead (`npx bddr` still works). Kept for a later name appeal to npm support.

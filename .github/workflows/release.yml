@@ -2,7 +2,7 @@ name: Release
 
 # Publishes the packages to npm when a version tag is pushed, for example:  git tag v0.1.0 && git push origin v0.1.0
 # Uses npm Trusted Publishing (OpenID Connect), so there is no npm token or secret.
-# One-time setup, for each of the 8 packages on npmjs.com (Settings > Trusted Publisher > GitHub Actions):
+# One-time setup, for each of the 7 packages on npmjs.com (Settings > Trusted Publisher > GitHub Actions):
 #   organization or user: afsarali273   repository: bddr   workflow filename: release.yml   environment: (empty)
 # A package must exist on npm before a trusted publisher can be added, so publish version 0.1.0 of each once by hand first.
 
@@ -35,7 +35,7 @@ jobs:
           test "v$v" = "$GITHUB_REF_NAME" || { echo "tag $GITHUB_REF_NAME does not match version $v"; exit 1; }
       - name: Publish (dependencies first)
         run: |
-          for d in packages/core packages/runtime packages/reporters packages/cli packages/bddr; do
+          for d in packages/core packages/runtime packages/reporters packages/cli; do
             (cd $d && npm publish --access public)
           done
           for d in plugins/playwright plugins/selenium plugins/axios; do
