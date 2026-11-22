@@ -48,8 +48,6 @@
           <dd>20.10 or newer for bddr itself. Use <strong>Node.js 22 or 24 (LTS)</strong> if you plan to use the Selenium plugin: current <code>selenium-webdriver</code> releases require Node.js 22 or newer.</dd>
           <dt>npm</dt>
           <dd>Comes with Node.js. Check with <code>npm -v</code>.</dd>
-          <dt>Git</dt>
-          <dd>To get the bddr source. bddr is not published to npm yet, so projects use it from a local clone.</dd>
           <dt>Operating system</dt>
           <dd>macOS, Windows 10 or 11, or Linux. bddr is plain Node.js and does not depend on the operating system. Browser plugins add their own requirements, listed below.</dd>
           <dt>Editor</dt>
@@ -104,67 +102,37 @@ $ node -v</code></pre></figure>
           </section>
         </div>
 
-        <h2 id="get-bddr">Get and build bddr</h2>
-        <aside class="callout note"><p class="callout-title">Not on npm yet</p><p>bddr is not published to the npm registry yet, so it is installed from your clone with <code>file:</code> paths. Once it is published, you will install the <code>@bddr/*</code> packages from npm with <code>npm i -D</code> and no clone is needed.</p></aside>
-        <ol class="steps">
-          <li>
-            <h3 id="clone">Clone the repository</h3>
-            <p>Put it next to the folder where your tests will live, for example in a <code>code</code> folder.</p>
-            <figure class="code-block"><pre><code class="lang-bash">$ git clone https://github.com/afsarali273/bddr.git
-$ cd bddr</code></pre></figure>
-          </li>
-          <li>
-            <h3 id="build">Install and build</h3>
-            <figure class="code-block"><pre><code class="lang-bash">$ npm install
-$ npm run build</code></pre></figure>
-            <p><code>npm run verify</code> also runs bddr's own tests, if you want to check the build.</p>
-          </li>
-          <li>
-            <h3 id="build-plugins">Build the plugins you need</h3>
-            <p>Each plugin is a separate package with its own dependencies. Build only the ones you use.</p>
-            <div class="tabs" data-group="os">
-              <section data-tab="macos" data-label="macOS / Linux">
-                <figure class="code-block"><pre><code class="lang-bash">$ (cd plugins/playwright && npm install && npm run build)
-$ (cd plugins/selenium && npm install && npm run build)
-$ (cd plugins/axios && npm install && npm run build)</code></pre></figure>
-              </section>
-              <section data-tab="windows" data-label="Windows">
-                <figure class="code-block"><pre><code class="lang-powershell">PS> cd plugins/playwright; npm install; npm run build; cd ../..
-PS> cd plugins/selenium; npm install; npm run build; cd ../..
-PS> cd plugins/axios; npm install; npm run build; cd ../..</code></pre></figure>
-              </section>
-            </div>
-          </li>
-        </ol>
+        <h2 id="install-bddr">Install bddr</h2>
+        <p>bddr is published on npm, so there is nothing to clone or build. You add it to your own project in the next section. Two packages are enough to start:</p>
+        <ul>
+          <li><code>@bddr/cli</code> is the <code>bddr</code> command and <code>defineConfig</code>.</li>
+          <li><code>@bddr/runtime</code> is what step files import: <code>Given</code>, <code>When</code>, <code>Then</code>, hooks and fixtures.</li>
+        </ul>
+        <p>Plugins for Playwright, Selenium and axios are separate packages, covered under <a href="#plugins">Add browser or API testing</a>.</p>
 
         <h2 id="first-project">Create your first project</h2>
         <p>A bddr project is an ordinary Node.js project with feature files, step files and a config. This one tests a shopping basket and needs no browser.</p>
-        <figure class="code-block" data-title="Folder layout"><pre><code class="lang-text">code/
-├─ bddr/                     the bddr clone from above
-└─ my-tests/
-   ├─ package.json
-   ├─ tsconfig.json
-   ├─ bddr.config.ts
-   ├─ features/
-   │  └─ basket.feature
-   └─ steps/
-      └─ basket.steps.ts</code></pre></figure>
+        <figure class="code-block" data-title="Folder layout"><pre><code class="lang-text">my-tests/
+├─ package.json
+├─ tsconfig.json
+├─ bddr.config.ts
+├─ features/
+│  └─ basket.feature
+└─ steps/
+   └─ basket.steps.ts</code></pre></figure>
 
         <ol class="steps">
           <li>
             <h3 id="package-json">package.json</h3>
-            <p>The bddr packages come from the clone through <code>file:</code> paths, all four of them.</p>
-            <aside class="callout note"><p class="callout-title">Not on npm yet</p><p>bddr is not published to the npm registry yet, so it is installed from your clone with <code>file:</code> paths. Once it is published, you will install the <code>@bddr/*</code> packages from npm with <code>npm i -D</code> and no clone is needed.</p></aside>
+            <p>Two bddr packages from npm: the command and the runtime your step files import. They bring <code>@bddr/core</code> and <code>@bddr/reporters</code> with them.</p>
             <figure class="code-block" data-title="my-tests/package.json"><pre><code class="lang-json">{
   "name": "my-tests",
   "private": true,
   "type": "module",
   "scripts": { "test": "bddr run" },
   "dependencies": {
-    "@bddr/cli": "file:../bddr/packages/cli",
-    "@bddr/core": "file:../bddr/packages/core",
-    "@bddr/reporters": "file:../bddr/packages/reporters",
-    "@bddr/runtime": "file:../bddr/packages/runtime"
+    "@bddr/cli": "^0.1.0",
+    "@bddr/runtime": "^0.1.0"
   },
   "devDependencies": {
     "@types/node": "^22.20.5",
@@ -288,11 +256,10 @@ PS> npx bddr plan</code></pre></figure>
         </aside>
 
         <h2 id="plugins">Add browser or API testing</h2>
-        <aside class="callout note"><p class="callout-title">Not on npm yet</p><p>bddr is not published to the npm registry yet, so it is installed from your clone with <code>file:</code> paths. Once it is published, you will install the <code>@bddr/*</code> packages from npm with <code>npm i -D</code> and no clone is needed.</p></aside>
         <p>Install the plugin and the tool it wraps in your project, then list the plugin in the config. Its fixtures (<code>page</code>, <code>driver</code>, <code>api</code> ...) are then available in every step.</p>
         <div class="tabs" data-group="plugin">
           <section data-tab="playwright" data-label="Playwright">
-            <figure class="code-block"><pre><code class="lang-bash">$ npm i -D file:../bddr/plugins/playwright playwright @playwright/test
+            <figure class="code-block"><pre><code class="lang-bash">$ npm i -D @bddr/playwright playwright @playwright/test
 $ npx playwright install chromium</code></pre></figure>
             <figure class="code-block" data-title="bddr.config.ts"><pre><code class="lang-ts">import { defineConfig } from '@bddr/cli';
 import { playwright } from '@bddr/playwright';
@@ -314,7 +281,7 @@ Then('the heading says {string}', async ({ page, expect }, text: string) => {
 });</code></pre></figure>
           </section>
           <section data-tab="selenium" data-label="Selenium">
-            <figure class="code-block"><pre><code class="lang-bash">$ npm i -D file:../bddr/plugins/selenium selenium-webdriver</code></pre></figure>
+            <figure class="code-block"><pre><code class="lang-bash">$ npm i -D @bddr/selenium selenium-webdriver</code></pre></figure>
             <figure class="code-block" data-title="bddr.config.ts"><pre><code class="lang-ts">import { defineConfig } from '@bddr/cli';
 import { selenium } from '@bddr/selenium';
 
@@ -337,7 +304,7 @@ Then('the heading says {string}', async ({ wait, selenium: { By, until } }, text
 });</code></pre></figure>
           </section>
           <section data-tab="axios" data-label="axios (API)">
-            <figure class="code-block"><pre><code class="lang-bash">$ npm i -D file:../bddr/plugins/axios axios</code></pre></figure>
+            <figure class="code-block"><pre><code class="lang-bash">$ npm i -D @bddr/axios axios</code></pre></figure>
             <figure class="code-block" data-title="bddr.config.ts"><pre><code class="lang-ts">import { defineConfig } from '@bddr/cli';
 import { axios } from '@bddr/axios';
 
@@ -365,8 +332,8 @@ Then('the status is {int}', ({ state }, status: number) => {
           <table>
             <thead><tr><th>You see</th><th>Do this</th></tr></thead>
             <tbody>
-              <tr><td><code>bddr: command not found</code> or <code>npx</code> asks to install bddr</td><td>Run <code>npm install</code> in your project, and check the <code>file:</code> paths in <code>package.json</code> point at the clone.</td></tr>
-              <tr><td><code>Cannot find module '@bddr/…/dist/index.js'</code></td><td>bddr or the plugin is not built: run <code>npm run build</code> in the clone, or in the plugin folder.</td></tr>
+              <tr><td><code>bddr: command not found</code> or <code>npx</code> asks to install bddr</td><td>Run <code>npm install</code> in your project, and check that <code>@bddr/cli</code> is listed in <code>package.json</code>.</td></tr>
+              <tr><td><code>Cannot find module '@bddr/runtime'</code></td><td>Install it in your project: <code>npm i -D @bddr/runtime</code>.</td></tr>
               <tr><td><code>Executable doesn't exist</code> (Playwright)</td><td>Download the browser: <code>npx playwright install chromium</code>. On Linux also <code>npx playwright install-deps</code>.</td></tr>
               <tr><td><code>Fixture "page" is asynchronous and was not requested before use</code></td><td>Name the fixture in the step itself, <code>({ page })</code> or <code>const { page } = ctx</code>, instead of reading it inside a helper function.</td></tr>
               <tr><td>Safari: <code>Could not create a session</code></td><td>Run <code>safaridriver --enable</code> once and allow remote automation in Safari's Develop menu.</td></tr>
@@ -377,7 +344,7 @@ Then('the status is {int}', ({ state }, status: number) => {
 
         <h2 id="next">Where to go next</h2>
         <ul>
-          <li>The two complete example projects in the clone: <code>examples/playwright-showcase</code> (139 scenarios, UI, API and both together) and <code>examples/selenium-showcase</code> (33 scenarios).</li>
+          <li>The two complete example projects in <a href="https://github.com/afsarali273/bddr/tree/main/examples">the repository</a>: <code>examples/playwright-showcase</code> (139 scenarios, UI, API and both together) and <code>examples/selenium-showcase</code> (33 scenarios).</li>
           <li>The pages on groups, dependencies, serial features and retries, listed under Orchestration in the sidebar, as they are written.</li>
         </ul>
 

@@ -8,7 +8,17 @@ TypeScript first, with Java and Python ports planned. The name is short on purpo
 > Playwright, Selenium and axios plugins are in. Everything done and remaining: [docs/STATUS.md](docs/STATUS.md).
 > Next step: [docs/PROGRESS.md](docs/PROGRESS.md). How the pieces fit: the Architecture page of the docs site (`website/docs/architecture.html`).
 
-## Quick start
+## Install
+
+```bash
+npm i -D @bddr/cli @bddr/runtime        # the command and the step API
+npm i -D @bddr/playwright playwright    # optional: @bddr/selenium, @bddr/axios
+npx bddr
+```
+
+The packages are on npm under the `@bddr` scope. Full walk-through: https://afsarali273.github.io/bddr/docs/getting-started.html
+
+## Develop bddr itself
 
 ```bash
 git clone https://github.com/afsarali273/bddr.git && cd bddr

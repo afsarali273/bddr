@@ -43,16 +43,15 @@
         <p class="lede">The Selenium plugin works the same way as the Playwright plugin. Steps ask for a driver, and bddr starts a fresh browser session for each scenario and quits it afterwards.</p>
 
 <h2 id="install">Install</h2>
-        <aside class="callout note"><p class="callout-title">Not on npm yet</p><p>bddr is not published to the npm registry yet, so it is installed from your clone with <code>file:</code> paths. Once it is published, run <code>npm i -D @bddr/selenium</code> plus the library instead, and this note will go away.</p></aside>
         <div class="tabs" data-group="os">
           <section data-tab="macos" data-label="macOS">
-        <figure class="code-block"><pre><code class="lang-bash">$ npm i -D file:../bddr/plugins/selenium selenium-webdriver</code></pre></figure>
+        <figure class="code-block"><pre><code class="lang-bash">$ npm i -D @bddr/selenium selenium-webdriver</code></pre></figure>
           </section>
           <section data-tab="windows" data-label="Windows">
-        <figure class="code-block"><pre><code class="lang-powershell">PS&gt; npm i -D file:../bddr/plugins/selenium selenium-webdriver</code></pre></figure>
+        <figure class="code-block"><pre><code class="lang-powershell">PS&gt; npm i -D @bddr/selenium selenium-webdriver</code></pre></figure>
           </section>
           <section data-tab="linux" data-label="Linux">
-        <figure class="code-block"><pre><code class="lang-bash">$ npm i -D file:../bddr/plugins/selenium selenium-webdriver</code></pre></figure>
+        <figure class="code-block"><pre><code class="lang-bash">$ npm i -D @bddr/selenium selenium-webdriver</code></pre></figure>
           </section>
         </div>
         <p>Selenium Manager comes with <code>selenium-webdriver</code> and finds or downloads the driver for Chrome, Firefox and Edge. You need the browser itself installed. <code>selenium-webdriver</code> 4.x needs a recent Node.js: use Node 22 or 24.</p>

@@ -56,8 +56,7 @@
         <ol class="steps">
           <li><h4>Install the plugin and the library</h4>
             <p>The command for each plugin is on its page and in <a href="getting-started.html">Getting started</a>.</p>
-            <aside class="callout note"><p class="callout-title">Not on npm yet</p><p>bddr is not published to the npm registry yet, so it is installed from your clone with <code>file:</code> paths. Once it is published, run <code>npm i -D @bddr/axios</code> plus the library instead, and this note will go away.</p></aside>
-            <figure class="code-block"><pre><code class="lang-bash">$ npm i -D file:../bddr/plugins/axios axios</code></pre></figure></li>
+            <figure class="code-block"><pre><code class="lang-bash">$ npm i -D @bddr/axios axios</code></pre></figure></li>
           <li><h4>List it in the config</h4>
         <figure class="code-block" data-title="bddr.config.ts"><pre><code class="lang-ts">import { defineConfig } from '@bddr/cli';
 import { axios } from '@bddr/axios';
