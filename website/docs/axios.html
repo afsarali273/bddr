@@ -104,14 +104,7 @@ Then('the response status is {int}', ({ state }, status: number) =&gt; {
           <li><strong>Credentials from the command line.</strong> <code>-D token=...</code> replaces the bearer token and <code>-D baseURL=...</code> the base URL.</li>
           <li><strong>No extra process.</strong> A scenario that only uses <code>api</code> starts nothing else.</li>
         </ul>
-        <figure class="placeholder" data-kind="screenshot" style="--ratio: 16 / 9">
-          <div class="placeholder-frame"><p class="placeholder-what">An <code>api-calls.json</code> attachment open in the HTML report for a failed API scenario.</p></div>
-          <figcaption>
-            <p class="placeholder-how">Capture this yourself:</p>
-            <p>In <code>plugins/axios/example</code> run <code>npx bddr -D token=wrong</code> so the token scenarios fail, open the HTML report, expand a failed scenario and its <code>api-calls.json</code> attachment. Light theme, about 1400 px wide.</p>
-            <p class="placeholder-file">Save as <code>assets/img/axios-call-log.png</code>.</p>
-          </figcaption>
-        </figure>
+        <figure class="shot"><img src="../assets/img/axios-call-log.png" alt="A failed API scenario in the HTML report with its api-calls.json attachment expanded: method, URL, status, request headers with the token hidden, and the response body." width="2800" height="1800" loading="lazy"></figure>
 
         <h2 id="fixtures">Fixtures</h2>
         <div class="table-wrap"><table>

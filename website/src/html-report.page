@@ -28,14 +28,7 @@ $ start reports\report.html          # Windows</cb>
   <li>The <strong>timeline</strong>: one lane per worker with a bar for each scenario attempt. Retried attempts are hatched. Worker start-up and busy percentage are shown. There is one row per group. Click a bar to open the scenario.</li>
   <li>The <strong>dependency graph</strong>: scenarios and groups that wait for each other, left to right. Soft dependencies are dashed.</li>
 </ul>
-<figure class="placeholder" data-kind="screenshot" style="--ratio: 16 / 9">
-  <div class="placeholder-frame"><p class="placeholder-what">The Execution tab: the worker timeline and the dependency graph.</p></div>
-  <figcaption>
-    <p class="placeholder-how">Capture this yourself:</p>
-    <p>Run <code>npx bddr --workers 4</code> in <code>examples/orchestration</code>, open the Execution tab of the report and capture the timeline and graph together. Light theme, about 1400 px wide.</p>
-    <p class="placeholder-file">Save as <code>assets/img/report-execution.png</code>.</p>
-  </figcaption>
-</figure>
+<figure class="shot"><img src="../assets/img/report-execution.png" alt="The Execution tab of the HTML report: a timeline with one lane per worker and one row per group, and the dependency graph below it." width="2800" height="1660" loading="lazy"></figure>
 <h3>History</h3>
 <ul>
   <li>The pass rate of each recorded run.</li>

@@ -64,14 +64,7 @@
 
         <h2 id="one-run-parallel-and-serial-together">One run, parallel and serial together</h2>
         <p>Most suites mix work that can run side by side with work that cannot. A login test and a catalogue test are independent. A checkout journey is not: add to basket, pay, see the receipt. bddr plans both in one run, so you do not split the suite into separate jobs.</p>
-        <figure class="placeholder" data-kind="ai" style="--ratio: 16 / 9">
-          <div class="placeholder-frame"><p class="placeholder-what">A run schedule: four worker lanes, a setup group first, then parallel and serial groups, then reports last.</p></div>
-          <figcaption>
-            <p class="placeholder-how">Generate with an AI diagram or image tool. Prompt:</p>
-            <pre class="prompt">Flat technical schedule chart, white background, font IBM Plex Sans. Time runs left to right. Four horizontal lanes labelled w1, w2, w3, w4. First column of blocks: one block "setup (serial)" on lane w1 only, other lanes empty and labelled "waiting". Second column: block group "checkout (parallel, 3 workers)" spread across w1, w2, w3, and a block "payments (serial)" on w4 with a small lock icon labelled "payments-db". Last column: one block "reports (runs after checkout and payments)" on w1. Use deep cyan (#0B7A86) for setup, teal (#2F8F6B) for checkout, amber (#B7791F) for payments, slate (#5B6385) for reports. Thin navy (#171A33) text, no gradients, no shadows.</pre>
-            <p class="placeholder-file">Save as <code>assets/img/why-schedule.png</code>.</p>
-          </figcaption>
-        </figure>
+        <figure class="shot"><img src="../assets/img/why-schedule.png" alt="A run schedule with four worker lanes: setup runs first while the other workers wait, then checkout runs in parallel on three workers while payments runs on the fourth holding a lock, then reports run last." width="2400" height="1120" loading="lazy"></figure>
 
         <h2 id="how-it-is-built">How it is built</h2>
         <p>Four small packages, a plan that is plain data, and plugins for browsers and API clients. <a href="architecture.html">Architecture</a> shows how they fit together.</p>

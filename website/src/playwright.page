@@ -111,14 +111,7 @@ Feature: Checkout journey
 <cb lang="bash">$ npx bddr run -D browser=firefox
 $ npx bddr run -D headed=true --workers 1
 $ npx bddr run --pool process --workers 4</cb>
-<figure class="placeholder" data-kind="screenshot" style="--ratio: 16 / 9">
-  <div class="placeholder-frame"><p class="placeholder-what">The HTML report of the Playwright showcase with a failed scenario and its attached screenshot.</p></div>
-  <figcaption>
-    <p class="placeholder-how">Capture this yourself:</p>
-    <p>In <code>examples/playwright-showcase</code> make one scenario fail on purpose (change an expected text), run <code>npx bddr run -t @saucedemo</code>, open the HTML report, expand the failed scenario so the error and the screenshot are visible. Light theme, about 1400 px wide.</p>
-    <p class="placeholder-file">Save as <code>assets/img/playwright-failure-report.png</code>.</p>
-  </figcaption>
-</figure>
+<figure class="shot"><img src="../assets/img/playwright-failure-report.png" alt="The HTML report for a failed Playwright scenario: the screenshot of the page taken at the failure, then the failing step with its assertion error." width="2800" height="2120" loading="lazy"></figure>
 
 <h2>Examples</h2>
 <ul>
