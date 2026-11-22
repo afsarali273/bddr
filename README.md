@@ -2,14 +2,16 @@
 
 A BDD automation framework that keeps Gherkin's readability and adds TestNG-style orchestration:
 groups, dependencies, mixed parallel/serial execution and layered retries.
-TypeScript first, Java next. ("bddr" is a working name.)
+TypeScript first, with Java and Python ports planned. The name is short on purpose ("BDD runner"), so it is easy to type.
 
-> **Status:** Phases 0, 1, 3 and 4 done; Phase 2 data core done; Phase 5 started (HTML report v1).
-> Everything done and remaining: [docs/STATUS.md](docs/STATUS.md). Next step: [docs/PROGRESS.md](docs/PROGRESS.md).
+> **Status:** v0.1. Phases 0, 1, 3 and 4 are done; the data core, reporting (HTML, living docs, history) and the
+> Playwright, Selenium and axios plugins are in. Everything done and remaining: [docs/STATUS.md](docs/STATUS.md).
+> Next step: [docs/PROGRESS.md](docs/PROGRESS.md). How the pieces fit: the Architecture page of the docs site (`website/docs/architecture.html`).
 
 ## Quick start
 
 ```bash
+git clone https://github.com/afsarali273/bddr.git && cd bddr
 npm install
 npm run build          # compile all packages (tsc -b)
 npm test               # unit + conformance + CLI end-to-end tests (vitest)
@@ -191,6 +193,13 @@ bddr run -f html:reports/report.html --set history=true
 bddr history --top 10        # flakiest and slowest scenarios
 ```
 
+Living documentation: `bddr docs` turns the spec folders into one HTML page (a `README.md` per folder is its intro),
+and `--results reports/run1.ndjson` colours each scenario by its last result:
+
+```bash
+bddr docs features -o reports/living-docs.html --results reports/run1.ndjson
+```
+
 `bddr plan` prints the graph (`--plan-format mermaid` for a diagram, `--explain <id>` for one scenario).
 
 ```ts
@@ -218,6 +227,8 @@ bddr run -r 2 --fail-on-flaky  # retry failed scenarios twice; flaky passes fail
 bddr run --run-timeout 30m --worker-crash-retry 1
 bddr run --rerun-failed reports/bddr.ndjson
 bddr report run1.ndjson run2.ndjson -f html:reports/report.html
+bddr docs [paths...] -o reports/living-docs.html [--results run.ndjson]   # living documentation
+bddr history --top 10   # flakiest and slowest scenarios
 ```
 
 Paths accept files, folders, globs and `file.feature:LINE`. Exit codes: 0 passed, 1 failed, 2 usage/config/parse error,
@@ -227,19 +238,23 @@ Paths accept files, folders, globs and `file.feature:LINE`. Exit codes: 0 passed
 
 | Path | What |
 | --- | --- |
-| `packages/core` | Spec model, Gherkin compiler, `@data` loaders, tags, selection, planner, event schema + merge |
+| `packages/core` | Spec model, Gherkin compiler, `@data` loaders, tags, selection, planner, run history, event schema + merge |
 | `packages/runtime` | Step registry, hooks, scoped context, executor, scheduler, process pool, logging, global API |
-| `packages/reporters` | console, HTML, NDJSON, JUnit XML, Cucumber JSON |
+| `packages/reporters` | console, HTML, NDJSON, JUnit XML, Cucumber JSON, Cucumber Messages, living docs |
 | `packages/cli` | `bddr` command, config loading, file discovery |
+| `plugins/playwright`, `plugins/selenium`, `plugins/axios` | Optional integrations (peer-dependent on the runtime; the core has no browser or HTTP dependency) |
 | `conformance` | Language-neutral features + expected results (Java must pass these too) |
 | `examples/basic` | Steps, hooks, outlines, class steps + DI, `@data`, step repeat/retry |
 | `examples/orchestration` | Groups, dependencies, locks, exports, logs with images (inline and `--pool process`) |
 | `examples/resilience` | Scenario/group retry, flaky, quarantine, soft assertions, time budget |
 | `examples/playwright-showcase` | Standalone real project: 125 Playwright UI/API scenarios across 13 feature files, run entirely by bddr |
+| `examples/selenium-showcase` | The same idea with Selenium WebDriver |
+| `website` | Static documentation site (`website/docs/*.html`, authored in `website/src/*.page`) |
 | `docs` | Implementation notes, progress log, decisions, roadmap |
 
 ## Documentation
 
+- Documentation site: open `website/index.html` (getting started, guides, references, architecture)
 - [docs/STATUS.md](docs/STATUS.md): everything done so far and everything remaining, on one page
 - [docs/IMPLEMENTATION.md](docs/IMPLEMENTATION.md): how it works, module by module
 - [docs/PROGRESS.md](docs/PROGRESS.md): what is done, what is next, how to resume
