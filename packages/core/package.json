@@ -2,6 +2,26 @@
   "name": "@bddr/core",
   "version": "0.1.0",
   "description": "bddr core: spec model, Gherkin compiler, tags, event schema",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/afsarali273/bddr.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://afsarali273.github.io/bddr/",
+  "bugs": {
+    "url": "https://github.com/afsarali273/bddr/issues"
+  },
+  "keywords": [
+    "bdd",
+    "gherkin",
+    "test-runner",
+    "automation",
+    "cucumber",
+    "playwright",
+    "selenium",
+    "testing"
+  ],
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -12,7 +32,9 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
   "dependencies": {
     "@cucumber/gherkin": "^43.0.0",
@@ -20,5 +42,11 @@
     "@cucumber/tag-expressions": "^11.1.0",
     "exceljs": "^4.4.0",
     "yaml": "^2.9.1"
+  },
+  "engines": {
+    "node": ">=20.10"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

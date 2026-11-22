@@ -174,6 +174,8 @@ export class Executor implements WorkerExecutor {
   private readonly touchedBy = new Map<string, Set<string>>();
   /** Worker mode: BeforeWorker failed, so every node assigned here is skipped with this reason. */
   private workerFatal: string | undefined;
+  /** BeforeWorker failed in this process: its AfterWorker hooks must not run (they would only cascade the error). */
+  private workerBeforeFailed = false;
   private readonly signal: AbortSignal;
 
   constructor(private readonly opts: ExecuteOptions) {
@@ -244,6 +246,7 @@ export class Executor implements WorkerExecutor {
     if (!this.opts.dryRun) {
       const outcome = await this.runHooks('run', 'before', runCtx, () => true, {});
       if (outcome.status === 'failed') {
+        this.workerBeforeFailed = true; // no worker was started, so there is nothing for AfterWorker to tear down
         this.stopReason = `BeforeAll hook "${outcome.hookName}" failed`;
         this.runFailed = true;
         this.runError ??= outcome.error;
@@ -254,6 +257,7 @@ export class Executor implements WorkerExecutor {
         // inline pool: this process is the only worker
         const w = await this.runHooks('worker', 'before', runCtx, () => true, {});
         if (w.status === 'failed') {
+          this.workerBeforeFailed = true;
           this.stopReason = `BeforeWorker hook "${w.hookName}" failed`;
           this.runFailed = true;
           this.runError ??= w.error;
@@ -281,10 +285,12 @@ export class Executor implements WorkerExecutor {
         const stopped = await this.opts.pool.stop();
         if (stopped.runFailed) this.runFailed = true;
       } else {
-        const w = await this.runHooks('worker', 'after', runCtx, () => true, {});
-        if (w.status === 'failed') {
-          this.runFailed = true;
-          this.runError ??= w.error;
+        if (!this.workerBeforeFailed) {
+          const w = await this.runHooks('worker', 'after', runCtx, () => true, {});
+          if (w.status === 'failed') {
+            this.runFailed = true;
+            this.runError ??= w.error;
+          }
         }
         const fx = await this.closeWorkerFixtures();
         if (fx) {
@@ -715,6 +721,7 @@ export class Executor implements WorkerExecutor {
     setFallbackLogger(runCtx.log);
     const w = await this.runHooks('worker', 'before', runCtx, () => true, {});
     if (w.status === 'failed') {
+      this.workerBeforeFailed = true;
       this.workerFatal = `BeforeWorker hook "${w.hookName}" failed`;
       this.runFailed = true;
     }
@@ -796,8 +803,10 @@ export class Executor implements WorkerExecutor {
     }
     for (const g of [...this.groups.keys()]) await this.closeScopes([{ kind: 'group', key: g }]);
     const runCtx = this.makeRunContext(this.runScope, {});
-    const w = await this.runHooks('worker', 'after', runCtx, () => true, {});
-    if (w.status === 'failed') this.runFailed = true;
+    if (!this.workerBeforeFailed) {
+      const w = await this.runHooks('worker', 'after', runCtx, () => true, {});
+      if (w.status === 'failed') this.runFailed = true;
+    }
     if (await this.closeWorkerFixtures()) this.runFailed = true;
     const cleanupErrors = await this.runScope.close();
     if (cleanupErrors.length) {

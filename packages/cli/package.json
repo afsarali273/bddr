@@ -2,19 +2,57 @@
   "name": "@bddr/cli",
   "version": "0.1.0",
   "description": "bddr command line: run, dry-run, snippets",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/afsarali273/bddr.git",
+    "directory": "packages/cli"
+  },
+  "homepage": "https://afsarali273.github.io/bddr/",
+  "bugs": {
+    "url": "https://github.com/afsarali273/bddr/issues"
+  },
+  "keywords": [
+    "bdd",
+    "gherkin",
+    "test-runner",
+    "automation",
+    "cucumber",
+    "playwright",
+    "selenium",
+    "testing"
+  ],
   "type": "module",
-  "bin": { "bddr": "./dist/bin.js" },
+  "bin": {
+    "bddr": "./dist/bin.js"
+  },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
-    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" }
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./bin": {
+      "import": "./dist/bin.js"
+    }
   },
-  "files": ["dist"],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "dependencies": {
     "@bddr/core": "0.1.0",
     "@bddr/runtime": "0.1.0",
     "@bddr/reporters": "0.1.0",
     "tinyglobby": "^0.2.17",
     "tsx": "^4.23.15"
+  },
+  "engines": {
+    "node": ">=20.10"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

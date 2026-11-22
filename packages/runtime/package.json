@@ -2,15 +2,48 @@
   "name": "@bddr/runtime",
   "version": "0.1.0",
   "description": "bddr runtime: step registry, hooks, context, executor",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/afsarali273/bddr.git",
+    "directory": "packages/runtime"
+  },
+  "homepage": "https://afsarali273.github.io/bddr/",
+  "bugs": {
+    "url": "https://github.com/afsarali273/bddr/issues"
+  },
+  "keywords": [
+    "bdd",
+    "gherkin",
+    "test-runner",
+    "automation",
+    "cucumber",
+    "playwright",
+    "selenium",
+    "testing"
+  ],
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
-    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" }
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
   },
-  "files": ["dist"],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "dependencies": {
     "@bddr/core": "0.1.0",
     "@cucumber/cucumber-expressions": "^20.2.0"
+  },
+  "engines": {
+    "node": ">=20.10"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

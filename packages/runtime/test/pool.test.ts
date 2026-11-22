@@ -218,9 +218,40 @@ describe('coordinator + worker mode (fake pool)', () => {
     expect(of('scenarioFinished')[0]).toMatchObject({ status: 'skipped', reason: expect.stringMatching(/^BeforeWorker hook .* failed$/) });
     expect(result.success).toBe(false);
   });
+
+  it('AfterWorker does not run in a worker whose BeforeWorker failed', async () => {
+    const r = new SupportRegistry();
+    const calls: string[] = [];
+    r.defineStep('ok', () => {});
+    r.defineHook('worker', 'before', {}, () => {
+      throw new Error('no browser');
+    });
+    r.defineHook('worker', 'after', {}, () => {
+      calls.push('after');
+    });
+    await runPooled(r, `Feature: F\n  Scenario: a\n    Given ok\n`, { workers: 1 });
+    expect(calls).toEqual([]);
+  });
 });
 
 describe('inline pool worker hooks', () => {
+  it('AfterWorker does not run after a failed BeforeWorker', async () => {
+    const r = new SupportRegistry();
+    const calls: string[] = [];
+    r.defineStep('ok', () => {});
+    r.defineHook('worker', 'before', {}, () => {
+      throw new Error('no browser');
+    });
+    r.defineHook('worker', 'after', {}, () => {
+      calls.push('after');
+    });
+    const spec = parseSpec(`Feature: F\n  Scenario: a\n    Given ok\n`, 'x.feature');
+    const plan = buildPlan(spec.scenarios, spec.scenarios, { workers: 1 });
+    const result = await new Executor({ registry: r, bus: new EventBus(), plan }).execute(spec.scenarios);
+    expect(calls).toEqual([]);
+    expect(result.success).toBe(false);
+  });
+
   it('BeforeWorker/AfterWorker run once, inside BeforeAll/AfterAll', async () => {
     const r = new SupportRegistry();
     const trace: string[] = [];

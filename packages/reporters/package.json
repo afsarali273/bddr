@@ -2,6 +2,26 @@
   "name": "@bddr/reporters",
   "version": "0.1.0",
   "description": "bddr reporters: console, NDJSON, JUnit XML, HTML, Cucumber JSON and Messages",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/afsarali273/bddr.git",
+    "directory": "packages/reporters"
+  },
+  "homepage": "https://afsarali273.github.io/bddr/",
+  "bugs": {
+    "url": "https://github.com/afsarali273/bddr/issues"
+  },
+  "keywords": [
+    "bdd",
+    "gherkin",
+    "test-runner",
+    "automation",
+    "cucumber",
+    "playwright",
+    "selenium",
+    "testing"
+  ],
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -12,11 +32,19 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
   "dependencies": {
     "@bddr/core": "0.1.0",
     "@cucumber/gherkin": "^43.0.0",
     "@cucumber/messages": "^35.0.0"
+  },
+  "engines": {
+    "node": ">=20.10"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

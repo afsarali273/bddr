@@ -207,7 +207,8 @@ scenarioRetry, timeout), `defaultMode`, `logLevel`, `retry` (scenario, delay, ba
 
 ### 4.1 Next (in order)
 1. **Release readiness for v0.1** (nothing here is built yet)
-   - Publish to npm under the `@bddr` scope. First check that the scope, the `bddr` name and any domains are free. Then remove the
+   - DONE (2026-11-23): MIT licence, package metadata, the bare `bddr` package, CI and release workflows, `bddr migrate`, the three small fixes.
+   - Publish to npm under the `@bddr` scope (names checked free on 2026-11-23; create the org and the `NPM_TOKEN` secret, then push a `v0.1.0` tag). Check that the scope, the `bddr` name and any domains are free. Then remove the
      "Not on npm yet" notes from the docs (search the site for that text).
    - `bddr migrate` codemod for projects that used the old bddx names (`bddx.config.ts`, `BDDX_*`, `.bddx/`, `@bddx/*`).
    - Retake the screenshots that still show "bddx": `first-run-terminal.png`, `debug-prompt.png`, `first-project-report.png` (and

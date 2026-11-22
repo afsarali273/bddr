@@ -53,7 +53,8 @@
         <tr><td><code>bddr plan [paths...]</code></td><td>Show groups, dependencies and locks. Options <code>--plan-format text|json|mermaid</code> and <code>--explain &lt;scenario id&gt;</code>.</td></tr>
         <tr><td><code>bddr report &lt;events.ndjson...&gt;</code></td><td>Build reports from event files. Several files are merged and later runs win.</td></tr>
         <tr><td><code>bddr history [--top n]</code></td><td>The flakiest and slowest scenarios. Needs <code>history: true</code>.</td></tr>
-        <tr><td><code>bddr docs [paths...]</code></td><td>Living documentation. Options <code>-o</code>, <code>--results</code> (repeatable), <code>--title</code>.</td></tr>
+        <tr><td><code>bddr docs [paths...]</code></td><td>Living documentation. Options <code>-o</code>, <code>--results</code> (repeatable; without it, the last recorded run or <code>reports/events.ndjson</code> is used), <code>--title</code>.</td></tr>
+        <tr><td><code>bddr migrate [dir] [--write]</code></td><td>Update a project that used the old name bddx: <code>@bddx/*</code> imports, <code>BDDX_*</code> variables, <code>bddx.config.*</code> and <code>.bddx/</code>. Shows what would change unless you pass <code>--write</code>.</td></tr>
         </tbody></table></div>
 
         <h2 id="selection">Selection</h2>

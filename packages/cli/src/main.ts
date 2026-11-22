@@ -1,4 +1,5 @@
 import { parseArgs } from 'node:util';
+import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -7,6 +8,7 @@ import { DEFAULTS, loadConfig, UsageError } from './config.js';
 import { watchLoop } from './watch.js';
 import { buildLivingDocs, discoverSpecs, historyReport, makeDataLoader, prepareRun, registerTypeScriptLoader, reportFromEvents, runBddr } from './run.js';
 import { formatValidation, validateProject } from './validate.js';
+import { formatMigration, migrateProject } from './migrate.js';
 import type { Reporter } from '@bddr/reporters';
 
 const HELP = `bddr ${BDDR_VERSION}
@@ -21,6 +23,7 @@ Usage:
              -o reports/living-docs.html   --results <events.ndjson> (repeatable, colours scenarios)   --title <text>
   bddr report <events.ndjson...>     Build reports from event files; several files are merged (later runs win)
              -f html:reports/report.html -f junit:reports/junit.xml
+  bddr migrate [dir] [--write]       Update a project from the old name bddx to bddr (previews unless --write)
   bddr plan  [paths...] [options]    Show the execution plan: groups, dependencies, locks (runs nothing)
              --plan-format text|json|mermaid    --explain <scenario id>
 
@@ -95,6 +98,7 @@ export async function main(argv: string[]): Promise<number> {
         'fail-on-flaky': { type: 'boolean' },
         'rerun-failed': { type: 'string' },
         'fail-on-warnings': { type: 'boolean' },
+        write: { type: 'boolean' },
         top: { type: 'string' },
         'log-level': { type: 'string' },
         'plan-format': { type: 'string' },
@@ -119,7 +123,7 @@ export async function main(argv: string[]): Promise<number> {
 
   let command = 'run';
   let paths = positionals;
-  if (['run', 'list', 'snippets', 'validate', 'plan', 'report', 'history', 'docs'].includes(positionals[0] ?? '')) {
+  if (['run', 'list', 'snippets', 'validate', 'plan', 'report', 'history', 'docs', 'migrate'].includes(positionals[0] ?? '')) {
     command = positionals[0]!;
     paths = positionals.slice(1);
   }
@@ -132,6 +136,13 @@ export async function main(argv: string[]): Promise<number> {
       params[d.slice(0, i)] = d.slice(i + 1);
     }
 
+    if (command === 'migrate') {
+      const root = resolve(paths[0] ?? '.');
+      if (!existsSync(root)) throw new UsageError(`migrate: folder not found: ${root}`);
+      const result = await migrateProject(root, values.write === true);
+      process.stdout.write(formatMigration(result));
+      return 0;
+    }
     if (command === 'list') return await list(paths, values.config, values.profile, values.tags, values.name);
     if (command === 'snippets') return await snippets(paths, values.config, values.profile, values.tags, values.name);
     if (command === 'docs') {

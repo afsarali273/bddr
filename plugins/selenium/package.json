@@ -2,13 +2,40 @@
   "name": "@bddr/selenium",
   "version": "0.1.0",
   "description": "Selenium WebDriver plugin for bddr: a driver per scenario, shared sessions for serial features, remote grids, screenshots",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/afsarali273/bddr.git",
+    "directory": "plugins/selenium"
+  },
+  "homepage": "https://afsarali273.github.io/bddr/",
+  "bugs": {
+    "url": "https://github.com/afsarali273/bddr/issues"
+  },
+  "keywords": [
+    "bdd",
+    "gherkin",
+    "test-runner",
+    "automation",
+    "cucumber",
+    "playwright",
+    "selenium",
+    "testing"
+  ],
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
-    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" }
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
   },
-  "files": ["dist", "README.md"],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.test.json",
@@ -30,5 +57,8 @@
   },
   "engines": {
     "node": ">=20.10"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

@@ -1,0 +1,24 @@
+{
+  "name": "bddr",
+  "version": "0.1.0",
+  "description": "bddr: a test runner for BDD scenarios with groups, dependencies, locks, retries and living documentation",
+  "license": "MIT",
+  "repository": { "type": "git", "url": "git+https://github.com/afsarali273/bddr.git", "directory": "packages/bddr" },
+  "homepage": "https://afsarali273.github.io/bddr/",
+  "bugs": { "url": "https://github.com/afsarali273/bddr/issues" },
+  "keywords": ["bdd", "gherkin", "test-runner", "automation", "cucumber", "playwright", "selenium", "testing"],
+  "type": "module",
+  "bin": { "bddr": "./bin.js" },
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": { ".": { "types": "./index.d.ts", "import": "./index.js" } },
+  "files": ["bin.js", "index.js", "index.d.ts", "README.md", "LICENSE"],
+  "dependencies": {
+    "@bddr/cli": "0.1.0",
+    "@bddr/core": "0.1.0",
+    "@bddr/reporters": "0.1.0",
+    "@bddr/runtime": "0.1.0"
+  },
+  "engines": { "node": ">=20.10" },
+  "publishConfig": { "access": "public" }
+}

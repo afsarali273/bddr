@@ -2,6 +2,26 @@
   "name": "@bddr/playwright",
   "version": "0.1.0",
   "description": "Playwright plugin for bddr: browser per worker, context and page per scenario, API request context, screenshots, traces and videos",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/afsarali273/bddr.git",
+    "directory": "plugins/playwright"
+  },
+  "homepage": "https://afsarali273.github.io/bddr/",
+  "bugs": {
+    "url": "https://github.com/afsarali273/bddr/issues"
+  },
+  "keywords": [
+    "bdd",
+    "gherkin",
+    "test-runner",
+    "automation",
+    "cucumber",
+    "playwright",
+    "selenium",
+    "testing"
+  ],
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -13,7 +33,8 @@
   },
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
@@ -26,6 +47,11 @@
     "playwright": ">=1.40.0",
     "@playwright/test": ">=1.40.0"
   },
+  "peerDependenciesMeta": {
+    "@playwright/test": {
+      "optional": true
+    }
+  },
   "devDependencies": {
     "@bddr/core": "file:../../packages/core",
     "@bddr/runtime": "file:../../packages/runtime",
@@ -37,9 +63,7 @@
   "engines": {
     "node": ">=20.10"
   },
-  "peerDependenciesMeta": {
-    "@playwright/test": {
-      "optional": true
-    }
+  "publishConfig": {
+    "access": "public"
   }
 }

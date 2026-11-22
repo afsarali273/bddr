@@ -251,6 +251,9 @@ export async function prepareRun(req: RunRequest = {}): Promise<PreparedRun> {
     shardNote = [
       `shard ${spec.index}/${spec.count}: ${sh.ids.length} of ${total} scenario(s); estimated load per shard: ${sh.loads.map((l) => `${Math.round(l)}ms`).join(', ')}`,
       ...(!runs.length ? ['shard: no run history, scenarios weighted equally (enable `history: true` and run once for duration-based balancing)'] : []),
+      ...(spec.count > 1 && all.some((x) => sh.ids.includes(x.id) && plan.byId.get(x.id)?.exclusive)
+        ? ['shard: `@exclusive` keeps a scenario alone only within its own shard; the other shards run at the same time on other machines']
+        : []),
       ...(sh.largestUnit.ids.length > total / spec.count && spec.count > 1
         ? [`shard: one dependency/group/lock cluster has ${sh.largestUnit.ids.length} scenarios and limits the speed-up`]
         : []),
@@ -345,6 +348,13 @@ export async function buildLivingDocs(req: DocsRequest = {}): Promise<{ file: st
   } else {
     const h = historySettings(opts, rootDir);
     const last = h ? loadHistory(h.dir, h.keep).at(-1) : undefined;
+    const conventional = resolve(cwd, 'reports/events.ndjson');
+    if (!last && existsSync(conventional)) {
+      for (const e of parseNdjson(await readFile(conventional, 'utf8'))) {
+        if (e.type === 'scenarioFinished' && !e.willRetry) status.set(e.scenarioId, { status: e.flaky ? 'flaky' : e.status, ms: e.durationMs });
+      }
+      source = 'reports/events.ndjson';
+    }
     if (last) {
       for (const [id, en] of Object.entries(last.scenarios)) status.set(id, { status: en.f ? 'flaky' : en.s, ms: en.d });
       source = `last recorded run (${new Date(last.startedAt).toISOString().slice(0, 16).replace('T', ' ')})`;

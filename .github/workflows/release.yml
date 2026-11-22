@@ -1,0 +1,40 @@
+name: Release
+
+# Publishes the packages to npm when a version tag is pushed, for example:  git tag v0.1.0 && git push origin v0.1.0
+# One-time setup: create the "@bddr" organisation on npmjs.com and add an automation token as the repository secret NPM_TOKEN.
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+  id-token: write # npm provenance
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          registry-url: https://registry.npmjs.org
+      - run: npm ci
+      - run: npm run build
+      - run: npm run verify
+      - name: Check the tag matches the package version
+        run: |
+          v=$(node -p "require('./packages/core/package.json').version")
+          test "v$v" = "$GITHUB_REF_NAME" || { echo "tag $GITHUB_REF_NAME does not match version $v"; exit 1; }
+      - name: Publish (dependencies first)
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          for d in packages/core packages/runtime packages/reporters packages/cli packages/bddr; do
+            (cd $d && npm publish --provenance --access public)
+          done
+          for d in plugins/playwright plugins/selenium plugins/axios; do
+            (cd $d && npm ci && npm run build && npm publish --provenance --access public)
+          done
