@@ -1,6 +1,6 @@
 {
   "name": "@bddr/selenium",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Selenium WebDriver plugin for bddr: a driver per scenario, shared sessions for serial features, remote grids, screenshots",
   "license": "MIT",
   "repository": {

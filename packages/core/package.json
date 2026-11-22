@@ -1,6 +1,6 @@
 {
   "name": "@bddr/core",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "bddr core: spec model, Gherkin compiler, tags, event schema",
   "license": "MIT",
   "repository": {
@@ -40,7 +40,6 @@
     "@cucumber/gherkin": "^43.0.0",
     "@cucumber/messages": "^35.0.0",
     "@cucumber/tag-expressions": "^11.1.0",
-    "exceljs": "^4.4.0",
     "yaml": "^2.9.1"
   },
   "engines": {
@@ -48,5 +47,16 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "peerDependencies": {
+    "exceljs": "^4.4.0"
+  },
+  "peerDependenciesMeta": {
+    "exceljs": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "exceljs": "^4.4.0"
   }
 }

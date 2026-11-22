@@ -9,7 +9,7 @@ export { cucumberTagExpressions } from './adapters/cucumber-tag-expressions.js';
 export * from './events.js';
 export * from './selection.js';
 
-export const BDDR_VERSION = '0.1.0';
+export const BDDR_VERSION = '0.1.1';
 export * from './data/index.js';
 export * from './plan/index.js';
 export * from './events-merge.js';

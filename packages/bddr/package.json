@@ -1,6 +1,6 @@
 {
   "name": "bddr",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "bddr: a test runner for BDD scenarios with groups, dependencies, locks, retries and living documentation",
   "license": "MIT",
@@ -43,10 +43,10 @@
     "LICENSE"
   ],
   "dependencies": {
-    "@bddr/cli": "0.1.0",
-    "@bddr/core": "0.1.0",
-    "@bddr/reporters": "0.1.0",
-    "@bddr/runtime": "0.1.0"
+    "@bddr/cli": "0.1.1",
+    "@bddr/core": "0.1.1",
+    "@bddr/reporters": "0.1.1",
+    "@bddr/runtime": "0.1.1"
   },
   "engines": {
     "node": ">=20.10"

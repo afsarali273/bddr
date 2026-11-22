@@ -1,6 +1,6 @@
 {
   "name": "@bddr/cli",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "bddr command line: run, dry-run, snippets",
   "license": "MIT",
   "repository": {
@@ -43,9 +43,9 @@
     "LICENSE"
   ],
   "dependencies": {
-    "@bddr/core": "0.1.0",
-    "@bddr/runtime": "0.1.0",
-    "@bddr/reporters": "0.1.0",
+    "@bddr/core": "0.1.1",
+    "@bddr/runtime": "0.1.1",
+    "@bddr/reporters": "0.1.1",
     "tinyglobby": "^0.2.17",
     "tsx": "^4.23.15"
   },

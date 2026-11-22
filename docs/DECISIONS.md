@@ -243,3 +243,7 @@ effects); rejected.
 **Checked (2026-11-22).** `bddr` is free on npm, PyPI, crates.io and RubyGems; a web search found no test tool of that name. The owner created the GitHub repo `afsarali273/bddr` the same day. NOT yet checked by us: the npm scope `@bddr`, domains, trademarks.
 
 **Consequences.** `bddr` is one letter from the other project's `bddx`, so a typo could run their tool. Old name in history entries (PROGRESS.md, git log) is `bddx`; a global replace was applied to all docs, so older entries now read `bddr`.
+
+## ADR-027 exceljs is an optional peer dependency (2026-11-23)
+
+A clean install of `@bddr/cli` 0.1.0 showed `npm audit` warnings: core depended on exceljs, which depends on uuid 8 (GHSA-w5hq-g745-h8pq). The root `overrides` of ADR-012 only apply inside this repository, not to people who install bddr. Since XLSX is optional and already loaded with a dynamic `import()`, exceljs moved to an optional peer dependency (0.1.1). A project that reads `.xlsx` files installs it itself (`npm i -D exceljs`); without it the error says so.

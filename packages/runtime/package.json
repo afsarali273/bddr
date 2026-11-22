@@ -1,6 +1,6 @@
 {
   "name": "@bddr/runtime",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "bddr runtime: step registry, hooks, context, executor",
   "license": "MIT",
   "repository": {
@@ -37,7 +37,7 @@
     "LICENSE"
   ],
   "dependencies": {
-    "@bddr/core": "0.1.0",
+    "@bddr/core": "0.1.1",
     "@cucumber/cucumber-expressions": "^20.2.0"
   },
   "engines": {

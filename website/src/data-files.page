@@ -29,7 +29,7 @@ Scenario: <qty> x <product> costs <total>
 <div class="table-wrap"><table>
 <thead><tr><th>Part</th><th>Meaning</th></tr></thead>
 <tbody>
-<tr><td><code>file</code></td><td>CSV, TSV, JSON, YAML or XLSX, by extension.</td></tr>
+<tr><td><code>file</code></td><td>CSV, TSV, JSON, YAML or XLSX, by extension. XLSX needs the optional <code>exceljs</code> package: <code>npm i -D exceljs</code>.</td></tr>
 <tr><td><code>#selector</code></td><td>For JSON and YAML, a dotted path to the array, such as <code>#data.users</code>. For Excel, the sheet name.</td></tr>
 <tr><td><code>?col=val</code></td><td>Keep rows where the column equals the value.</td></tr>
 <tr><td><code>rows=1-3,7</code></td><td>Keep these rows by their number in the file, header not counted.</td></tr>

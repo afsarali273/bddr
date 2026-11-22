@@ -1,6 +1,6 @@
 {
   "name": "@bddr/playwright",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Playwright plugin for bddr: browser per worker, context and page per scenario, API request context, screenshots, traces and videos",
   "license": "MIT",
   "repository": {

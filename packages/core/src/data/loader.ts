@@ -129,7 +129,12 @@ export const builtInDataProviders: Record<string, DataProvider> = {
   },
   '.yml': async (file, selector) => builtInDataProviders['.yaml']!(file, selector),
   '.xlsx': async (file, selector) => {
-    const { default: ExcelJS } = await import('exceljs');
+    let ExcelJS: typeof import('exceljs');
+    try {
+      ExcelJS = (await import('exceljs')).default;
+    } catch {
+      throw new Error(`${file}: reading .xlsx files needs the optional package "exceljs". Install it in your project: npm i -D exceljs`);
+    }
     const wb = new ExcelJS.Workbook();
     await wb.xlsx.readFile(file);
     const sheet = selector ? wb.getWorksheet(selector) : wb.worksheets[0];

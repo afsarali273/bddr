@@ -1,6 +1,6 @@
 {
   "name": "@bddr/axios",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "axios plugin for bddr: an API client fixture with base URL, auth, call log attachments",
   "license": "MIT",
   "repository": {
