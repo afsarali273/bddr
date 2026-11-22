@@ -133,8 +133,10 @@ in TS/Java; the annotated document is the report. Design note: [design/code-link
 ## Phase 6: Ecosystem
 
 - [ ] Plugin API (data loaders, reporters, parameter types, retry analyzers, plan modifiers)
-- [ ] Reusable Playwright integration package (the real-project showcase already proves browser per worker, page per
-      scenario, screenshot attachments and `concurrent:false`; extraction plus automatic failure traces remain)
+- [x] Reusable Playwright integration package: `plugins/playwright` (browser per worker, page per scenario, failure screenshots and traces)
+- [x] Selenium plugin (`plugins/selenium`) and axios plugin (`plugins/axios`)
+- [x] Documentation site (`website/`), published to GitHub Pages by a workflow
+- [ ] Publish to npm under `@bddr`; `bddr migrate` codemod from bddx; remove the "Not on npm yet" notes
 - [ ] HTTP step library (Karate-style JSON matching)
 - [ ] Allure reporter
 - [ ] Step catalogue export (JSON) + MCP server for AI assistants
@@ -144,4 +146,10 @@ in TS/Java; the annotated document is the report. Design note: [design/code-link
 
 - [ ] JUnit Platform `TestEngine`, annotations (`@Given`, `@Before`…), Maven + Gradle plugins
 - [ ] Same config schema (JSON/YAML), same event schema, same reports
+- [ ] Passes `conformance/` unchanged
+
+## Phase 8: Python port
+
+- [ ] Decide the runner shape (own CLI, or a pytest plugin)
+- [ ] Same config schema, same event schema, same reports
 - [ ] Passes `conformance/` unchanged

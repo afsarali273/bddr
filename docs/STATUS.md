@@ -1,6 +1,6 @@
 # bddr: status overview (done so far and what remains)
 
-_Last updated: 2026-11-15 (after session 12: independent UI/API coverage and Page Object Model examples)._
+_Last updated: 2026-11-23 (after the rename to bddr, the plugins, the Architecture page and the documentation site)._
 
 This is the one-page answer to "what does bddr do today, and what is left?". It is a summary: details live in
 [IMPLEMENTATION.md](IMPLEMENTATION.md) (how), [DECISIONS.md](DECISIONS.md) (why), [ROADMAP.md](ROADMAP.md) (task
@@ -9,7 +9,7 @@ checklist) and [PROGRESS.md](PROGRESS.md) (session log + next step).
 **What bddr is:** an automation framework with BDD-style specs (Gherkin), not a BDD-purist tool. It takes the best ideas
 from Cucumber, TestNG, Karate, Serenity/JS, Reqnroll, Gauge, Behave, Robot Framework, pytest-bdd, JBehave and
 playwright-bdd, on its own architecture: Cucumber's libraries are used only for parsing and expressions, behind
-replaceable adapters. TypeScript first, Java later (same config, events and conformance suite).
+replaceable adapters. TypeScript first, with Java and Python ports planned (same config, events and conformance suite).
 
 ---
 
@@ -22,12 +22,13 @@ replaceable adapters. TypeScript first, Java later (same config, events and conf
 | 2 Data-driven specs | CSV/TSV/JSON/YAML/XLSX via `@data:` | 🟡 Data core done; composite steps + gate left |
 | 3 Orchestration | Groups, dependencies, locks, priorities, parallel/serial, worker processes, logging, step repeat/retry | ✅ Done; `@requires` and `waitedForMs` event left |
 | 4 Resilience | Scenario/group/run retry, flaky, quarantine, rerun + merge, soft asserts, cancellation and time budgets | ✅ Done |
-| 5 Reporting + DX | HTML v2 (timeline, dependency graph, history), run history + flakiness score, `bddr history` | 🟡 Reporting done; DX tools (debug, watch, sharding, IDE, Cucumber Messages) left |
-| 6 Ecosystem | Plugin API, Playwright, HTTP steps, Allure, AI step catalogue/MCP, v1.0 | 🟡 Playwright showcase done; reusable integration pending |
+| 5 Reporting + DX | HTML v3 (timeline, dependency graph, history), run history + flakiness score, `bddr history`, living docs, debug, watch, `--shard`, Cucumber Messages | ✅ Done except the VS Code extension |
+| 6 Ecosystem | Playwright, Selenium and axios plugins, documentation site; still to do: plugin API extension points, HTTP steps, Allure, AI step catalogue/MCP, npm release, v1.0 | 🟡 Plugins and docs done; the rest left |
 | 7 Java port | JUnit Platform engine, same config/events/conformance | ⬜ Not started |
+| 8 Python port | pytest-style runner over the same config, events and conformance suite | ⬜ Not started (planned) |
 | Parked | Code-linked Markdown specs; callable scenarios | ⏸ Owner decision: later |
 
-**Health:** `npm run verify` is green: 178 tests (unit, conformance, CLI end to end), plus the offline example projects.
+**Health:** `npm run verify` is green: 235 tests (unit, conformance, CLI end to end; the 236th, `watch.test.ts`, fails only in the sandbox on file cleanup, so run it on your machine), plus the offline example projects.
 The optional live `examples/playwright-showcase` project is independently green: 125 scenarios / 523 steps across 13
 feature files against The Internet, SauceDemo, TodoMVC, JSONPlaceholder, DummyJSON, Playwright documentation and HTTPBin
 (not part of root verify because it requires network access and a Chromium download). Six scenarios are deliberately
@@ -158,12 +159,16 @@ scope. Failure semantics (what is skipped and what still runs) are a documented 
 
 ### 2.12 Architecture and quality
 - Packages: `core` (model, parsing, plan, events), `runtime` (registry, executor, scheduler, pool), `reporters`, `cli`.
+- Plugins (separate packages, peer-dependent on the runtime, so the core has no browser or HTTP dependency): `@bddr/playwright`,
+  `@bddr/selenium`, `@bddr/axios`.
 - Ports and adapters: `SpecParser`, `TagExpressionEngine`, `StepExpressionEngine`. Cucumber libraries are imported only in `adapters/`.
 - Language-neutral **conformance suite** (9 features with expected JSON) that the Java port must also pass.
-- Four runnable examples: `examples/basic`, `examples/orchestration`, `examples/resilience`, plus the standalone
-  `examples/playwright-showcase` real project (125 UI/API scenarios across 13 feature files, powered by Playwright but
+- Runnable examples: `examples/basic`, `examples/orchestration`, `examples/resilience`, the standalone `examples/selenium-showcase`
+  and the `examples/playwright-showcase` real project (125 UI/API scenarios across 13 feature files, powered by Playwright but
   run by bddr).
-- 24 ADRs recording the design decisions.
+- 26 ADRs recording the design decisions (ADR-026: the rename from bddx to bddr).
+- Documentation site in `website/` (about 40 pages, Architecture page, offline, no build step for readers), published to GitHub Pages
+  by `.github/workflows/pages.yml`.
 
 ---
 
@@ -201,47 +206,36 @@ scenarioRetry, timeout), `defaultMode`, `logLevel`, `retry` (scenario, delay, ba
 ## 4. What remains
 
 ### 4.1 Next (in order)
-1. **Phase 5: the rest (developer experience)**
-   - ~~Debug mode~~ DONE (session 13): `--debug` pauses after a failing step, `--debug-step` before every step, `--inspect [port]`
-     opens the Node inspector and waits. Prompt: `c` continue, `n` next step, `r` retry the failed step, `s` state, `e <expr>`
-     (eval with `ctx`), `q` quit. Forces 1 worker, inline pool, no scenario/group/run/step/hook timeouts, no retries.
-     Needs a TTY (exit 2 otherwise). Runtime: `ExecuteOptions.debug: DebugController` (`beforeStep`, `onFailure`);
-     CLI: `packages/cli/src/debug.ts`. Open: when `beforeWorker` fails, `afterWorker` still runs (cascading error).
-   - ~~Cucumber Messages adapter~~ DONE (session 13): `-f messages[:file]` (default `reports/messages.ndjson`, `reporters/src/messages.ts`).
-     Regenerates `source`/`gherkinDocument`/`pickle` from the feature files (`sourceRoot`, set to the project root by the CLI) with
-     `@cucumber/gherkin`, then maps run events to `testRunStarted`, `testCase`, `testCaseStarted` (attempt, workerId),
-     `testStepStarted/Finished` (with exception), `attachment` (attachments, screenshots, user logs as `text/x-cucumber-log+plain`),
-     `testCaseFinished` (`willBeRetried`), `testRunFinished`, plus `stepDefinition`. Validated with `parseEnvelope`.
-     Limits: scenarios from `@data` files have no pickle and are left out; groups/locks/hook levels have no Messages equivalent;
-     hooks are not emitted as `hook`/`testStep` messages yet.
-   - ~~Watch mode~~ DONE (session 13): `bddr --watch` (`cli/src/watch.ts`). Each run is a fresh child process (step code, page
-     objects and config always reload). Changed `.feature`/`.md` files re-run just those files; any other change re-runs the
-     original selection; changes during a run are coalesced. Keys: Enter/`a` all, `f` failed (via `--rerun-failed`), `q` quit.
-     Ignores node_modules, .git, .bddr, dist, reports. Not combinable with `--debug`/`--dry-run`. Uses recursive `fs.watch`.
-   - ~~CI sharding~~ DONE (session 13): `--shard i/n` on `run` and `plan`. `core/src/plan/shard.ts`: scenarios linked by dependencies,
-     named groups or locks form one unit (never split across machines); units are packed largest-first onto shards by average
-     duration from run history (`history: true`; equal weights without it, unknown durations use the median). Deterministic, so
-     every CI machine agrees. Warns when one unit dominates; an empty shard exits 0. CI example: matrix of `--shard $i/4`,
-     restore `.bddr/history` as a cache, merge results with `bddr report a.ndjson b.ndjson -f html`.
-   - ~~Living documentation~~ DONE (session 13): `bddr docs [paths] [-o file] [--results events.ndjson]... [--title t]`
-     (`cli/src/run.ts buildLivingDocs`, `reporters/src/living-docs.ts`). One offline HTML page: folder tree navigation, each
-     folder's `README.md` is its introduction (first heading = folder title), features with description, scenarios, steps, data
-     tables and doc strings, tag chips, search. Results (from `--results`, else the latest history run) colour scenarios and
-     roll up per folder. Markdown is a small safe subset (links limited to http(s), mailto, relative).
+1. **Release readiness for v0.1** (nothing here is built yet)
+   - Publish to npm under the `@bddr` scope. First check that the scope, the `bddr` name and any domains are free. Then remove the
+     "Not on npm yet" notes from the docs (search the site for that text).
+   - `bddr migrate` codemod for projects that used the old bddx names (`bddx.config.ts`, `BDDX_*`, `.bddx/`, `@bddx/*`).
+   - Retake the screenshots that still show "bddx": `first-run-terminal.png`, `debug-prompt.png`, `first-project-report.png` (and
+     `data-driven-report.png`, which is a copy of it); capture a clean-pass `report-overview.png`.
+   - Run the live `playwright-showcase` and `selenium-showcase` projects after the rename (not run since).
+   - CI workflow that runs `npm run verify`.
+   - Small fixes: warn when `--shard` meets `@exclusive`; better default for `--results` in `bddr docs`; `AfterWorker` still runs after
+     a failed `BeforeWorker` (cascading error).
+2. **Phase 5: the last item**
    - VS Code extension and language server: step completion, go to definition.
-2. **Phase 6: ecosystem**
-   - Plugin API: data loaders, reporters, parameter types, retry analyzers, plan modifiers.
-   - **Reusable Playwright integration** (extract and generalise the patterns proven in `examples/playwright-showcase`):
-     - a browser per worker (BeforeWorker) and a page per scenario
-     - screenshots and traces on failure
-     - browser steps marked `concurrent: false`
+3. **Phase 6: ecosystem (remaining)**
+   - Plugin API extension points: data loaders, reporters, parameter types, retry analyzers, plan modifiers.
    - HTTP step library (Karate-style JSON matching).
    - Allure reporter.
    - Step catalogue export plus an MCP server for AI assistants.
    - TypeScript v1.0 release.
-3. **Phase 7: Java port**
+   - Already done: Playwright, Selenium and axios plugins (`plugins/`), with fixtures, automatic failure screenshots and traces.
+4. **Phase 7: Java port**
    - JUnit Platform `TestEngine`, annotations, Maven and Gradle plugins.
    - Same config schema, event schema and reports; must pass `conformance/` unchanged.
+5. **Phase 8: Python port** (new)
+   - Same config and event schema, must pass `conformance/` unchanged. Decide the runner shape first (own CLI like the TypeScript one,
+     or a pytest plugin).
+
+Done in Phase 5 (kept for reference): debug mode (`--debug`, `--debug-step`, `--inspect`), Cucumber Messages (`-f messages`), watch
+mode (`--watch`), CI sharding (`--shard i/n`), living documentation (`bddr docs`). Details are in [IMPLEMENTATION.md](IMPLEMENTATION.md)
+and the session log in [PROGRESS.md](PROGRESS.md). Limits worth knowing: Cucumber Messages leaves out scenarios from `@data` files and
+does not emit hooks; `--shard` keeps dependent scenarios, groups and locks together on one machine.
 
 ### 4.2 Smaller leftovers
 - **Phase 2:**
@@ -249,7 +243,7 @@ scenarioRetry, timeout), `defaultMode`, `logLevel`, `retry` (scenario, delay, ba
   - the Phase 2 gate (same feature gives identical results from inline Examples, CSV and XLSX)
   - SQL/HTTP data providers (with the plugin API)
 - **Phase 3:**
-  - `@requires:<file.feature>` spec-level preconditions
+  - `@requires:<file.feature>` spec-level preconditions (whole-feature ordering today: `@serial` inside a file, or `@group` on features with group `dependsOn`; there is no feature-file target for `@dependsOn`)
   - `waitedForMs` event (`workerStarted` is done)
 - **Phase 0/1 gates:**
   - parse the Cucumber Compatibility Kit features
@@ -286,5 +280,5 @@ scenarioRetry, timeout), `defaultMode`, `logLevel`, `retry` (scenario, delay, ba
 | Class steps + DI container, scenario context | Reqnroll/SpecFlow, Serenity/JS |
 | Rerun failed + report merge, flaky/quarantine | Surefire/Maven, pytest plugins |
 | Fixture-like scoped stores with `defer()` | pytest / pytest-bdd |
-| Browser-aware execution (planned Playwright integration) | playwright-bdd |
-| Living documentation and Markdown specs (parked) | Gauge, Serenity |
+| Browser-aware execution (Playwright plugin) | playwright-bdd |
+| Living documentation (done); Markdown specs (parked) | Gauge, Serenity |
