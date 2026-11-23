@@ -46,6 +46,26 @@ Feature: Orders
 <tr><td>Group <code>dependsOn</code></td><td>The default is <code>onDependencyFailure: 'skip'</code>. Set <code>'run'</code> to run anyway, as a reporting group would.</td></tr>
 </tbody></table></div>
 
+<h2>Which results skip a dependent</h2>
+<p>A hard dependency must end as <code>passed</code>. Every other result skips the scenarios that depend on it: <code>failed</code>, <code>pending</code>, <code>undefined</code>, <code>ambiguous</code> and <code>skipped</code>. This holds even with <code>--no-strict</code>, which only changes the exit code. A failing <code>@quarantine</code> scenario also skips its dependents, even though the build does not fail for it.</p>
+<p>The skip reason in the report and the console names the scenario and its result, for example <code>dependency failed: create-order (failed)</code>. When several dependencies did not pass, the reason names the first one in the order the tags were written. With <code>--fail-fast</code>, scenarios skipped because the run stopped show the fail-fast reason instead.</p>
+<p>With <code>--dry-run</code> nothing executes, so every scenario is reported as skipped without a dependency reason.</p>
+
+<h2>Rules and edge cases</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Situation</th><th>What bddr does</th></tr></thead>
+<tbody>
+<tr><td>The same target is named as hard and as soft</td><td>The hard dependency wins.</td></tr>
+<tr><td>A scenario depends on itself, or the tag has no value (<code>@dependsOn:</code>)</td><td>Ignored, with no message.</td></tr>
+<tr><td>Two scenarios in different files have the same <code>@id</code></td><td>Plan error, exit code 2, naming both file and line. <code>bddr validate</code> reports it once.</td></tr>
+<tr><td><code>@dependsOn:name</code> where <code>name</code> is both an id and an outline</td><td>The exact id wins over the outline's rows.</td></tr>
+<tr><td>A soft dependency whose target is not in the run</td><td>Dropped. Soft dependencies never add scenarios to a selection.</td></tr>
+<tr><td>A hard dependency that your <code>-t</code> or tag filter would exclude</td><td>Still added to the run, because the dependent cannot run without it.</td></tr>
+<tr><td>A cycle made only of soft dependencies</td><td>Still a plan error. Soft dependencies order scenarios, so a loop cannot be ordered.</td></tr>
+<tr><td>Any plan error (unknown id, duplicate id, cycle)</td><td>Nothing runs. bddr does not run part of a plan.</td></tr>
+<tr><td>Config group <code>dependsOn</code> names a group that is only used in tags</td><td>Plan error <code>unknown group</code>. Declare every group you depend on under <code>groups</code> in the config, even with an empty <code>{}</code>.</td></tr>
+</tbody></table></div>
+
 <h2>Run one scenario and what it needs</h2>
 <p>When you select a scenario with <code>-t</code>, a name, or <code>file:line</code>, bddr adds the scenarios it depends on, including the files it requires, even from other files. Add <code>--no-deps</code> to run only what you selected.</p>
 <cb lang="bash">$ npx bddr run features/orders.feature:9
@@ -67,4 +87,4 @@ Given('the order created earlier', (ctx) => {
 <aside class="callout warning"><p class="callout-title">Add the dependency</p><p><code>ctx.from(id)</code> throws if that scenario has not finished. If you see that error, add <code>@dependsOn:</code> for it.</p></aside>
 
 <h2>Check the plan</h2>
-<p>bddr reports unknown ids, unknown groups and cycles such as <code>a -&gt; c -&gt; b -&gt; a</code> before anything runs, and exits with code 2. <code>npx bddr plan --plan-format mermaid</code> prints the dependency graph as a Mermaid diagram you can paste into a wiki. The HTML report shows the same graph after a run.</p>
+<p>bddr reports unknown ids, duplicate ids, unknown groups and cycles such as <code>a -&gt; c -&gt; b -&gt; a</code> before anything runs, and exits with code 2. <code>npx bddr plan --plan-format mermaid</code> prints the dependency graph as a Mermaid diagram you can paste into a wiki. The HTML report shows the same graph after a run.</p>

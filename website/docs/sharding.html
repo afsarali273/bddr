@@ -54,7 +54,7 @@
           <li>the same lock,</li>
           <li>a <code>@serial</code> feature.</li>
         </ul>
-        <p>Each linked set is one unit. Units are packed onto shards, largest first, by their average duration from the run history. Without history every scenario weighs the same. A shard with nothing to run exits with 0.</p>
+        <p>Each linked set is one unit. Units are packed onto shards, largest first, by their average duration from the run history. Without history every scenario weighs the same. A shard with nothing to run prints <code>Nothing to run in shard i/n</code>, exits with 0 and writes no events file. If your CI merges one events file per shard, let that step skip a shard whose file is missing.</p>
         <aside class="callout warning"><p class="callout-title">Big units</p><p>If one unit holds most of the suite, one shard ends up with most of the work. bddr warns about this. Use more locks, fewer dependencies or smaller groups to break it up.</p></aside>
 
         <h2 id="better-balance-with-history">Better balance with history</h2>

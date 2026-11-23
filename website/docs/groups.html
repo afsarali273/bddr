@@ -78,7 +78,7 @@ export default defineConfig({
         <tbody>
         <tr><td><code>mode</code></td><td><code>'parallel'</code>: members run side by side. <code>'serial'</code>: one member at a time. <code>'exclusive'</code>: nothing else runs while a member runs.</td></tr>
         <tr><td><code>workers</code></td><td>The most members of this group that run at once. The run-wide <code>workers</code> still applies.</td></tr>
-        <tr><td><code>dependsOn</code></td><td>Names of groups that must settle first. See <a href="dependencies.html">Dependencies</a>.</td></tr>
+        <tr><td><code>dependsOn</code></td><td>Names of groups that must settle first. Each name must also be declared under <code>groups</code>, or the plan fails with <code>unknown group</code>. See <a href="dependencies.html">Dependencies</a>.</td></tr>
         <tr><td><code>onDependencyFailure</code></td><td><code>'skip'</code> (default): members are skipped if a dependency group failed. <code>'run'</code>: members run anyway.</td></tr>
         <tr><td><code>priority</code></td><td>Lower numbers are scheduled earlier. See <a href="locks.html">Locks and priority</a>.</td></tr>
         <tr><td><code>locks</code></td><td>Lock names held by every member. See <a href="locks.html">Locks and priority</a>.</td></tr>

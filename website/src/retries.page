@@ -32,7 +32,7 @@ Scenario: Load the dashboard</cb>
 <cb lang="bash">$ npx bddr history --top 10</cb>
 
 <h2>Quarantine</h2>
-<p>Add <code>@quarantine</code> to a test you know is broken but want to keep running. It runs and is reported, but a failure never fails the build. JUnit XML shows a quarantined failure as skipped.</p>
+<p>Add <code>@quarantine</code> to a test you know is broken but want to keep running. It runs and is reported, but a failure never fails the build. JUnit XML shows a quarantined failure as skipped. Scenarios that depend on a quarantined scenario are still skipped when it fails (see <a href="dependencies.html">Dependencies</a>).</p>
 <cb lang="gherkin">@quarantine @owner:ann
 Scenario: Export to PDF</cb>
 
