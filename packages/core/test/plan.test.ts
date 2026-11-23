@@ -158,3 +158,90 @@ describe('defaultMode', () => {
     expect(buildPlan(s, s, {}).byId.get('d.feature::a')!.groups).toEqual([]);
   });
 });
+
+describe('@requires:<file.feature>', () => {
+  const files = (map: Record<string, string>) => Object.entries(map).flatMap(([uri, src]) => {
+    const spec = parseSpec(src, uri);
+    expect(spec.errors).toEqual([]);
+    return spec.scenarios;
+  });
+  const SETUP = `Feature: Setup
+  Scenario: seed users
+    Given ok
+  Scenario: seed products
+    Given ok
+`;
+
+  it('makes every scenario of the tagged feature wait for every scenario of the required file', () => {
+    const all = files({
+      'features/setup.feature': SETUP,
+      'features/orders.feature': `@requires:setup.feature\nFeature: Orders\n  Scenario: place\n    Given ok\n  Scenario: cancel\n    Given ok\n`,
+    });
+    const plan = buildPlan(all, all);
+    expect(plan.errors).toEqual([]);
+    for (const name of ['place', 'cancel']) {
+      const node = plan.nodes.find((n) => n.scenario.name === name)!;
+      expect(node.deps.map((d) => d.target).sort()).toEqual(plan.nodes.filter((n) => n.scenario.uri === 'features/setup.feature').map((n) => n.id).sort());
+      expect(node.deps.every((d) => !d.soft && d.via === 'requires:setup.feature')).toBe(true);
+    }
+    expect(plan.nodes.find((n) => n.scenario.name === 'seed users')!.deps).toEqual([]);
+  });
+
+  it('pulls the required file in when only the dependent scenario is selected, unless --no-deps', () => {
+    const all = files({
+      'features/setup.feature': SETUP,
+      'features/orders.feature': `Feature: Orders\n  @requires:setup.feature\n  Scenario: place\n    Given ok\n  Scenario: other\n    Given ok\n`,
+    });
+    const place = all.filter((s) => s.name === 'place');
+    const withDeps = buildPlan(all, place);
+    expect(withDeps.nodes.map((n) => n.scenario.name).sort()).toEqual(['place', 'seed products', 'seed users']);
+    expect(withDeps.nodes.find((n) => n.scenario.name === 'seed users')!.pulledInBy).toEqual([place[0]!.id]);
+    expect(buildPlan(all, place, { withDeps: false }).nodes.map((n) => n.scenario.name)).toEqual(['place']);
+  });
+
+  it('resolves the path relative to the requiring file, then the project root, then a unique path ending', () => {
+    const all = files({
+      'features/auth/login.feature': 'Feature: Login\n  Scenario: l\n    Given ok\n',
+      'features/shop/cart.feature': '@requires:../auth/login.feature\nFeature: Cart\n  Scenario: c\n    Given ok\n',
+      'features/shop/pay.feature': '@requires:features/auth/login.feature\nFeature: Pay\n  Scenario: p\n    Given ok\n',
+      'features/shop/ship.feature': '@requires:login.feature\nFeature: Ship\n  Scenario: s\n    Given ok\n',
+    });
+    const plan = buildPlan(all, all);
+    expect(plan.errors).toEqual([]);
+    const login = plan.nodes.find((n) => n.scenario.name === 'l')!.id;
+    for (const name of ['c', 'p', 's']) expect(plan.nodes.find((n) => n.scenario.name === name)!.deps.map((d) => d.target)).toEqual([login]);
+  });
+
+  it('supports :soft', () => {
+    const all = files({
+      'a.feature': 'Feature: A\n  Scenario: a\n    Given ok\n',
+      'b.feature': '@requires:a.feature:soft\nFeature: B\n  Scenario: b\n    Given ok\n',
+    });
+    const plan = buildPlan(all, all);
+    expect(plan.nodes.find((n) => n.scenario.name === 'b')!.deps).toMatchObject([{ soft: true }]);
+  });
+
+  it('reports a missing file, an ambiguous path ending and a file that requires itself', () => {
+    const all = files({
+      'x/dup.feature': 'Feature: D1\n  Scenario: d1\n    Given ok\n',
+      'y/dup.feature': 'Feature: D2\n  Scenario: d2\n    Given ok\n',
+      'z/user.feature': '@requires:nope.feature\nFeature: U\n  Scenario: u\n    Given ok\n',
+      'z/amb.feature': '@requires:dup.feature\nFeature: M\n  Scenario: m\n    Given ok\n',
+      'z/self.feature': '@requires:self.feature\nFeature: S\n  Scenario: s\n    Given ok\n',
+    });
+    const messages = buildPlan(all, all).errors.map((e) => e.message);
+    expect(messages).toContainEqual(expect.stringContaining('@requires:nope.feature: no feature file'));
+    expect(messages).toContainEqual(expect.stringContaining('@requires:dup.feature: matches several feature files (x/dup.feature, y/dup.feature)'));
+    expect(messages).toContainEqual(expect.stringContaining('@requires:self.feature: no feature file'));
+  });
+});
+
+describe('@requires cycles', () => {
+  it('reports two files that require each other', () => {
+    const all = [
+      ...parseSpec('@requires:b.feature\nFeature: A\n  Scenario: a\n    Given ok\n', 'a.feature').scenarios,
+      ...parseSpec('@requires:a.feature\nFeature: B\n  Scenario: b\n    Given ok\n', 'b.feature').scenarios,
+    ];
+    expect(buildPlan(all, all).errors.map((e) => e.message).join('\n')).toMatch(/cycle/i);
+  });
+});

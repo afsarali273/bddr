@@ -158,7 +158,7 @@ function hookMatches(hook: HookDefinition, scenarios: readonly ScenarioInstance[
 }
 
 const BUILT_IN_TAG_KEYS = [
-  'id', 'group', 'dependsOn', 'lock', 'priority', 'exclusive', 'serial', 'parallel', 'data', 'dataField', 'retry', 'noRetry', 'quarantine', 'timeout',
+  'id', 'group', 'dependsOn', 'requires', 'lock', 'priority', 'exclusive', 'serial', 'parallel', 'data', 'dataField', 'retry', 'noRetry', 'quarantine', 'timeout',
   'stepRetry', 'stepDelay', 'stepTimeout',
 ] as const;
 

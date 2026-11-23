@@ -69,3 +69,31 @@ describe.skipIf(!built)('bddr steps (built)', () => {
     expect(r.err).toContain('bddr:');
   });
 });
+
+describe.skipIf(!built)('@requires through the CLI', () => {
+  const dir = fileURLToPath(new URL('./fixtures/requires-project/', import.meta.url));
+  const run = (...args: string[]) => {
+    const r = spawnSync(process.execPath, [bin, ...args], { cwd: dir, encoding: 'utf8', env: { ...process.env, NO_COLOR: '1' } });
+    return { code: r.status, out: r.stdout, err: r.stderr };
+  };
+
+  it('skips a feature whose required file failed, but runs a soft requirement', () => {
+    const r = run();
+    expect(r.code).toBe(1);
+    expect(r.out).toContain('↷ place an order');
+    expect(r.out).toContain('dependency failed: features/a-setup.feature::seed-the-database (failed)');
+    expect(r.out).toContain('✔ runs whatever setup did');
+  });
+
+  it('selecting only the dependent feature still runs the required file first', () => {
+    const r = run('features/b-orders.feature');
+    expect(r.out).toContain('seed the database');
+    expect(r.out.indexOf('seed the database')).toBeLessThan(r.out.indexOf('place an order'));
+  });
+
+  it('shows the requirement in the plan', () => {
+    const r = run('plan', '--plan-format', 'json');
+    expect(r.code).toBe(0);
+    expect(r.out).toContain('requires:a-setup.feature');
+  });
+});

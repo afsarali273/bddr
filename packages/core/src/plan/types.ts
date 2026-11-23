@@ -9,6 +9,8 @@ import type { ScenarioInstance } from '../model.js';
  *   @dependsOn:<id>               hard dependency on a scenario id (all outline/data rows when the id has rows)
  *   @dependsOn:<id>:soft          soft dependency: waits for it, runs whatever its result
  *   @dependsOn:group:<name>[:soft] dependency on every member of a group
+ *   @requires:<file.feature>[:soft] dependency on every scenario of another feature file (path relative to this file,
+ *                                 to the project root, or the end of a unique path)
  *   @lock:<name>                  never runs at the same time as another holder of <name> (repeatable)
  *   @priority:<n>                 lower runs first among ready scenarios (default: group priority, else 0)
  *   @exclusive                    runs alone: nothing else in flight

@@ -22,6 +22,7 @@ lede: Tags are how you choose what runs and how it runs. Your own tags, such as 
 <tr><td><code>@id:name</code></td><td>scenario</td><td>A stable id.</td><td><a href="feature-files.html">Feature files</a></td></tr>
 <tr><td><code>@group:name</code></td><td>feature, rule, scenario</td><td>Join a group.</td><td><a href="groups.html">Groups</a></td></tr>
 <tr><td><code>@dependsOn:id</code>, <code>@dependsOn:id:soft</code>, <code>@dependsOn:group:name</code></td><td>scenario</td><td>Wait for another scenario or group.</td><td><a href="dependencies.html">Dependencies</a></td></tr>
+<tr><td><code>@requires:file.feature</code>, <code>@requires:file.feature:soft</code></td><td>feature, rule, scenario</td><td>Wait for every scenario of another feature file.</td><td><a href="dependencies.html">Dependencies</a></td></tr>
 <tr><td><code>@serial</code>, <code>@parallel</code></td><td>feature, rule</td><td>Run scenarios in file order, or opt out.</td><td><a href="serial-features.html">Serial features</a></td></tr>
 <tr><td><code>@lock:name</code>, <code>@exclusive</code>, <code>@priority:n</code></td><td>scenario</td><td>Mutual exclusion, run alone, start earlier.</td><td><a href="locks.html">Locks and priority</a></td></tr>
 <tr><td><code>@retry:N</code>, <code>@noRetry</code></td><td>scenario</td><td>Retry a failed scenario, or never.</td><td><a href="retries.html">Retries</a></td></tr>

@@ -7,6 +7,26 @@ interface RawDep {
   ref: string;
   soft: boolean;
   group?: string;
+  /** `@requires:<file>`: every scenario of that feature file. */
+  file?: string;
+}
+
+/** `@requires:<file.feature>[:soft]` */
+function parseRequires(value: string): RawDep {
+  const soft = value.endsWith(':soft');
+  const file = soft ? value.slice(0, -5) : value.endsWith(':hard') ? value.slice(0, -5) : value;
+  return { ref: `requires:${file}`, soft, file };
+}
+
+/** Collapse `.` and `..` in a forward-slash path. */
+function normalizePath(p: string): string {
+  const out: string[] = [];
+  for (const part of p.replace(/\\/g, '/').split('/')) {
+    if (!part || part === '.') continue;
+    if (part === '..') out.pop();
+    else out.push(part);
+  }
+  return out.join('/');
 }
 
 function parseDependsOn(value: string): RawDep {
@@ -84,6 +104,7 @@ export function buildPlan(all: readonly ScenarioInstance[], selected: readonly S
       }
       if (t.key === 'group' && t.value) groups.push(t.value);
       else if (t.key === 'dependsOn' && t.value) deps.push(parseDependsOn(t.value));
+      else if (t.key === 'requires' && t.value) deps.push(parseRequires(t.value));
       else if (t.key === 'lock' && t.value) locks.push(t.value);
       else if (t.key === 'priority' && t.value !== undefined) {
         const n = Number(t.value);
@@ -122,6 +143,21 @@ export function buildPlan(all: readonly ScenarioInstance[], selected: readonly S
     return families.get(ref) ?? [];
   };
   const groupMembersAll = (name: string) => all.filter((s) => factsOf(s).groups.includes(name));
+  /**
+   * Scenarios of the feature file a `@requires:<file>` names: exact path relative to the requiring file's folder, else
+   * relative to the project root, else a unique path suffix (`@requires:login.feature` finds `features/auth/login.feature`).
+   * An empty result means no file matched; `ambiguous` lists several files that matched equally well.
+   */
+  const fileMembers = (spec: string, from: ScenarioInstance): { members: ScenarioInstance[]; ambiguous?: string[] } => {
+    const uris = [...new Set(all.map((s) => s.uri))];
+    const dir = from.uri.includes('/') ? from.uri.slice(0, from.uri.lastIndexOf('/')) : '';
+    const want = normalizePath(spec);
+    const exact = [normalizePath(`${dir}/${spec}`), want].find((c) => uris.includes(c));
+    let picked: string[] = exact ? [exact] : uris.filter((u) => u === want || u.endsWith(`/${want}`));
+    if (picked.length > 1) return { members: [], ambiguous: picked };
+    picked = picked.filter((u) => u !== from.uri);
+    return { members: all.filter((s) => s.uri === picked[0]) };
+  };
 
   // --- selection closure (withDeps)
   // Keyed by id (not object identity) so `selected` may come from a separate parse of the same files.
@@ -144,7 +180,7 @@ export function buildPlan(all: readonly ScenarioInstance[], selected: readonly S
       const targets: ScenarioInstance[] = [];
       for (const d of f.deps) {
         if (d.soft) continue; // soft deps only order what is already selected
-        targets.push(...(d.group ? groupMembersAll(d.group) : resolveRef(d.ref)));
+        targets.push(...(d.file !== undefined ? fileMembers(d.file, s).members : d.group ? groupMembersAll(d.group) : resolveRef(d.ref)));
       }
       for (const g of f.groups) {
         const cfg = configs[g];
@@ -258,6 +294,13 @@ export function buildPlan(all: readonly ScenarioInstance[], selected: readonly S
       else n.deps.push({ target, soft, via });
     };
     for (const d of f.deps) {
+      if (d.file !== undefined) {
+        const { members, ambiguous } = fileMembers(d.file, n.scenario);
+        if (ambiguous) err(`@requires:${d.file}: matches several feature files (${ambiguous.join(', ')}); write more of the path`, n.scenario);
+        else if (!members.length) err(`@requires:${d.file}: no feature file with this path (or it is this scenario's own file)`, n.scenario);
+        for (const m of members) if (nodeById.has(m.id)) add(m.id, d.soft, `requires:${d.file}`);
+        continue;
+      }
       if (d.group) {
         if (!groups.has(d.group) && !all.some((s) => factsOf(s).groups.includes(d.group!))) {
           err(`@dependsOn:${d.ref}: unknown group "${d.group}"`, n.scenario);

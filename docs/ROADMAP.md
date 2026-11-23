@@ -89,7 +89,7 @@ Tags: `@group:<name>`, `@id:<id>`, `@dependsOn:<id|group:name>[:soft]`, `@lock:<
 - [x] Event `workerStarted` (process pool: pid, start-up time)
 - [x] Event field `waitedForMs` on the first `scenarioStarted` (time a ready scenario waited for a worker, lock, group cap or `@exclusive`; inline and process pool)
 - [x] Conformance: `dependencies.feature` (hard/soft/priority); timing rules covered by runtime tests
-- [ ] `@requires:<file.feature>` spec-level preconditions
+- [x] `@requires:<file.feature>[:soft]` spec-level preconditions (path relative to the file, to the root, or a unique path ending; ambiguous, missing and self references are plan errors; cycles are caught)
 - [ ] HTML/console view of the executed graph (timeline per worker) — Phase 5
 - [x] Gate: groups, dependencies and locks demo passes (`examples/orchestration`, `npm run example:orchestration`)
 

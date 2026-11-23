@@ -28,17 +28,26 @@ Scenario: Clean up test orders</cb>
 Scenario: Browse the catalogue</cb>
 <p>This scenario waits for every member of the <code>setup</code> group. You can also set <code>dependsOn</code> on the group in the config, which gives every member the same dependency. See <a href="groups.html">Groups</a>.</p>
 
+<h2>Order whole features</h2>
+<p>When an entire feature file needs another file to have run first, tag the feature with <code>@requires:</code> and the path of the file. Every scenario in the tagged feature then waits for every scenario in that file.</p>
+<cb lang="gherkin" title="features/orders.feature">@requires:setup.feature
+Feature: Orders
+  Scenario: Place an order
+    Given I am logged in</cb>
+<p>The path is read relative to the tagged file's folder, then relative to the project root, then as the end of a path (<code>setup.feature</code> finds <code>features/shop/setup.feature</code> if only one file ends that way). If two files match, bddr stops and asks for more of the path. A file cannot require itself, and two files cannot require each other. Put <code>@requires</code> on a single scenario or rule to limit it to that part of the file, and add <code>:soft</code> to wait without being skipped when the required file fails. File names with spaces are not supported in a tag.</p>
+
 <h2>What happens when a dependency fails</h2>
 <div class="table-wrap"><table>
 <thead><tr><th>Dependency kind</th><th>When the dependency does not pass</th></tr></thead>
 <tbody>
 <tr><td><code>@dependsOn:id</code></td><td>The scenario is skipped. The skip cascades to anything that depends on it.</td></tr>
 <tr><td><code>@dependsOn:id:soft</code></td><td>The scenario still runs.</td></tr>
+<tr><td><code>@requires:file.feature</code></td><td>Each scenario in the tagged feature is skipped when any scenario in the required file does not pass. With <code>:soft</code> they still run.</td></tr>
 <tr><td>Group <code>dependsOn</code></td><td>The default is <code>onDependencyFailure: 'skip'</code>. Set <code>'run'</code> to run anyway, as a reporting group would.</td></tr>
 </tbody></table></div>
 
 <h2>Run one scenario and what it needs</h2>
-<p>When you select a scenario with <code>-t</code>, a name, or <code>file:line</code>, bddr adds the scenarios it depends on, even from other files. Add <code>--no-deps</code> to run only what you selected.</p>
+<p>When you select a scenario with <code>-t</code>, a name, or <code>file:line</code>, bddr adds the scenarios it depends on, including the files it requires, even from other files. Add <code>--no-deps</code> to run only what you selected.</p>
 <cb lang="bash">$ npx bddr run features/orders.feature:9
 $ npx bddr run features/orders.feature:9 --no-deps</cb>
 

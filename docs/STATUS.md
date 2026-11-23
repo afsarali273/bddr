@@ -20,7 +20,7 @@ replaceable adapters. TypeScript first, with Java and Python ports planned (same
 | 0 Foundations | Monorepo, spec model, Gherkin parsing, stable ids, tags, event schema, conformance skeleton | ✅ Done (CCK parse gate passes) |
 | 1 Core runner | Steps, hooks, context, reporters, CLI, config, class steps + DI | ✅ Done (real-project gate passed) |
 | 2 Data-driven specs | CSV/TSV/JSON/YAML/XLSX via `@data:` | 🟡 Data core and gate done; composite steps left |
-| 3 Orchestration | Groups, dependencies, locks, priorities, parallel/serial, worker processes, logging, step repeat/retry | ✅ Done; `@requires` left |
+| 3 Orchestration | Groups, dependencies, locks, priorities, parallel/serial, worker processes, logging, step repeat/retry | ✅ Done |
 | 4 Resilience | Scenario/group/run retry, flaky, quarantine, rerun + merge, soft asserts, cancellation and time budgets | ✅ Done |
 | 5 Reporting + DX | HTML v3 (timeline, dependency graph, history), run history + flakiness score, `bddr history`, living docs, debug, watch, `--shard`, Cucumber Messages | ✅ Done except the VS Code extension |
 | 6 Ecosystem | Playwright, Selenium and axios plugins, documentation site; still to do: plugin API extension points, HTTP steps, Allure, AI step catalogue/MCP, npm release, v1.0 | 🟡 Plugins and docs done; the rest left |
@@ -242,10 +242,6 @@ does not emit hooks; `--shard` keeps dependent scenarios, groups and locks toget
 - **Phase 2:**
   - text-defined composite steps (`.steps.md` / `.concept`)
   - SQL/HTTP data providers (with the plugin API)
-- **Phase 3:**
-  - `@requires:<file.feature>` spec-level preconditions (whole-feature ordering today: `@serial` inside a file, or `@group` on features with group `dependsOn`; there is no feature-file target for `@dependsOn`)
-- **Phase 0/1 gates:**
-  - ~~run a real project end to end~~ done by `examples/playwright-showcase`
 - **Gauge-style Markdown specs:** today `.md` means Markdown-with-Gherkin. This overlaps with the parked code-linked
   Markdown work.
 
