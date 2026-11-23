@@ -6,9 +6,10 @@ import { fileURLToPath } from 'node:url';
 import { BDDR_VERSION, explainNode, parseSpecFile, planToJSON, renderPlanMermaid, renderPlanText, selectScenarios } from '@bddr/core';
 import { DEFAULTS, loadConfig, UsageError } from './config.js';
 import { watchLoop } from './watch.js';
-import { buildLivingDocs, discoverSpecs, historyReport, makeDataLoader, prepareRun, registerTypeScriptLoader, reportFromEvents, runBddr } from './run.js';
+import { buildLivingDocs, discoverSpecs, historyReport, loadSupportCode, makeDataLoader, prepareRun, registerTypeScriptLoader, reportFromEvents, runBddr } from './run.js';
 import { formatValidation, validateProject } from './validate.js';
 import { formatMigration, migrateProject } from './migrate.js';
+import { buildStepCatalogue, formatStepCatalogue } from './catalogue.js';
 import type { Reporter } from '@bddr/reporters';
 
 const HELP = `bddr ${BDDR_VERSION}
@@ -17,6 +18,7 @@ Usage:
   bddr [run] [paths...] [options]    Run scenarios (paths may be files, folders, globs, file:line)
   bddr list  [paths...] [options]    List selected scenarios with ids and tags, without running
   bddr snippets [paths...] [options] Print ready-to-paste code for every undefined step (runs nothing)
+  bddr steps [--json] [options]      List every step, hook and fixture the support code registers, with file:line (for editors and tools)
   bddr validate [paths...] [options] Static checks: specs, plan, steps, hooks and unused definitions
   bddr history [--top <n>]           Flakiest and slowest scenarios from the recorded run history (config history: true)
   bddr docs [paths...] [options]     Living documentation: the spec folders as one HTML page (README.md per folder is the intro)
@@ -99,6 +101,7 @@ export async function main(argv: string[]): Promise<number> {
         'rerun-failed': { type: 'string' },
         'fail-on-warnings': { type: 'boolean' },
         write: { type: 'boolean' },
+        json: { type: 'boolean' },
         top: { type: 'string' },
         'log-level': { type: 'string' },
         'plan-format': { type: 'string' },
@@ -123,7 +126,7 @@ export async function main(argv: string[]): Promise<number> {
 
   let command = 'run';
   let paths = positionals;
-  if (['run', 'list', 'snippets', 'validate', 'plan', 'report', 'history', 'docs', 'migrate'].includes(positionals[0] ?? '')) {
+  if (['run', 'list', 'snippets', 'validate', 'plan', 'report', 'history', 'docs', 'migrate', 'steps'].includes(positionals[0] ?? '')) {
     command = positionals[0]!;
     paths = positionals.slice(1);
   }
@@ -141,6 +144,14 @@ export async function main(argv: string[]): Promise<number> {
       if (!existsSync(root)) throw new UsageError(`migrate: folder not found: ${root}`);
       const result = await migrateProject(root, values.write === true);
       process.stdout.write(formatMigration(result));
+      return 0;
+    }
+    if (command === 'steps') {
+      await registerTypeScriptLoader();
+      const loaded = await loadConfig(values.config, process.cwd(), values.profile);
+      const registry = await loadSupportCode(loaded.rootDir, loaded.options, true);
+      const catalogue = buildStepCatalogue(registry, loaded.rootDir);
+      process.stdout.write(values.json ? `${JSON.stringify(catalogue, null, 2)}\n` : formatStepCatalogue(catalogue));
       return 0;
     }
     if (command === 'list') return await list(paths, values.config, values.profile, values.tags, values.name);

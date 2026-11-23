@@ -1,6 +1,6 @@
 title: Command line
 section: Running
-desc: The bddr commands: run, list, plan, validate, snippets, report, history and docs, with the options you use every day.
+desc: The bddr commands: run, list, plan, validate, snippets, steps, report, history and docs, with the options you use every day.
 lede: bddr is a single command with a few sub-commands. <code>run</code> is the default, so <code>npx bddr</code> alone runs your suite.
 ---
 <h2>Commands</h2>
@@ -12,6 +12,7 @@ lede: bddr is a single command with a few sub-commands. <code>run</code> is the 
 <tr><td><code>bddr plan [paths...]</code></td><td>Show the execution plan: groups, dependencies, locks. Runs nothing. See <a href="groups.html">Groups</a>.</td></tr>
 <tr><td><code>bddr validate [paths...]</code></td><td>Static checks: parse errors, duplicate ids, undefined and ambiguous steps, unused step definitions and unmatched hooks.</td></tr>
 <tr><td><code>bddr snippets [paths...]</code></td><td>Print ready-to-paste code for every undefined step.</td></tr>
+<tr><td><code>bddr steps [--json]</code></td><td>List the steps, hooks and fixtures your support code registers, each with its file and line. <code>--json</code> is meant for editors and other tools.</td></tr>
 <tr><td><code>bddr report events.ndjson...</code></td><td>Build reports from event files. Several files are merged and later runs win.</td></tr>
 <tr><td><code>bddr history [--top n]</code></td><td>The flakiest and slowest scenarios from the recorded history.</td></tr>
 <tr><td><code>bddr docs [paths...]</code></td><td>Build the living documentation page. See <a href="living-docs.html">Living documentation</a>.</td></tr>

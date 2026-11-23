@@ -28,6 +28,7 @@
     "vitest.config.ts"
   ],
   "exclude": [
-    "examples/playwright-showcase/**"
+    "examples/playwright-showcase/**",
+    "examples/selenium-showcase/**"
   ]
 }

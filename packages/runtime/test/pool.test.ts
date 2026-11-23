@@ -266,3 +266,14 @@ describe('inline pool worker hooks', () => {
     expect(trace).toEqual(['beforeAll', 'beforeWorker', 'step', 'step', 'afterWorker', 'afterAll']);
   });
 });
+
+describe('waitedForMs through the pool', () => {
+  it('reaches scenarioStarted when the scenario runs on a worker', async () => {
+    const r = new SupportRegistry();
+    r.defineStep('wait', () => new Promise((res) => setTimeout(res, 60)));
+    const { of } = await runPooled(r, `Feature: F\n  Scenario: a\n    Given wait\n  Scenario: b\n    Given wait\n`, { workers: 1 });
+    const waited = of('scenarioStarted').map((e) => e.waitedForMs);
+    expect(waited.every((w) => typeof w === 'number')).toBe(true);
+    expect(waited[1]!).toBeGreaterThanOrEqual(40);
+  });
+});

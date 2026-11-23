@@ -140,6 +140,11 @@ export interface ScenarioStarted extends Base {
   scenarioId: string;
   attempt: number;
   workerId: string;
+  /**
+   * First attempt only: how long the scenario was ready (every dependency finished) before it could start, because no
+   * worker was free or a lock, group cap or @exclusive scenario held it back. Absent for retries and unscheduled starts.
+   */
+  waitedForMs?: number;
 }
 
 export interface StepStarted extends Base {

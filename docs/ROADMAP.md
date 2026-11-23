@@ -14,7 +14,7 @@ file is self-contained.
 - [x] Key/value tags + tag expressions + selection (tags, name, file:line, ids)
 - [x] Event schema v1 + EventBus
 - [x] Conformance suite skeleton (5 features)
-- [ ] Gate: parse every Cucumber Compatibility Kit feature → *deferred: add CCK `.feature` files to `conformance/cck/` and a parse-only test*
+- [x] Gate: parse every Cucumber Compatibility Kit feature (`core/test/cck.test.ts` reads the official `@cucumber/compatibility-kit` dev dependency: 49 features, zero parse errors, pickle counts equal the kit's reference streams)
 
 ## Phase 1: Core runner (TypeScript)
 
@@ -46,7 +46,7 @@ file is self-contained.
 - [ ] Data providers for SQL queries and HTTP endpoints (plugin API, phase 6)
 - [ ] Text-defined composite steps (`.steps.md` or `.concept` files)
 - [ ] ~~Call a scenario from a step~~ parked by the owner (dependencies + exports + step repeat cover current needs)
-- [ ] Gate: same feature runs from inline Examples, CSV and XLSX with identical results
+- [x] Gate: same feature runs from inline Examples, CSV and XLSX with identical results (`core/test/data-parity.test.ts`, including commas, quotes, unicode, decimals and empty cells)
 
 ## Cross-cutting: own architecture, swappable third-party parts
 
@@ -87,7 +87,7 @@ Tags: `@group:<name>`, `@id:<id>`, `@dependsOn:<id|group:name>[:soft]`, `@lock:<
 - [x] Exports between scenarios (`ctx.export`, `ctx.from(id).get`), structured-clone copies (ready for processes)
 - [x] Events: `groupStarted/Finished`, planReady `workers`/`groups`, PlannedScenario `groups/dependsOn/locks/priority/exclusive/pulledInBy`
 - [x] Event `workerStarted` (process pool: pid, start-up time)
-- [ ] Event `waitedForMs`
+- [x] Event field `waitedForMs` on the first `scenarioStarted` (time a ready scenario waited for a worker, lock, group cap or `@exclusive`; inline and process pool)
 - [x] Conformance: `dependencies.feature` (hard/soft/priority); timing rules covered by runtime tests
 - [ ] `@requires:<file.feature>` spec-level preconditions
 - [ ] HTML/console view of the executed graph (timeline per worker) — Phase 5
@@ -139,7 +139,8 @@ in TS/Java; the annotated document is the report. Design note: [design/code-link
 - [ ] Publish to npm under `@bddr`; `bddr migrate` codemod from bddx; remove the "Not on npm yet" notes
 - [ ] HTTP step library (Karate-style JSON matching)
 - [ ] Allure reporter
-- [ ] Step catalogue export (JSON) + MCP server for AI assistants
+- [x] Step catalogue export: `bddr steps [--json]` (schema v1, ADR-028)
+- [ ] MCP server for AI assistants (reads the same catalogue)
 - [ ] TypeScript v1.0 release
 
 ## Phase 7: Java port

@@ -372,6 +372,8 @@ plugin. Automatic failure-only trace capture still belongs to that package-level
 | HTML reporter: collects attempt intervals (scenarioStarted/Finished by `id#attempt`), `workerStarted` start-ups, option `history` (previous runs) | `reporters/src/html.ts` |
 | `history` config, write after the run, previous runs injected into `html` reporters, `bddr history` | `cli/src/run.ts` (`historySettings`, `withHistory`, `historyReport`), `cli/src/main.ts` |
 | `workerStarted` event (fork → ready) | `runtime/src/pool.ts` |
+| `waitedForMs` on `scenarioStarted` (scheduler records when a node became ready; passed to `runNode`, over IPC for the process pool) | `runtime/src/scheduler.ts`, `executor.ts`, `pool.ts` |
+| Step catalogue (`bddr steps [--json]`): steps, hooks, fixtures with project-relative `file:line`, no absolute paths | `cli/src/catalogue.ts`, `cli/src/main.ts` |
 
 - **Record** (`HistoryRun` v1): runId, startedAt, durationMs, success, workers, and per scenario id the final status,
   duration, attempts, flaky flag and name. Final attempts only (`willRetry` attempts are ignored).

@@ -23,6 +23,8 @@ export interface NodeRequest {
   workerId: string;
   /** Attempts already used (group retry re-runs continue the count). */
   attemptBase: number;
+  /** Scheduler wait before this node started (see ScenarioStarted.waitedForMs). */
+  waitedForMs?: number;
   /** An earlier attempt did not pass (so a pass now is flaky). */
   failedBefore: boolean;
   groupAttempts: Record<string, number>;

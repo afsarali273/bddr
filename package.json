@@ -23,6 +23,7 @@
     "example:resilience": "node packages/cli/dist/bin.js run --config examples/resilience/bddr.config.ts"
   },
   "devDependencies": {
+    "@cucumber/compatibility-kit": "^31.0.0",
     "@types/node": "^22.20.5",
     "typescript": "~5.9.3",
     "vitest": "^5.1.0"

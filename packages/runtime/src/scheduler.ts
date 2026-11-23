@@ -18,7 +18,7 @@ import { TimeoutError } from './signals.js';
 
 export interface SchedulerCallbacks {
   /** Run the node on worker `workerId` ('w1'…). Must resolve to the node's status (never reject). */
-  runNode(node: PlanNode, workerId: string, signal?: AbortSignal): Promise<Status>;
+  runNode(node: PlanNode, workerId: string, signal?: AbortSignal, waitedForMs?: number): Promise<Status>;
   /** Mark the node skipped without running it. */
   skipNode(node: PlanNode, reason: string): Promise<void>;
   /** A reason to stop starting new nodes (fail-fast, fatal BeforeAll), or undefined. */
@@ -43,6 +43,8 @@ export interface ScheduleOptions {
 export async function schedule(plan: Plan, cb: SchedulerCallbacks, options: ScheduleOptions = {}): Promise<Map<string, Status>> {
   const results = new Map<string, Status>();
   const pending = new Set(plan.nodes.map((n) => n.id));
+  /** When each node first became ready (all dependencies finished); start time minus this is `waitedForMs`. */
+  const readyAt = new Map<string, number>();
   const running = new Map<string, Promise<void>>();
   const heldLocks = new Map<string, number>();
   const groupRunning = new Map<string, number>();
@@ -118,8 +120,9 @@ export async function schedule(plan: Plan, cb: SchedulerCallbacks, options: Sche
       return signal ? [signal] : [];
     });
     const signal = signals.length === 0 ? undefined : signals.length === 1 ? signals[0] : AbortSignal.any(signals);
+    const waitedForMs = Math.max(0, Date.now() - (readyAt.get(n.id) ?? Date.now()));
     const p = cb
-      .runNode(n, slot, signal)
+      .runNode(n, slot, signal, waitedForMs)
       .catch((): Status => 'failed')
       .then((status) => {
         results.set(n.id, status);
@@ -201,6 +204,8 @@ export async function schedule(plan: Plan, cb: SchedulerCallbacks, options: Sche
     const ready = plan.nodes
       .filter((n) => pending.has(n.id) && depsDone(n))
       .sort((a, b) => a.priority - b.priority || a.order - b.order);
+    const now = Date.now();
+    for (const n of ready) if (!readyAt.has(n.id)) readyAt.set(n.id, now);
     for (const n of ready) {
       if (!freeSlots.length) break;
       if (canStart(n)) start(n);

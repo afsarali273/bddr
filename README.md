@@ -229,6 +229,7 @@ export default defineConfig({
 bddr [run] [paths...]  -t "@smoke and not @wip"  -p ci  -D env=qa  -f ndjson:reports/e.ndjson  --dry-run
 bddr list  [paths...]  # ids + tags of selected scenarios
 bddr snippets         # code for every undefined step
+bddr steps --json     # every step, hook and fixture with file:line (for editors and tools)
 bddr validate [paths...] [--fail-on-warnings]  # static project checks; runs no tests
 bddr plan [--explain <id>] [--plan-format text|json|mermaid]   # execution graph, runs nothing
 bddr run -w 4 --no-deps   # 4 parallel workers; do not pull in dependencies

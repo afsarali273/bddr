@@ -63,7 +63,7 @@
         <tr><td><code>groupRetrying</code></td><td><code>group</code>, <code>attempt</code>, <code>scenarioIds</code></td></tr>
         <tr><td><code>featureStarted</code>, <code>featureFinished</code></td><td><code>uri</code>, <code>name</code>, and <code>status</code> when finished</td></tr>
         <tr><td><code>hookStarted</code>, <code>hookFinished</code></td><td><code>hookId</code>, <code>hookName</code>, <code>level</code>, <code>kind</code>, <code>scenarioId</code>, and <code>status</code>, <code>durationMs</code>, <code>error</code> when finished</td></tr>
-        <tr><td><code>scenarioStarted</code></td><td><code>scenarioId</code>, <code>attempt</code>, <code>workerId</code></td></tr>
+        <tr><td><code>scenarioStarted</code></td><td><code>scenarioId</code>, <code>attempt</code>, <code>workerId</code>, and on the first attempt <code>waitedForMs</code> (how long the scenario was ready but held back by a free worker, a lock, a group cap or <code>@exclusive</code>)</td></tr>
         <tr><td><code>stepStarted</code></td><td><code>scenarioId</code>, <code>stepId</code>, <code>keyword</code>, <code>text</code>, <code>line</code></td></tr>
         <tr><td><code>stepFinished</code></td><td><code>scenarioId</code>, <code>stepId</code>, <code>status</code>, <code>durationMs</code>, <code>error</code>, <code>definition</code> (pattern, location), <code>snippet</code> for undefined steps, <code>mode</code> and <code>attempts</code> for repeated or retried steps</td></tr>
         <tr><td><code>stepAttemptFinished</code></td><td><code>scenarioId</code>, <code>stepId</code>, <code>attempt</code>, <code>of</code>, <code>mode</code>, <code>status</code>, <code>durationMs</code></td></tr>

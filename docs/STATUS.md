@@ -17,10 +17,10 @@ replaceable adapters. TypeScript first, with Java and Python ports planned (same
 
 | Phase | Scope | State |
 | --- | --- | --- |
-| 0 Foundations | Monorepo, spec model, Gherkin parsing, stable ids, tags, event schema, conformance skeleton | ✅ Done (CCK parse gate deferred) |
+| 0 Foundations | Monorepo, spec model, Gherkin parsing, stable ids, tags, event schema, conformance skeleton | ✅ Done (CCK parse gate passes) |
 | 1 Core runner | Steps, hooks, context, reporters, CLI, config, class steps + DI | ✅ Done (real-project gate passed) |
-| 2 Data-driven specs | CSV/TSV/JSON/YAML/XLSX via `@data:` | 🟡 Data core done; composite steps + gate left |
-| 3 Orchestration | Groups, dependencies, locks, priorities, parallel/serial, worker processes, logging, step repeat/retry | ✅ Done; `@requires` and `waitedForMs` event left |
+| 2 Data-driven specs | CSV/TSV/JSON/YAML/XLSX via `@data:` | 🟡 Data core and gate done; composite steps left |
+| 3 Orchestration | Groups, dependencies, locks, priorities, parallel/serial, worker processes, logging, step repeat/retry | ✅ Done; `@requires` left |
 | 4 Resilience | Scenario/group/run retry, flaky, quarantine, rerun + merge, soft asserts, cancellation and time budgets | ✅ Done |
 | 5 Reporting + DX | HTML v3 (timeline, dependency graph, history), run history + flakiness score, `bddr history`, living docs, debug, watch, `--shard`, Cucumber Messages | ✅ Done except the VS Code extension |
 | 6 Ecosystem | Playwright, Selenium and axios plugins, documentation site; still to do: plugin API extension points, HTTP steps, Allure, AI step catalogue/MCP, npm release, v1.0 | 🟡 Plugins and docs done; the rest left |
@@ -223,7 +223,7 @@ scenarioRetry, timeout), `defaultMode`, `logLevel`, `retry` (scenario, delay, ba
    - Plugin API extension points: data loaders, reporters, parameter types, retry analyzers, plan modifiers.
    - HTTP step library (Karate-style JSON matching).
    - Allure reporter.
-   - Step catalogue export plus an MCP server for AI assistants.
+   - MCP server for AI assistants (the step catalogue, `bddr steps --json`, is done).
    - TypeScript v1.0 release.
    - Already done: Playwright, Selenium and axios plugins (`plugins/`), with fixtures, automatic failure screenshots and traces.
 4. **Phase 7: Java port**
@@ -241,13 +241,10 @@ does not emit hooks; `--shard` keeps dependent scenarios, groups and locks toget
 ### 4.2 Smaller leftovers
 - **Phase 2:**
   - text-defined composite steps (`.steps.md` / `.concept`)
-  - the Phase 2 gate (same feature gives identical results from inline Examples, CSV and XLSX)
   - SQL/HTTP data providers (with the plugin API)
 - **Phase 3:**
   - `@requires:<file.feature>` spec-level preconditions (whole-feature ordering today: `@serial` inside a file, or `@group` on features with group `dependsOn`; there is no feature-file target for `@dependsOn`)
-  - `waitedForMs` event (`workerStarted` is done)
 - **Phase 0/1 gates:**
-  - parse the Cucumber Compatibility Kit features
   - ~~run a real project end to end~~ done by `examples/playwright-showcase`
 - **Gauge-style Markdown specs:** today `.md` means Markdown-with-Gherkin. This overlaps with the parked code-linked
   Markdown work.

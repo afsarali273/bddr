@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Command line | bddr</title>
-  <meta name="description" content="The bddr commands: run, list, plan, validate, snippets, report, history and docs, with the options you use every day.">
+  <meta name="description" content="The bddr commands: run, list, plan, validate, snippets, steps, report, history and docs, with the options you use every day.">
   <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../assets/css/theme.css">
   <script>(function(){var t=null;try{t=localStorage.getItem('bddr-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))})()</script>
@@ -51,6 +51,7 @@
         <tr><td><code>bddr plan [paths...]</code></td><td>Show the execution plan: groups, dependencies, locks. Runs nothing. See <a href="groups.html">Groups</a>.</td></tr>
         <tr><td><code>bddr validate [paths...]</code></td><td>Static checks: parse errors, duplicate ids, undefined and ambiguous steps, unused step definitions and unmatched hooks.</td></tr>
         <tr><td><code>bddr snippets [paths...]</code></td><td>Print ready-to-paste code for every undefined step.</td></tr>
+        <tr><td><code>bddr steps [--json]</code></td><td>List the steps, hooks and fixtures your support code registers, each with its file and line. <code>--json</code> is meant for editors and other tools.</td></tr>
         <tr><td><code>bddr report events.ndjson...</code></td><td>Build reports from event files. Several files are merged and later runs win.</td></tr>
         <tr><td><code>bddr history [--top n]</code></td><td>The flakiest and slowest scenarios from the recorded history.</td></tr>
         <tr><td><code>bddr docs [paths...]</code></td><td>Build the living documentation page. See <a href="living-docs.html">Living documentation</a>.</td></tr>

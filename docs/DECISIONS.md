@@ -247,3 +247,7 @@ effects); rejected.
 ## ADR-027 exceljs is an optional peer dependency (2026-11-23)
 
 A clean install of `@bddr/cli` 0.1.0 showed `npm audit` warnings: core depended on exceljs, which depends on uuid 8 (GHSA-w5hq-g745-h8pq). The root `overrides` of ADR-012 only apply inside this repository, not to people who install bddr. Since XLSX is optional and already loaded with a dynamic `import()`, exceljs moved to an optional peer dependency (0.1.1). A project that reads `.xlsx` files installs it itself (`npm i -D exceljs`); without it the error says so.
+
+## ADR-028 The step catalogue is the interface between bddr and its tools (2026-11-23)
+
+The VS Code extension, AI assistants and the Java and Python ports all need to know which steps a project defines. Parsing source code for that would need one parser per language and would break on dynamic registration. Instead each runtime reports its own registry: `bddr steps --json` prints `{ schemaVersion: 1, language, steps, hooks, fixtures }`, each with pattern, kind (`expression` or `regex`), tags and a project-relative `file` and `line`. Absolute paths never appear (hook names that embed them are cleaned), so the output is the same on every machine. A tool calls the `bddr` in the project and does not care which language answers. Every port must implement `bddr steps --json` with this schema; `language` says which runtime produced it. Bump `schemaVersion` for breaking changes only.

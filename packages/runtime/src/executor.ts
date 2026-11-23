@@ -157,6 +157,8 @@ export class Executor implements WorkerExecutor {
   /** Scenarios that had a non-passed attempt (scenario or group retry) — a later pass is flaky. */
   private readonly failedBefore = new Set<string>();
   private readonly attemptsUsed = new Map<string, number>();
+  /** Scheduler wait per node, reported on its first scenarioStarted (see ScenarioStarted.waitedForMs). */
+  private readonly waitedFor = new Map<string, number>();
   private readonly flaky = new Set<string>();
   private readonly groupAttempts = new Map<string, number>();
   // populated per run
@@ -268,7 +270,8 @@ export class Executor implements WorkerExecutor {
     await schedule(
       plan,
       {
-        runNode: (node, workerId, signal) => (this.opts.pool ? this.runRemote(node, workerId, signal) : this.runNode(node, workerId, signal)),
+        runNode: (node, workerId, signal, waited) =>
+          this.opts.pool ? this.runRemote(node, workerId, signal, waited) : this.runNode(node, workerId, signal, waited),
         skipNode: async (node, reason) => {
           this.debug(`skip ${node.id}: ${reason}`, { scenarioId: node.id });
           this.skipScenario(node.scenario, reason, 'scheduler');
@@ -361,8 +364,9 @@ export class Executor implements WorkerExecutor {
     return AbortSignal.any([this.signal, signal]);
   }
 
-  private async runNode(node: PlanNode, workerId: string, nodeSignal?: AbortSignal): Promise<Status> {
+  private async runNode(node: PlanNode, workerId: string, nodeSignal?: AbortSignal, waitedForMs?: number): Promise<Status> {
     const s = node.scenario;
+    if (waitedForMs !== undefined) this.waitedFor.set(node.id, waitedForMs);
     const signal = this.combineSignal(nodeSignal);
     const waited = node.deps.length ? ` after ${node.deps.map((d) => `${d.target}${d.soft ? '~' : ''}`).join(', ')}` : '';
     this.debug(`start ${node.id} on ${workerId}${waited}${node.locks.length ? ` holding ${node.locks.join(', ')}` : ''}`, { scenarioId: node.id });
@@ -589,7 +593,7 @@ export class Executor implements WorkerExecutor {
     set.add(workerId);
   }
 
-  private async runRemote(node: PlanNode, workerId: string, nodeSignal?: AbortSignal): Promise<Status> {
+  private async runRemote(node: PlanNode, workerId: string, nodeSignal?: AbortSignal, waitedForMs?: number): Promise<Status> {
     const pool = this.opts.pool!;
     const s = node.scenario;
     const signal = this.combineSignal(nodeSignal);
@@ -623,6 +627,7 @@ export class Executor implements WorkerExecutor {
             nodeId: node.id,
             workerId,
             attemptBase: this.attemptsUsed.get(node.id) ?? 0,
+            ...(waitedForMs !== undefined ? { waitedForMs } : {}),
             failedBefore: this.failedBefore.has(node.id),
             groupAttempts,
           });
@@ -746,7 +751,7 @@ export class Executor implements WorkerExecutor {
       this.attemptsUsed.set(node.id, req.attemptBase + 1);
       status = this.skipScenario(node.scenario, this.workerFatal, req.workerId);
     } else {
-      status = await this.runNode(node, req.workerId);
+      status = await this.runNode(node, req.workerId, undefined, req.waitedForMs);
     }
     const exports = this.exportsById.get(node.id);
     return {
@@ -838,7 +843,8 @@ export class Executor implements WorkerExecutor {
     const scope = new Scope('scenario');
     const tagNames = scenario.tags.map((t) => t.name);
     const ids: Emitters = { scenarioId: scenario.id };
-    bus.emit({ type: 'scenarioStarted', scenarioId: scenario.id, attempt, workerId });
+    const waited = attempt === 1 && node ? this.waitedFor.get(node.id) : undefined;
+    bus.emit({ type: 'scenarioStarted', scenarioId: scenario.id, attempt, workerId, ...(waited !== undefined ? { waitedForMs: waited } : {}) });
 
     const ctx = this.makeStepContext(runScope, featureScope, scope, scenario, attempt, ids, groupStores, signal);
     const fixtures = new FixtureCache('scenario');

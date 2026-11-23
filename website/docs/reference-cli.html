@@ -49,6 +49,7 @@
         <tr><td><code>bddr [run] [paths...]</code></td><td>Run scenarios. Paths are files, folders, globs or <code>file:line</code>.</td></tr>
         <tr><td><code>bddr list [paths...]</code></td><td>List scenarios with ids and tags, without running.</td></tr>
         <tr><td><code>bddr snippets [paths...]</code></td><td>Print code for every undefined step.</td></tr>
+        <tr><td><code>bddr steps [--json]</code></td><td>List every step, hook and fixture the support code registers, with <code>file:line</code>. <code>--json</code> prints the step catalogue for editors and tools.</td></tr>
         <tr><td><code>bddr validate [paths...]</code></td><td>Static checks on specs, plan, steps and hooks.</td></tr>
         <tr><td><code>bddr plan [paths...]</code></td><td>Show groups, dependencies and locks. Options <code>--plan-format text|json|mermaid</code> and <code>--explain &lt;scenario id&gt;</code>.</td></tr>
         <tr><td><code>bddr report &lt;events.ndjson...&gt;</code></td><td>Build reports from event files. Several files are merged and later runs win.</td></tr>
