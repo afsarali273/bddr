@@ -42,6 +42,7 @@ export async function validateProject(req: RunRequest = {}): Promise<ValidationR
     ...(prepared.opts.featureMode ? { featureMode: prepared.opts.featureMode } : {}),
   });
   for (const e of plan.errors) {
+    if (/^Scenario id ".*" is duplicated at /.test(e.message)) continue; // reported below as duplicate-id
     add({ severity: 'error', code: 'plan', message: e.message, ...(e.uri ? { uri: e.uri } : {}), ...(e.line ? { line: e.line } : {}) });
   }
 

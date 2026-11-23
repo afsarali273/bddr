@@ -277,3 +277,68 @@ describe('waitedForMs through the pool', () => {
     expect(waited[1]!).toBeGreaterThanOrEqual(40);
   });
 });
+
+describe('dependencies through the pool', () => {
+  const sc = (id: string, tags: string, step: string) => `  @id:${id} ${tags}\n  Scenario: ${id}\n    Given ${step}\n`;
+
+  function registry(trace: string[]) {
+    const r = new SupportRegistry();
+    r.defineStep('ok', () => {});
+    r.defineStep('slow', () => new Promise((res) => setTimeout(res, 25)));
+    r.defineStep('fail', () => {
+      throw new Error('boom');
+    });
+    r.defineHook('scenario', 'before', {}, (c) => void trace.push(`start:${c.scenario.id}`));
+    r.defineHook('scenario', 'after', {}, (c) => void trace.push(`end:${c.scenario.id}`));
+    return r;
+  }
+
+  it('runs a diamond in order across lanes', async () => {
+    const trace: string[] = [];
+    const src = `Feature: D\n${sc('a', '', 'ok')}${sc('b', '@dependsOn:a', 'slow')}${sc('c', '@dependsOn:a', 'slow')}${sc('d', '@dependsOn:b @dependsOn:c', 'ok')}`;
+    const { result } = await runPooled(registry(trace), src, { workers: 3 });
+    expect(result.success).toBe(true);
+    const end = (id: string) => trace.indexOf(`end:${id}`);
+    const start = (id: string) => trace.indexOf(`start:${id}`);
+    expect(end('a')).toBeLessThan(start('b'));
+    expect(end('a')).toBeLessThan(start('c'));
+    expect(Math.max(end('b'), end('c'))).toBeLessThan(start('d'));
+    expect(start('b')).toBeLessThan(end('c')); // b and c ran on different lanes at the same time
+  });
+
+  it('skips a hard dependent in the coordinator (it never reaches a lane) and runs a soft one', async () => {
+    const trace: string[] = [];
+    const src = `Feature: S\n${sc('bad', '', 'fail')}${sc('hard', '@dependsOn:bad', 'ok')}${sc('soft', '@dependsOn:bad:soft', 'ok')}${sc('after-hard', '@dependsOn:hard', 'ok')}`;
+    const { result, of, pool } = await runPooled(registry(trace), src, { workers: 2 });
+    expect(result.scenarioStatuses.get('hard')).toBe('skipped');
+    expect(result.scenarioStatuses.get('after-hard')).toBe('skipped');
+    expect(result.scenarioStatuses.get('soft')).toBe('passed');
+    const reason = (id: string) => of('scenarioFinished').find((e) => e.scenarioId === id)?.reason;
+    expect(reason('hard')).toBe('dependency failed: bad (failed)');
+    expect(reason('after-hard')).toBe('dependency failed: hard (skipped)');
+    expect(trace.filter((t) => t.startsWith('start:')).map((t) => t.slice(6)).sort()).toEqual(['bad', 'soft']);
+    expect([...pool.lanes.keys()].length).toBeGreaterThan(0);
+  });
+
+  it('a dependency that passes on a scenario retry releases its dependents', async () => {
+    const trace: string[] = [];
+    const r = registry(trace);
+    r.defineStep('flaky', (ctx: StepContext) => {
+      if (ctx.scenario.attempt < 2) throw new Error('first attempt fails');
+    });
+    const src = `Feature: R\n${sc('dep', '@retry:2', 'flaky')}${sc('x', '@dependsOn:dep', 'ok')}`;
+    const { result } = await runPooled(r, src, { workers: 2 });
+    expect(result.scenarioStatuses.get('dep')).toBe('passed');
+    expect(result.scenarioStatuses.get('x')).toBe('passed');
+    expect(trace.lastIndexOf('end:dep')).toBeLessThan(trace.indexOf('start:x'));
+  });
+
+  it('a worker crash in the dependency fails it and skips the dependents', async () => {
+    const trace: string[] = [];
+    const src = `Feature: C\n${sc('dep', '', 'ok')}${sc('x', '@dependsOn:dep', 'ok')}${sc('y', '', 'ok')}`;
+    const { result } = await runPooled(registry(trace), src, { workers: 2 }, ['dep']);
+    expect(result.scenarioStatuses.get('dep')).toBe('failed');
+    expect(result.scenarioStatuses.get('x')).toBe('skipped');
+    expect(result.scenarioStatuses.get('y')).toBe('passed');
+  });
+});

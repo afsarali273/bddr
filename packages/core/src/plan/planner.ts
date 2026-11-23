@@ -129,13 +129,21 @@ export function buildPlan(all: readonly ScenarioInstance[], selected: readonly S
   // --- id index (exact ids and outline/data "families": `x` matches `x[...]`)
   const byId = new Map<string, ScenarioInstance>();
   const families = new Map<string, ScenarioInstance[]>();
+  const owners = new Map<string, ScenarioInstance[]>();
   for (const s of all) {
+    const same = owners.get(s.id);
+    if (!same) owners.set(s.id, [s]);
+    else if (!same.some((o) => o.uri === s.uri && o.line === s.line)) same.push(s);
     byId.set(s.id, s);
     const b = s.id.indexOf('[');
     if (b > 0) {
       const fam = s.id.slice(0, b);
       families.set(fam, [...(families.get(fam) ?? []), s]);
     }
+  }
+  // Ids are dependency targets and keys of results, so two scenarios must never share one.
+  for (const [id, list] of owners) {
+    if (list.length > 1) err(`Scenario id "${id}" is duplicated at ${list.map((s) => `${s.uri}:${s.line}`).join(', ')}`, list[1]);
   }
   const resolveRef = (ref: string): ScenarioInstance[] => {
     const exact = byId.get(ref);
