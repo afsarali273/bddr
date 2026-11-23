@@ -1,0 +1,291 @@
+{
+  "basket-quantity": {
+    "checksHash": "2a91b409ef71",
+    "checkCode": {
+      "C1": "8d12f39ac65c",
+      "C2": "8a8186b47260"
+    },
+    "actionLiterals": [
+      "s:Fay",
+      "s:fay@example.com",
+      "s:pw",
+      "n:0",
+      "s:/shop",
+      "n:0",
+      "n:3",
+      "s:button",
+      "s:Add Apple to basket",
+      "s:/basket"
+    ],
+    "shape": "1d48990e5a01",
+    "by": "afsar",
+    "on": "2026-11-23"
+  },
+  "checkout-low-balance": {
+    "checksHash": "c60efcab8263",
+    "checkCode": {
+      "C1": "7c14c80d1141",
+      "C2": "896c52bb1ea3",
+      "C3": "6eae2ce8930d"
+    },
+    "actionLiterals": [
+      "s:Cy",
+      "s:cy@example.com",
+      "s:pw",
+      "n:5",
+      "s:/shop",
+      "s:button",
+      "s:Add Apple to basket",
+      "s:/basket",
+      "s:button",
+      "s:Pay 7.50"
+    ],
+    "shape": "bffafca06a6d",
+    "by": "afsar",
+    "on": "2026-11-23"
+  },
+  "checkout-within-balance": {
+    "checksHash": "ce5fd9782cdb",
+    "checkCode": {
+      "C1": "9a38bce91b1b",
+      "C2": "ef84269b421f",
+      "C3": "d4fea68124ab"
+    },
+    "actionLiterals": [
+      "s:Ann",
+      "s:ann@example.com",
+      "s:secret1",
+      "n:20",
+      "s:/shop",
+      "s:button",
+      "s:Add Apple to basket",
+      "s:/basket",
+      "s:button",
+      "s:Pay 7.50"
+    ],
+    "shape": "3f61d5df773b",
+    "by": "afsar",
+    "on": "2026-11-23"
+  },
+  "coupon-discount": {
+    "checksHash": "8a75f1cae3ff",
+    "checkCode": {
+      "C1": "cf104b0e6df2",
+      "C2": "e0ab6b8fa315"
+    },
+    "actionLiterals": [
+      "s:Di",
+      "s:di@example.com",
+      "s:pw",
+      "n:50",
+      "s:/shop",
+      "s:button",
+      "s:Add Melon to basket",
+      "s:/basket",
+      "s:textbox",
+      "s:Coupon",
+      "s:SAVE10",
+      "s:button",
+      "s:Apply",
+      "s:button",
+      "s:Pay 18.00"
+    ],
+    "shape": "036ab297cef8",
+    "by": "afsar",
+    "on": "2026-11-23"
+  },
+  "coupon-invalid": {
+    "checksHash": "475a8fe0b023",
+    "checkCode": {
+      "C1": "dc31cb33988b",
+      "C2": "623d7f706f9d"
+    },
+    "actionLiterals": [
+      "s:Ed",
+      "s:ed@example.com",
+      "s:pw",
+      "n:50",
+      "s:/shop",
+      "s:button",
+      "s:Add Melon to basket",
+      "s:/basket",
+      "s:textbox",
+      "s:Coupon",
+      "s:BOGUS",
+      "s:button",
+      "s:Apply"
+    ],
+    "shape": "116f34af49c9",
+    "by": "afsar",
+    "on": "2026-11-23"
+  },
+  "login-lockout": {
+    "checksHash": "aa7fee51166b",
+    "checkCode": {
+      "C1": "268f69c9a8cc",
+      "C2": "268f69c9a8cc"
+    },
+    "actionLiterals": [
+      "s:Ann",
+      "s:ann@example.com",
+      "s:secret1",
+      "n:0",
+      "s:/login",
+      "n:1",
+      "n:3",
+      "s:textbox",
+      "s:Email",
+      "s:ann@example.com",
+      "s:textbox",
+      "s:Password",
+      "s:nope",
+      "s:button",
+      "s:Sign in",
+      "s:textbox",
+      "s:Email",
+      "s:ann@example.com",
+      "s:textbox",
+      "s:Password",
+      "s:secret1",
+      "s:button",
+      "s:Sign in"
+    ],
+    "shape": "5192249616ea",
+    "by": "afsar",
+    "on": "2026-11-23"
+  },
+  "login-success": {
+    "checksHash": "e651951bbd22",
+    "checkCode": {
+      "C1": "7183eac52004"
+    },
+    "actionLiterals": [
+      "s:Ann",
+      "s:ann@example.com",
+      "s:secret1",
+      "n:0",
+      "s:/login",
+      "s:textbox",
+      "s:Email",
+      "s:ann@example.com",
+      "s:textbox",
+      "s:Password",
+      "s:secret1",
+      "s:button",
+      "s:Sign in"
+    ],
+    "shape": "104f8f620410",
+    "by": "afsar",
+    "on": "2026-11-23"
+  },
+  "login-wrong-password": {
+    "checksHash": "2eb1516a3981",
+    "checkCode": {
+      "C1": "b0fe2d2952eb",
+      "C2": "49faf341943b"
+    },
+    "actionLiterals": [
+      "s:Ann",
+      "s:ann@example.com",
+      "s:secret1",
+      "n:0",
+      "s:/login",
+      "s:textbox",
+      "s:Email",
+      "s:ann@example.com",
+      "s:textbox",
+      "s:Password",
+      "s:nope",
+      "s:button",
+      "s:Sign in"
+    ],
+    "shape": "d64ee99dea20",
+    "by": "afsar",
+    "on": "2026-11-23"
+  },
+  "search-finds": {
+    "checksHash": "87cfad2d6587",
+    "checkCode": {
+      "C1": "276946c5b8b5",
+      "C2": "e0331063a3c5"
+    },
+    "actionLiterals": [
+      "s:/search",
+      "s:textbox",
+      "s:Search",
+      "s:apple",
+      "s:button",
+      "s:Search",
+      "s:listitem"
+    ],
+    "shape": "db5757b1e8ed",
+    "by": "afsar",
+    "on": "2026-11-23"
+  },
+  "search-none": {
+    "checksHash": "872787667aa0",
+    "checkCode": {
+      "C1": "92eed1cf589f",
+      "C2": "25c58d5d2907"
+    },
+    "actionLiterals": [
+      "s:/search",
+      "s:textbox",
+      "s:Search",
+      "s:zzz",
+      "s:button",
+      "s:Search"
+    ],
+    "shape": "deee74a761b0",
+    "by": "afsar",
+    "on": "2026-11-23"
+  },
+  "signup-invalid-email": {
+    "checksHash": "66b20b3226b6",
+    "checkCode": {
+      "C1": "01cac33c4fe5",
+      "C2": "8845ea707415"
+    },
+    "actionLiterals": [
+      "s:/signup",
+      "s:textbox",
+      "s:Name",
+      "s:Bo",
+      "s:textbox",
+      "s:Email",
+      "s:not-an-email",
+      "s:textbox",
+      "s:Password",
+      "s:hunter22",
+      "s:button",
+      "s:Create account"
+    ],
+    "shape": "9d3b05dbfc95",
+    "by": "afsar",
+    "on": "2026-11-23"
+  },
+  "signup-success": {
+    "checksHash": "f1763179b119",
+    "checkCode": {
+      "C1": "b424a4c312e6",
+      "C2": "7b2b0b19e03e"
+    },
+    "actionLiterals": [
+      "s:/signup",
+      "s:textbox",
+      "s:Name",
+      "s:Bo",
+      "s:textbox",
+      "s:Email",
+      "s:bo@example.com",
+      "s:textbox",
+      "s:Password",
+      "s:hunter22",
+      "s:button",
+      "s:Create account"
+    ],
+    "shape": "bb6bdfccd34d",
+    "by": "afsar",
+    "on": "2026-11-23"
+  }
+}
