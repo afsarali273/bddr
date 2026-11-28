@@ -259,6 +259,8 @@ does not emit hooks; `--shard` keeps dependent scenarios, groups and locks toget
 ### 4.4 Parked (owner decision; do not start without the owner)
 - **Code-linked Markdown specs**: free-form Markdown that links to step code (TS/Java symbols or file:line) and becomes
   the report. Design: [design/code-linked-markdown.md](design/code-linked-markdown.md).
+- **Prompt-driven tests** (prompt + approved checks, compiled to TypeScript, healed under a gate): POC done and
+  parked on the branch `poc/prompt-tests` (see `poc/prompt-tests/FINDINGS.md` there). Resume only on the owner's call.
 - **Callable scenarios** (`Given I run scenario "X"`): parked. Dependencies, exports and repeat steps cover the
   current needs.
 
