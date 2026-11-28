@@ -1,6 +1,6 @@
 # Design note: prompt-driven tests (DISCOVERY, branch `poc/prompt-tests`)
 
-Status: proof of concept, 2026-11-24. Not scheduled; kept only if it shows potential.
+Status: PARKED 2026-11-28 after the proof of concept (2026-11-24). Lives only on the branch `poc/prompt-tests`; resume only on the owner's call.
 Full research and design: the claude.ai doc "bddr: prompt-driven tests (research and design)".
 POC, how to run it, and results: [poc/prompt-tests/README.md](../../poc/prompt-tests/README.md),
 [poc/prompt-tests/FINDINGS.md](../../poc/prompt-tests/FINDINGS.md).

@@ -1,5 +1,7 @@
 # Findings: prompt-driven tests, discovery phase
 
+> **Status: PARKED (2026-11-28).** Discovery is done and the results are kept on this branch. Do not build further until the owner resumes it. Next step when resumed: rerun the experiment with a real model (`BDDR_AGENT="claude -p"`).
+
 Date: 2026-11-24. Branch: `poc/prompt-tests`. Raw numbers: [experiment/RESULTS.md](experiment/RESULTS.md)
 (first run, before two fixes: [experiment/RESULTS-run1.md](experiment/RESULTS-run1.md)).
 

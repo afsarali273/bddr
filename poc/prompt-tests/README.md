@@ -1,5 +1,7 @@
 # POC: prompt-driven tests
 
+> **Status: PARKED (2026-11-28).** Discovery is done and the results are kept on this branch. Do not build further until the owner resumes it. Next step when resumed: rerun the experiment with a real model (`BDDR_AGENT="claude -p"`).
+
 Discovery work on the branch `poc/prompt-tests`. Nothing here is part of bddr yet; nothing outside this folder
 depends on it, and `npm run verify` ignores it.
 
